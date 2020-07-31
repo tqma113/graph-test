@@ -1,7 +1,8 @@
 parser grammar GraphParser;
 
 options {
-    tokenVocab=JavaScriptLexer;
+    tokenVocab=GraphLexer;
+    superClass=GraphParserBase;
 }
 
 
@@ -25,7 +26,7 @@ identifier
     ;
 
 statement
-    | stepStatement
+    : stepStatement
     | ifStatement
     | switchStatement
     | gotoStatement
@@ -54,7 +55,7 @@ moduleItems
     ;
 
 exportStatement
-    : Export (identifier | inferenceDeclaration) eos    # ExportDeclaration
+    : Export (identifier | inferenceDeclaration)    # ExportDeclaration
     ;
 
 stepStatement
@@ -62,16 +63,16 @@ stepStatement
     ;
 
 ifStatement
-    : If expresssion '->' block (Else block)?
+    : If expression '->' block (Else block)?
     ;
 
-expresssion
+expression
     : Action
     ;
 
 
 switchStatement
-    : Switch expresssion switchBlock
+    : Switch expression switchBlock
     ;
 
 switchBlock

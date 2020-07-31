@@ -1,22 +1,25 @@
 lexer grammar GraphLexer;
 
+channels { ERROR }
+
+options { superClass=GraphLexerBase; }
+
 HashBangLine:                   { this.IsStartOfFile()}? '#!' ~[\r\n\u2028\u2029]*; // only allowed at start
 
 LineTerminator:                 [\r\n\u2028\u2029] -> channel(HIDDEN);
 
-Space:                          ' ';
-
-Tabulations:                    '\t;
-
+OpenBrace:                      '{';
+CloseBrace:                     '}';
 OpenBracket:                    '[';
 CloseBracket:                   ']';
 OpenAngleBracket:               '<';
-CloseAngleBracket:              '>;
+CloseAngleBracket:              '>';
 Assign:                         '=';
 Result:                         '->';
+Comma:                          ',';
 
 StringLiteral
-    : StringPart*
+    : StringPart StringPart*
     ;
 
 fragment StringPart
@@ -30,9 +33,9 @@ fragment StringPart
     | '\u200D'
     ;
 
-Identifier:                     ('<' StringLiteral '>');
+Identifier:    '<' StringLiteral '>';
 
-Action:                          ('[' StringLiteral ']');
+Action:        '[' StringLiteral ']';
 
 Start:         'start';
 Goto:          'goto';
@@ -45,16 +48,6 @@ Import:        'import';
 From:          'from';
 Export:        'export';
 
-fragment StringPart
-    : UnicodeLetter
-    | UnicodeCombiningMark
-    | UnicodeConnectorPunctuation
-    | [$_]
-    | '\\' UnicodeEscapeSequence
-    | UnicodeDigit
-    | '\u200C'
-    | '\u200D'
-    ;
 
 fragment UnicodeLetter
     : [\u0041-\u005A]
@@ -449,4 +442,13 @@ fragment UnicodeConnectorPunctuation
     | [\uFE4D-\uFE4F]
     | [\uFF3F]
     | [\uFF65]
+    ;
+
+fragment UnicodeEscapeSequence
+    : 'u' HexDigit HexDigit HexDigit HexDigit
+    | 'u' '{' HexDigit HexDigit+ '}'
+    ;
+
+fragment HexDigit
+    : [_0-9a-fA-F]
     ;

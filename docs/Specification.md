@@ -409,6 +409,12 @@ fragment UnicodeConnectorPunctuation
 HashBangLine:                   { this.IsStartOfFile()}? '#!' ~[\r\n\u2028\u2029]*; // only allowed at start
 ```
 
+### Comment
+
+```
+SingleLineComment:              '#' ~[\r\n\u2028\u2029]* -> channel(HIDDEN);
+```
+
 ### Keyword
 
 ```
