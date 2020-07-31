@@ -7,15 +7,7 @@ options {
 
 
 program
-    : sourceElements? EOF?
-    ;
-
-sourceElements
-    : sourceElement+
-    ;
-
-sourceElement
-    : moduleStatement
+    : HashBangLine? moduleStatements? EOF
     ;
 
 moduleStatement
@@ -23,6 +15,10 @@ moduleStatement
     | importStatement
     | exportStatement
     | startStatement
+    ;
+
+moduleStatements
+    : moduleStatement+
     ;
 
 identifier

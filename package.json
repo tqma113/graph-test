@@ -1,0 +1,25 @@
+{
+  "name": "graph-render",
+  "version": "1.0.0",
+  "description": "A graph render.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tqma113/graph-render.git"
+  },
+  "author": "Ma Tianqi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tqma113/graph-render/issues"
+  },
+  "homepage": "https://github.com/tqma113/graph-render#readme",
+  "dependencies": {
+    "antlr4": "^4.8.0"
+  }
+}

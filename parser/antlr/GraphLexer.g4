@@ -4,6 +4,8 @@ channels { ERROR }
 
 options { superClass=GraphLexerBase; }
 
+HashBangLine:                   { this.IsStartOfFile()}? '#!' ~[\r\n\u2028\u2029]*; // only allowed at start
+
 SingleLineComment:              '#' ~[\r\n\u2028\u2029]* -> channel(HIDDEN);
 
 LineTerminator:                 [\r\n\u2028\u2029] -> channel(HIDDEN);
@@ -18,10 +20,6 @@ Assign:                         '=';
 Result:                         '->';
 Comma:                          ',';
 SemiColon:                      ';';
-
-String
-    : StringPart StringPart*
-    ;
 
 fragment StringPart
     : UnicodeLetter
@@ -52,6 +50,10 @@ Default:       'default';
 Import:        'import';
 From:          'from';
 Export:        'export';
+
+String
+    : StringPart StringPart*
+    ;
 
 // Fragment rules
 

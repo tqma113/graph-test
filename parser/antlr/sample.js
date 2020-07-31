@@ -2,20 +2,10 @@ var antlr4 = require('antlr4');
 var MyGrammarLexer = require('./GraphLexer').GraphLexer;
 var MyGrammarParser = require('./GraphParser').GraphParser;
 var MyGrammarListener = require('./GraphParserListener').GraphParserListener;
+var MyGrammarVisitor = require('./GraphParserVisitor').GraphParserVisitor;
 
 
 var input = `
-start <选择上海站> = {
-  if [不是上海站] -> {
-    [点击顶部城市选择栏]
-    [选择上海出发地]
-  }
-}
-
-export [打开携程首页]
-
-import { [打开携程首页] } from "./asdf.graph"
-
 <从首页进入旅游频道> = {
   [打开携程首页]
 
@@ -66,14 +56,19 @@ start <下单流程> = {
   }
 }
 
-
+start <选择上海站> = {
+  if [不是上海站] -> {
+    [点击顶部城市选择栏]
+    [选择上海出发地]
+  }
+}
 
 <选择出行人> = {
   [点击选择出行人按钮]
 
   if [没有出行人] -> {
     # 去创建出行人
-    goto [创建出行人]
+    goto <创建出行人>
   }
 
   [选择第一个出行人]
@@ -97,12 +92,23 @@ var chars = new antlr4.InputStream(input);
 var lexer = new MyGrammarLexer(chars);
 var tokens = new antlr4.CommonTokenStream(lexer);
 var parser = new MyGrammarParser(tokens);
+parser.buildParseTrees = true;
+var ctx = parser.program()
+// var visitor = new MyGrammarVisitor()
+// var ast = visitor.visitProgram(ctx)
 
-console.log({
+const obj = {
   lexer,
   tokens,
-  parser
-})
+  parser,
+  ctx,
+  // ast,
+  tokenTexts: tokens.tokens.map(token => token.text)
+}
+
+console.log(obj)
+
+global.Graph = obj
 
 // console.log(parser.p())
 
