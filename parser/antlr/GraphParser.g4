@@ -7,11 +7,15 @@ options {
 
 
 program
-    : HashBangLine? module? EOF
+    : sourceElements? EOF?
     ;
 
-module
-    : moduleStatement*
+sourceElements
+    : sourceElement+
+    ;
+
+sourceElement
+    : moduleStatement
     ;
 
 moduleStatement
@@ -47,7 +51,7 @@ block
 
 
 importStatement
-    : Import moduleItems From StringLiteral
+    : Import moduleItems From Path
     ;
 
 moduleItems
@@ -55,7 +59,7 @@ moduleItems
     ;
 
 exportStatement
-    : Export (identifier | inferenceDeclaration)    # ExportDeclaration
+    : Export (identifier | inferenceDeclaration) eos   # ExportDeclaration
     ;
 
 stepStatement
@@ -96,5 +100,13 @@ gotoStatement
     ;
 
 startStatement
-    : Start (identifier | inferenceDeclaration)
+    : Start (Identifier | inferenceDeclaration)
+    ;
+
+
+eos
+    : SemiColon
+    | EOF
+    | {this.lineTerminatorAhead()}?
+    | {this.closeBrace()}?
     ;

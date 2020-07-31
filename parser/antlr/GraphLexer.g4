@@ -4,12 +4,12 @@ channels { ERROR }
 
 options { superClass=GraphLexerBase; }
 
-HashBangLine:                   { this.IsStartOfFile()}? '#!' ~[\r\n\u2028\u2029]*; // only allowed at start
+SingleLineComment:              '#' ~[\r\n\u2028\u2029]* -> channel(HIDDEN);
 
 LineTerminator:                 [\r\n\u2028\u2029] -> channel(HIDDEN);
 
-OpenBrace:                      '{';
-CloseBrace:                     '}';
+OpenBrace:                      '{' {this.ProcessOpenBrace();};
+CloseBrace:                     '}' {this.ProcessCloseBrace();};
 OpenBracket:                    '[';
 CloseBracket:                   ']';
 OpenAngleBracket:               '<';
@@ -17,8 +17,9 @@ CloseAngleBracket:              '>';
 Assign:                         '=';
 Result:                         '->';
 Comma:                          ',';
+SemiColon:                      ';';
 
-StringLiteral
+String
     : StringPart StringPart*
     ;
 
@@ -33,9 +34,13 @@ fragment StringPart
     | '\u200D'
     ;
 
-Identifier:    '<' StringLiteral '>';
+Identifier:    '<' String '>';
 
-Action:        '[' StringLiteral ']';
+Action:        '[' String ']';
+
+Path:          '"' DoubleStringCharacter* '"';
+
+WhiteSpaces:   [\t\u000B\u000C\u0020\u00A0]+ -> channel(HIDDEN);
 
 Start:         'start';
 Goto:          'goto';
@@ -48,7 +53,77 @@ Import:        'import';
 From:          'from';
 Export:        'export';
 
+// Fragment rules
 
+fragment DoubleStringCharacter
+    : ~["\\\r\n]
+    | '\\' EscapeSequence
+    | LineContinuation
+    ;
+fragment SingleStringCharacter
+    : ~['\\\r\n]
+    | '\\' EscapeSequence
+    | LineContinuation
+    ;
+fragment EscapeSequence
+    : CharacterEscapeSequence
+    | '0' // no digit ahead! TODO
+    | HexEscapeSequence
+    | UnicodeEscapeSequence
+    | ExtendedUnicodeEscapeSequence
+    ;
+fragment CharacterEscapeSequence
+    : SingleEscapeCharacter
+    | NonEscapeCharacter
+    ;
+fragment HexEscapeSequence
+    : 'x' HexDigit HexDigit
+    ;
+fragment UnicodeEscapeSequence
+    : 'u' HexDigit HexDigit HexDigit HexDigit
+    | 'u' '{' HexDigit HexDigit+ '}'
+    ;
+fragment ExtendedUnicodeEscapeSequence
+    : 'u' '{' HexDigit+ '}'
+    ;
+fragment SingleEscapeCharacter
+    : ['"\\bfnrtv]
+    ;
+
+fragment NonEscapeCharacter
+    : ~['"\\bfnrtv0-9xu\r\n]
+    ;
+fragment EscapeCharacter
+    : SingleEscapeCharacter
+    | [0-9]
+    | [xu]
+    ;
+fragment LineContinuation
+    : '\\' [\r\n\u2028\u2029]
+    ;
+fragment HexDigit
+    : [_0-9a-fA-F]
+    ;
+fragment DecimalIntegerLiteral
+    : '0'
+    | [1-9] [0-9_]*
+    ;
+fragment ExponentPart
+    : [eE] [+-]? [0-9_]+
+    ;
+fragment IdentifierPart
+    : IdentifierStart
+    | UnicodeCombiningMark
+    | UnicodeDigit
+    | UnicodeConnectorPunctuation
+    | '\u200C'
+    | '\u200D'
+    ;
+fragment IdentifierStart
+    : UnicodeLetter
+    | [$_]
+    | '\\' UnicodeEscapeSequence
+    ;
 fragment UnicodeLetter
     : [\u0041-\u005A]
     | [\u0061-\u007A]
@@ -443,12 +518,20 @@ fragment UnicodeConnectorPunctuation
     | [\uFF3F]
     | [\uFF65]
     ;
-
-fragment UnicodeEscapeSequence
-    : 'u' HexDigit HexDigit HexDigit HexDigit
-    | 'u' '{' HexDigit HexDigit+ '}'
+fragment RegularExpressionFirstChar
+    : ~[*\r\n\u2028\u2029\\/[]
+    | RegularExpressionBackslashSequence
+    | '[' RegularExpressionClassChar* ']'
     ;
-
-fragment HexDigit
-    : [_0-9a-fA-F]
+fragment RegularExpressionChar
+    : ~[\r\n\u2028\u2029\\/[]
+    | RegularExpressionBackslashSequence
+    | '[' RegularExpressionClassChar* ']'
+    ;
+fragment RegularExpressionClassChar
+    : ~[\r\n\u2028\u2029\]\\]
+    | RegularExpressionBackslashSequence
+    ;
+fragment RegularExpressionBackslashSequence
+    : '\\' ~[\r\n\u2028\u2029]
     ;

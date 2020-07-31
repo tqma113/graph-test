@@ -20,12 +20,21 @@ GraphParserListener.prototype.exitProgram = function(ctx) {
 };
 
 
-// Enter a parse tree produced by GraphParser#module.
-GraphParserListener.prototype.enterModule = function(ctx) {
+// Enter a parse tree produced by GraphParser#sourceElements.
+GraphParserListener.prototype.enterSourceElements = function(ctx) {
 };
 
-// Exit a parse tree produced by GraphParser#module.
-GraphParserListener.prototype.exitModule = function(ctx) {
+// Exit a parse tree produced by GraphParser#sourceElements.
+GraphParserListener.prototype.exitSourceElements = function(ctx) {
+};
+
+
+// Enter a parse tree produced by GraphParser#sourceElement.
+GraphParserListener.prototype.enterSourceElement = function(ctx) {
+};
+
+// Exit a parse tree produced by GraphParser#sourceElement.
+GraphParserListener.prototype.exitSourceElement = function(ctx) {
 };
 
 
@@ -197,6 +206,15 @@ GraphParserListener.prototype.enterStartStatement = function(ctx) {
 
 // Exit a parse tree produced by GraphParser#startStatement.
 GraphParserListener.prototype.exitStartStatement = function(ctx) {
+};
+
+
+// Enter a parse tree produced by GraphParser#eos.
+GraphParserListener.prototype.enterEos = function(ctx) {
+};
+
+// Exit a parse tree produced by GraphParser#eos.
+GraphParserListener.prototype.exitEos = function(ctx) {
 };
 
 
