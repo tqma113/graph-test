@@ -1,12 +1,61 @@
-# Specification
+lexer grammar GraphLexer;
 
-## Lexical
+HashBangLine:                   { this.IsStartOfFile()}? '#!' ~[\r\n\u2028\u2029]*; // only allowed at start
 
-### Code
+LineTerminator:                 [\r\n\u2028\u2029] -> channel(HIDDEN);
 
-Unicode Code, Case sensitive
+Space:                          ' ';
 
-```
+Tabulations:                    '\t;
+
+OpenBracket:                    '[';
+CloseBracket:                   ']';
+OpenAngleBracket:               '<';
+CloseAngleBracket:              '>;
+Assign:                         '=';
+Result:                         '->';
+
+StringLiteral
+    : StringPart*
+    ;
+
+fragment StringPart
+    : UnicodeLetter
+    | UnicodeCombiningMark
+    | UnicodeConnectorPunctuation
+    | [$_]
+    | '\\' UnicodeEscapeSequence
+    | UnicodeDigit
+    | '\u200C'
+    | '\u200D'
+    ;
+
+Identifier:                     ('<' StringLiteral '>');
+
+Action:                          ('[' StringLiteral ']');
+
+Start:         'start';
+Goto:          'goto';
+If:            'if';
+Else:          'else';
+Switch:        'switch';
+Case:          'case';
+Default:       'default';
+Import:        'import';
+From:          'from';
+Export:        'export';
+
+fragment StringPart
+    : UnicodeLetter
+    | UnicodeCombiningMark
+    | UnicodeConnectorPunctuation
+    | [$_]
+    | '\\' UnicodeEscapeSequence
+    | UnicodeDigit
+    | '\u200C'
+    | '\u200D'
+    ;
+
 fragment UnicodeLetter
     : [\u0041-\u005A]
     | [\u0061-\u007A]
@@ -401,226 +450,3 @@ fragment UnicodeConnectorPunctuation
     | [\uFF3F]
     | [\uFF65]
     ;
-```
-
-### Start Line
-
-```
-HashBangLine:                   { this.IsStartOfFile()}? '#!' ~[\r\n\u2028\u2029]*; // only allowed at start
-```
-
-### Keyword
-
-```
-Start:         'start';
-Goto:          'goto';
-If:            'if';
-Else:          'else';
-Switch:        'switch';
-Case:          'case';
-Default:       'default';
-Import:        'import';
-From:          'from';
-Export:        'export';
-```
-
-### White characters
-
-```
-Space:         ' ';
-
-Tabulations:   '\t;
-```
-
-### Operator
-
-```
-OpenBracket:                    '[';
-CloseBracket:                   ']';
-OpenAngleBracket:               '<';
-CloseAngleBracket:              '>;
-Assign:                         '=';
-Result:                         '->';
-```
-
-### End of line
-
-```
-LineTerminator:                 [\r\n\u2028\u2029] -> channel(HIDDEN);
-```
-
-### Comment
-
-```
-# xxx
-```
-
-### String
-
-```
-StringLiteral
-    : StringPart*
-    ;
-
-fragment StringPart
-    : UnicodeLetter
-    | UnicodeCombiningMark
-    | UnicodeConnectorPunctuation
-    | [$_]
-    | '\\' UnicodeEscapeSequence
-    | UnicodeDigit
-    | '\u200C'
-    | '\u200D'
-    ;
-```
-
-### Identifier
-
-Identifiers start with a letter, followed by any number of alphanumeric characters plus the underscore. 
-
-Identifiers are case sensitive.
-
-
-```
-Identifier:                     ('<' StringLiteral '>');
-```
-
-### Action
-
-Action start with a letter, followed by any number of alphanumeric characters plus the underscore. 
-
-```
-Action:                          ('[' StringLiteral ']');
-```
-
-## Syntax
-
-### Program
-
-```
-program
-    : HashBangLine? module? EOF
-    ;
-
-module
-    : moduleStatement*
-    ;
-
-moduleStatement
-    : inferenceDeclaration
-    | importStatement
-    | exportStatement
-    | startStatement
-    ;
-
-identifier
-    : Identifier
-    ;
-```
-
-### Statement
-
-```
-statement
-    | stepStatement
-    | ifStatement
-    | switchStatement
-    | gotoStatement
-    ;
-
-statementList
-    : statement+
-    ;
-```
-
-### Inference Declaration
-
-```
-inferenceDeclaration
-    : identifier '=' block
-    ;
-
-block
-    : '{' statementList? '}'
-    ;
-```
-
-### Import Statement
-
-```
-importStatement
-    : Import moduleItems From StringLiteral
-    ;
-
-moduleItems
-    : '{' (identifier ',')* (identifier ','?)? '}'
-    ;
-```
-
-### Export Statement
-
-```
-exportStatement
-    : Export (identifier | inferenceDeclaration) eos    # ExportDeclaration
-    ;
-```
-
-### Step Statement
-
-```
-stepStatement
-    : Action
-    ;
-```
-
-### If Statement
-
-```
-ifStatement
-    : If expresssion '->' block (Else block)?
-    ;
-
-expresssion
-    : Action
-    ;
-```
-
-### Switch Statement
-
-```
-switchStatement
-    : Switch expresssion switchBlock
-    ;
-
-switchBlock
-    : '{' caseClauses? (defaultClause caseClauses?)? '}'
-    ;
-
-caseClauses
-    : caseClause+
-    ;
-
-caseClause
-    : Case expression '->' block?
-    ;
-
-defaultClause
-    : Default '->' block?
-    ;
-```
-
-### Goto Statement
-
-```
-gotoStatement
-    : Goto identifier
-    ;
-```
-
-### Start Statement
-
-```
-startStatement
-    : Start (identifier | inferenceDeclaration)
-    ;
-```
