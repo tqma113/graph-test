@@ -5,8 +5,8 @@ var antlr4 = require('antlr4/index');
 // This class defines a complete generic visitor for a parse tree produced by GraphParser.
 
 function GraphParserVisitor() {
-	antlr4.tree.ParseTreeVisitor.call(this);
-	return this;
+  antlr4.tree.ParseTreeVisitor.call(this);
+  return this;
 }
 
 GraphParserVisitor.prototype = Object.create(antlr4.tree.ParseTreeVisitor.prototype);
@@ -14,31 +14,100 @@ GraphParserVisitor.prototype.constructor = GraphParserVisitor;
 
 // Visit a parse tree produced by GraphParser#program.
 GraphParserVisitor.prototype.visitProgram = function(ctx) {
-  return this.visitChildren(ctx);
-};
+  return {
+    type: 'program',
 
+    moduleStatements: this.visitModuleStatements(ctx.children[0]),
 
-// Visit a parse tree produced by GraphParser#sourceElements.
-GraphParserVisitor.prototype.visitSourceElements = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by GraphParser#sourceElement.
-GraphParserVisitor.prototype.visitSourceElement = function(ctx) {
-  return this.visitChildren(ctx);
+    pos: {
+      start: ctx.start,
+      stop: ctx.stop
+    }
+  }
 };
 
 
 // Visit a parse tree produced by GraphParser#moduleStatement.
 GraphParserVisitor.prototype.visitModuleStatement = function(ctx) {
-  return this.visitChildren(ctx);
+  const childContext = ctx.children[0]
+  let moduleStatement = null
+  switch (childContext.ruleIndex) {
+    // inferenceDeclaration
+    case 7:
+      moduleStatement = this.visitInferenceDeclaration(childContext)
+      break
+      // importStatement
+    case 9:
+      moduleStatement = this.visitImportStatement(childContext)
+      break
+      // exportStatement
+    case 11:
+      moduleStatement = this.visitExportDeclaration(childContext)
+      break
+      // startStatement
+    case 21:
+      moduleStatement = this.visitStartStatement(childContext)
+      break
+    default:
+  }
+
+  return {
+    type: 'moduleStatement',
+
+    moduleStatement,
+
+    pos: {
+      start: ctx.start,
+      stop: ctx.stop
+    }
+  }
+};
+
+
+// Visit a parse tree produced by GraphParser#moduleStatements.
+GraphParserVisitor.prototype.visitModuleStatements = function(ctx) {
+  return {
+    type: 'moduleStatements',
+
+    moduleStatementList: ctx.children.map(
+      childContext => this.visitModuleStatement(childContext)
+    ),
+
+    pos: {
+      start: ctx.start,
+      stop: ctx.stop
+    }
+  }
 };
 
 
 // Visit a parse tree produced by GraphParser#identifier.
 GraphParserVisitor.prototype.visitIdentifier = function(ctx) {
-  return this.visitChildren(ctx);
+  return {
+    type: 'identifier',
+
+    name: ctx.children[0].getSymbol(),
+
+    pos: {
+      start: ctx.start,
+      stop: ctx.stop
+    }
+  }
+};
+
+
+// Visit a parse tree produced by GraphParser#path.
+GraphParserVisitor.prototype.visitPath = function(ctx) {
+  return {
+    type: 'path',
+
+    pathStr: ctx.children[0].getSymbol(),
+
+    pos: {
+      start: ctx.start,
+      stop: ctx.stop
+    }
+  }
 };
 
 
@@ -56,19 +125,42 @@ GraphParserVisitor.prototype.visitStatementList = function(ctx) {
 
 // Visit a parse tree produced by GraphParser#inferenceDeclaration.
 GraphParserVisitor.prototype.visitInferenceDeclaration = function(ctx) {
-  return this.visitChildren(ctx);
+  return {
+    type: 'inferenceDeclaration',
+
+    identifier: this.visitIdentifier(ctx.children[0]),
+    block: this.visitBlock(ctx.children[2]),
+
+    pos: {
+      start: ctx.start,
+      stop: ctx.stop
+    }
+  }
 };
 
 
 // Visit a parse tree produced by GraphParser#block.
 GraphParserVisitor.prototype.visitBlock = function(ctx) {
+  return {
+    type: 'block'
+  }
   return this.visitChildren(ctx);
 };
 
 
 // Visit a parse tree produced by GraphParser#importStatement.
 GraphParserVisitor.prototype.visitImportStatement = function(ctx) {
-  return this.visitChildren(ctx);
+  return {
+    type: 'importStatement',
+
+    moduleItems: this.visitModuleItems(ctx.children[1]),
+    path: this.visitPath(ctx.children[3]),
+
+    pos: {
+      start: ctx.start,
+      stop: ctx.stop
+    }
+  }
 };
 
 

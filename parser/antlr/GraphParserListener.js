@@ -47,6 +47,15 @@ GraphParserListener.prototype.exitIdentifier = function(ctx) {
 };
 
 
+// Enter a parse tree produced by GraphParser#path.
+GraphParserListener.prototype.enterPath = function(ctx) {
+};
+
+// Exit a parse tree produced by GraphParser#path.
+GraphParserListener.prototype.exitPath = function(ctx) {
+};
+
+
 // Enter a parse tree produced by GraphParser#statement.
 GraphParserListener.prototype.enterStatement = function(ctx) {
 };

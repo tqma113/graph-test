@@ -6,6 +6,8 @@ var MyGrammarVisitor = require('./GraphParserVisitor').GraphParserVisitor;
 
 
 var input = `
+import { <测试> } from "state"
+
 <从首页进入旅游频道> = {
   [打开携程首页]
 
@@ -94,15 +96,15 @@ var tokens = new antlr4.CommonTokenStream(lexer);
 var parser = new MyGrammarParser(tokens);
 parser.buildParseTrees = true;
 var ctx = parser.program()
-// var visitor = new MyGrammarVisitor()
-// var ast = visitor.visitProgram(ctx)
+var visitor = new MyGrammarVisitor()
+var ast = visitor.visitProgram(ctx)
 
 const obj = {
   lexer,
   tokens,
   parser,
   ctx,
-  // ast,
+  ast,
   tokenTexts: tokens.tokens.map(token => token.text)
 }
 

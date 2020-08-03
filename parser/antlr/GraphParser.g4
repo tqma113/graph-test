@@ -25,6 +25,10 @@ identifier
     : Identifier
     ;
 
+path
+    : Path
+    ;
+
 statement
     : stepStatement
     | ifStatement
@@ -47,7 +51,7 @@ block
 
 
 importStatement
-    : Import moduleItems From Path
+    : Import moduleItems From path
     ;
 
 moduleItems
