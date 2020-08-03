@@ -39,6 +39,7 @@ const outputOptions = {
   file: './parser/antlr/dist/index.js',
   format: 'cjs',
   name: 'parser',
+  exports: 'default'
 }
 
 
