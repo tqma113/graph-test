@@ -6,7 +6,15 @@ var MyGrammarVisitor = require('./GraphParserVisitor').GraphParserVisitor;
 
 
 var input = `
-import { <测试> } from "state"
+import { <测试>, <测试> } from "state"
+
+export <从首页进入旅游频道>
+
+export <从首页进入旅游频道> = {
+  [打开携程首页]
+
+  [点击旅游频道]
+}
 
 <从首页进入旅游频道> = {
   [打开携程首页]

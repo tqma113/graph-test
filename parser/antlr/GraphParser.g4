@@ -58,8 +58,13 @@ moduleItems
     : '{' (identifier ',')* (identifier ','?)? '}'
     ;
 
+module
+    : identifier
+    | inferenceDeclaration
+    ;
+
 exportStatement
-    : Export (identifier | inferenceDeclaration) eos   # ExportDeclaration
+    : Export module
     ;
 
 stepStatement
@@ -100,13 +105,5 @@ gotoStatement
     ;
 
 startStatement
-    : Start (Identifier | inferenceDeclaration)
-    ;
-
-
-eos
-    : SemiColon
-    | EOF
-    | {this.lineTerminatorAhead()}?
-    | {this.closeBrace()}?
+    : Start module
     ;

@@ -31,17 +31,21 @@ GraphParserVisitor.prototype.visitProgram = function(ctx) {
 GraphParserVisitor.prototype.visitModuleStatement = function(ctx) {
   const childContext = ctx.children[0]
   let moduleStatement = null
-  switch (childContext.parser.ruleNames[childContext.ruleIndex]) {
-    case 'inferenceDeclaration':
+  switch (childContext.ruleIndex) {
+    // inferenceDeclaration
+    case 7:
       moduleStatement = this.visitInferenceDeclaration(childContext)
       break
-    case 'importStatement':
+      // importStatement
+    case 9:
       moduleStatement = this.visitImportStatement(childContext)
       break
-    case 'exportStatement':
-      moduleStatement = this.visitExportStatement(childContext)
+      // exportStatement
+    case 11:
+      moduleStatement = this.visitExportDeclaration(childContext)
       break
-    case 'startStatement':
+      // startStatement
+    case 21:
       moduleStatement = this.visitStartStatement(childContext)
       break
     default:
@@ -98,27 +102,41 @@ GraphParserVisitor.prototype.visitPath = function(ctx) {
 };
 
 
+
 // Visit a parse tree produced by GraphParser#statement.
 GraphParserVisitor.prototype.visitStatement = function(ctx) {
   const childContext = ctx.children[0]
   let statement = null
-  switch (childContext.parser.ruleNames[childContext.ruleIndex]) {
-    case 'stepStatement':
+  switch (childContext.ruleIndex) {
+    // stepStatement
+    case 12:
       statement = this.visitStepStatement(childContext)
       break
-    case 'ifStatement':
+      // ifStatement
+    case 13:
       statement = this.visitIfStatement(childContext)
       break
-    case 'switchStatement':
+      // switchStatement
+    case 15:
       statement = this.visitSwitchStatement(childContext)
       break
-    case 'gotoStatement':
+      // gotoStatement
+    case 20:
       statement = this.visitGotoStatement(childContext)
       break
     default:
   }
 
-  return statement
+  return {
+    type: 'statement',
+
+    statement,
+
+    pos: {
+      start: ctx.start,
+      stop: ctx.stop
+    }
+  }
 };
 
 
@@ -182,10 +200,7 @@ GraphParserVisitor.prototype.visitImportStatement = function(ctx) {
 
 // Visit a parse tree produced by GraphParser#moduleItems.
 GraphParserVisitor.prototype.visitModuleItems = function(ctx) {
-  const items = ctx.children.slice(1, ctx.children.length - 1).filter((childContext) => {
-    return (childContext.ruleIndex !== undefined) &&
-      ctx.parser.ruleNames[childContext.ruleIndex] === 'identifier'
-  })
+  const items = ctx.children.slice(1, ctx.children.length - 1)
 
   return {
     type: 'moduleItems',
@@ -200,30 +215,11 @@ GraphParserVisitor.prototype.visitModuleItems = function(ctx) {
 };
 
 
-// Visit a parse tree produced by GraphParser#module.
-GraphParserVisitor.prototype.visitModule = function(ctx) {
-  const childContext = ctx.children[0]
-  let module = null
-  switch (childContext.parser.ruleNames[childContext.ruleIndex]) {
-    case 'identifier':
-      module = this.visitIdentifier(childContext)
-      break
-    case 'inferenceDeclaration':
-      module = this.visitInferenceDeclaration(childContext)
-      break
-    default:
-  }
-
-  return module
-};
-
-
-// Visit a parse tree produced by GraphParser#exportStatement.
-GraphParserVisitor.prototype.visitExportStatement = function(ctx) {
+// Visit a parse tree produced by GraphParser#ExportDeclaration.
+GraphParserVisitor.prototype.visitExportDeclaration = function(ctx) {
+  console.log(ctx)
   return {
     type: 'exportStatement',
-
-    module: this.visitModule(ctx.children[1]),
 
     pos: {
       start: ctx.start,
@@ -235,167 +231,67 @@ GraphParserVisitor.prototype.visitExportStatement = function(ctx) {
 
 // Visit a parse tree produced by GraphParser#stepStatement.
 GraphParserVisitor.prototype.visitStepStatement = function(ctx) {
-  return {
-    type: 'stepStatement',
-
-    stepStr: ctx.children[0].getSymbol(),
-
-    pos: {
-      start: ctx.start,
-      stop: ctx.stop
-    }
-  };
+  return this.visitChildren(ctx);
 };
 
 
 // Visit a parse tree produced by GraphParser#ifStatement.
 GraphParserVisitor.prototype.visitIfStatement = function(ctx) {
-  const elseBlock = ctx.children.length > 4 ?
-    this.visitBlock(ctx.children[5]) : null
-
-  return {
-    type: 'ifStatement',
-
-    expression: this.visitExpression(ctx.children[1]),
-    block: this.visitBlock(ctx.children[3]),
-    elseBlock,
-
-    pos: {
-      start: ctx.start,
-      stop: ctx.stop
-    }
-  };
+  return this.visitChildren(ctx);
 };
 
 
 // Visit a parse tree produced by GraphParser#expression.
 GraphParserVisitor.prototype.visitExpression = function(ctx) {
-  return {
-    type: 'expression',
-
-    // expressionStr: ctx.children[0].getSymbol(),
-
-    pos: {
-      start: ctx.start,
-      stop: ctx.stop
-    }
-  };
+  return this.visitChildren(ctx);
 };
 
 
 // Visit a parse tree produced by GraphParser#switchStatement.
 GraphParserVisitor.prototype.visitSwitchStatement = function(ctx) {
-  return {
-    type: 'switchStatement',
-
-    expression: this.visitExpression(ctx.children[1]),
-    switchBlock: this.visitSwitchBlock(ctx.children[2]),
-
-    pos: {
-      start: ctx.start,
-      stop: ctx.stop
-    }
-  };
+  return this.visitChildren(ctx);
 };
 
 
 // Visit a parse tree produced by GraphParser#switchBlock.
 GraphParserVisitor.prototype.visitSwitchBlock = function(ctx) {
-  let caseClauses = []
-  let defaultClause = null
-
-  if (ctx.children.length > 2) {
-    ctx.children.slice(1, ctx.children.length - 1).forEach((childContext) => {
-      if (childContext.parser.ruleNames[childContext.ruleIndex] === 'defaultClause') {
-        defaultClause = this.visitDefaultClause(childContext)
-      } else if (childContext.parser.ruleNames[childContext.ruleIndex] === 'caseClauses') {
-        caseClauses.concat(this.visitCaseClauses(childContext))
-      }
-    })
-  }
-
-  return {
-    type: 'switchBlock',
-
-    caseClauses,
-    defaultClause,
-
-    pos: {
-      start: ctx.start,
-      stop: ctx.stop
-    }
-  };
+  return this.visitChildren(ctx);
 };
 
 
 // Visit a parse tree produced by GraphParser#caseClauses.
 GraphParserVisitor.prototype.visitCaseClauses = function(ctx) {
-  return ctx.children.map(childContext => this.visitCaseClause(childContext));
+  return this.visitChildren(ctx);
 };
 
 
 // Visit a parse tree produced by GraphParser#caseClause.
 GraphParserVisitor.prototype.visitCaseClause = function(ctx) {
-  const block = ctx.children.length === 4 ?
-    this.visitBlock(ctx.children[3]) : null
-  return {
-    type: 'caseClause',
-
-    expression: this.visitExpression(ctx.children[1]),
-    block,
-
-    pos: {
-      start: ctx.start,
-      stop: ctx.stop
-    }
-  };
+  return this.visitChildren(ctx);
 };
 
 
 // Visit a parse tree produced by GraphParser#defaultClause.
 GraphParserVisitor.prototype.visitDefaultClause = function(ctx) {
-  const block = ctx.children.length === 3 ?
-    this.visitBlock(ctx.children[2]) : null
-  return {
-    type: 'defaultClause',
-
-    block,
-
-    pos: {
-      start: ctx.start,
-      stop: ctx.stop
-    }
-  };
+  return this.visitChildren(ctx);
 };
 
 
 // Visit a parse tree produced by GraphParser#gotoStatement.
 GraphParserVisitor.prototype.visitGotoStatement = function(ctx) {
-  return {
-    type: 'gotoStatement',
-
-    identifier: this.visitIdentifier(ctx.children[1]),
-
-    pos: {
-      start: ctx.start,
-      stop: ctx.stop
-    }
-  };
+  return this.visitChildren(ctx);
 };
 
 
 // Visit a parse tree produced by GraphParser#startStatement.
 GraphParserVisitor.prototype.visitStartStatement = function(ctx) {
-  return {
-    type: 'startStatement',
+  return this.visitChildren(ctx);
+};
 
-    module: this.visitModule(ctx.children[1]),
 
-    pos: {
-      start: ctx.start,
-      stop: ctx.stop
-    }
-  };
+// Visit a parse tree produced by GraphParser#eos.
+GraphParserVisitor.prototype.visitEos = function(ctx) {
+  return this.visitChildren(ctx);
 };
 
 

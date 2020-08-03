@@ -10,7 +10,7 @@ var grammarFileName = "GraphParser.g4";
 
 
 var serializedATN = ["\u0003\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964",
-    "\u0003\u001e\u00b4\u0004\u0002\t\u0002\u0004\u0003\t\u0003\u0004\u0004",
+    "\u0003\u001e\u00ac\u0004\u0002\t\u0002\u0004\u0003\t\u0003\u0004\u0004",
     "\t\u0004\u0004\u0005\t\u0005\u0004\u0006\t\u0006\u0004\u0007\t\u0007",
     "\u0004\b\t\b\u0004\t\t\t\u0004\n\t\n\u0004\u000b\t\u000b\u0004\f\t\f",
     "\u0004\r\t\r\u0004\u000e\t\u000e\u0004\u000f\t\u000f\u0004\u0010\t\u0010",
@@ -25,97 +25,89 @@ var serializedATN = ["\u0003\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964",
     "\n\u0003\n\u0005\nY\n\n\u0003\n\u0003\n\u0003\u000b\u0003\u000b\u0003",
     "\u000b\u0003\u000b\u0003\u000b\u0003\f\u0003\f\u0003\f\u0003\f\u0007",
     "\ff\n\f\f\f\u000e\fi\u000b\f\u0003\f\u0003\f\u0005\fm\n\f\u0005\fo\n",
-    "\f\u0003\f\u0003\f\u0003\r\u0003\r\u0003\r\u0005\rv\n\r\u0003\r\u0003",
-    "\r\u0003\u000e\u0003\u000e\u0003\u000f\u0003\u000f\u0003\u000f\u0003",
-    "\u000f\u0003\u000f\u0003\u000f\u0005\u000f\u0082\n\u000f\u0003\u0010",
-    "\u0003\u0010\u0003\u0011\u0003\u0011\u0003\u0011\u0003\u0011\u0003\u0012",
-    "\u0003\u0012\u0005\u0012\u008c\n\u0012\u0003\u0012\u0003\u0012\u0005",
-    "\u0012\u0090\n\u0012\u0005\u0012\u0092\n\u0012\u0003\u0012\u0003\u0012",
-    "\u0003\u0013\u0006\u0013\u0097\n\u0013\r\u0013\u000e\u0013\u0098\u0003",
-    "\u0014\u0003\u0014\u0003\u0014\u0003\u0014\u0005\u0014\u009f\n\u0014",
-    "\u0003\u0015\u0003\u0015\u0003\u0015\u0005\u0015\u00a4\n\u0015\u0003",
-    "\u0016\u0003\u0016\u0003\u0016\u0003\u0017\u0003\u0017\u0003\u0017\u0005",
-    "\u0017\u00ac\n\u0017\u0003\u0018\u0003\u0018\u0003\u0018\u0003\u0018",
-    "\u0005\u0018\u00b2\n\u0018\u0003\u0018\u0002\u0002\u0019\u0002\u0004",
-    "\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u001e ",
-    "\"$&(*,.\u0002\u0002\u0002\u00b6\u00021\u0003\u0002\u0002\u0002\u0004",
-    "<\u0003\u0002\u0002\u0002\u0006?\u0003\u0002\u0002\u0002\bC\u0003\u0002",
-    "\u0002\u0002\nE\u0003\u0002\u0002\u0002\fK\u0003\u0002\u0002\u0002\u000e",
-    "N\u0003\u0002\u0002\u0002\u0010R\u0003\u0002\u0002\u0002\u0012V\u0003",
-    "\u0002\u0002\u0002\u0014\\\u0003\u0002\u0002\u0002\u0016a\u0003\u0002",
-    "\u0002\u0002\u0018r\u0003\u0002\u0002\u0002\u001ay\u0003\u0002\u0002",
-    "\u0002\u001c{\u0003\u0002\u0002\u0002\u001e\u0083\u0003\u0002\u0002",
-    "\u0002 \u0085\u0003\u0002\u0002\u0002\"\u0089\u0003\u0002\u0002\u0002",
-    "$\u0096\u0003\u0002\u0002\u0002&\u009a\u0003\u0002\u0002\u0002(\u00a0",
-    "\u0003\u0002\u0002\u0002*\u00a5\u0003\u0002\u0002\u0002,\u00a8\u0003",
-    "\u0002\u0002\u0002.\u00b1\u0003\u0002\u0002\u000202\u0007\u0003\u0002",
-    "\u000210\u0003\u0002\u0002\u000212\u0003\u0002\u0002\u000224\u0003\u0002",
-    "\u0002\u000235\u0005\u0006\u0004\u000243\u0003\u0002\u0002\u000245\u0003",
-    "\u0002\u0002\u000256\u0003\u0002\u0002\u000267\u0007\u0002\u0002\u0003",
-    "7\u0003\u0003\u0002\u0002\u00028=\u0005\u0010\t\u00029=\u0005\u0014",
-    "\u000b\u0002:=\u0005\u0018\r\u0002;=\u0005,\u0017\u0002<8\u0003\u0002",
-    "\u0002\u0002<9\u0003\u0002\u0002\u0002<:\u0003\u0002\u0002\u0002<;\u0003",
-    "\u0002\u0002\u0002=\u0005\u0003\u0002\u0002\u0002>@\u0005\u0004\u0003",
-    "\u0002?>\u0003\u0002\u0002\u0002@A\u0003\u0002\u0002\u0002A?\u0003\u0002",
-    "\u0002\u0002AB\u0003\u0002\u0002\u0002B\u0007\u0003\u0002\u0002\u0002",
-    "CD\u0007\u0010\u0002\u0002D\t\u0003\u0002\u0002\u0002EF\u0007\u0012",
-    "\u0002\u0002F\u000b\u0003\u0002\u0002\u0002GL\u0005\u001a\u000e\u0002",
-    "HL\u0005\u001c\u000f\u0002IL\u0005 \u0011\u0002JL\u0005*\u0016\u0002",
-    "KG\u0003\u0002\u0002\u0002KH\u0003\u0002\u0002\u0002KI\u0003\u0002\u0002",
-    "\u0002KJ\u0003\u0002\u0002\u0002L\r\u0003\u0002\u0002\u0002MO\u0005",
-    "\f\u0007\u0002NM\u0003\u0002\u0002\u0002OP\u0003\u0002\u0002\u0002P",
-    "N\u0003\u0002\u0002\u0002PQ\u0003\u0002\u0002\u0002Q\u000f\u0003\u0002",
-    "\u0002\u0002RS\u0005\b\u0005\u0002ST\u0007\f\u0002\u0002TU\u0005\u0012",
-    "\n\u0002U\u0011\u0003\u0002\u0002\u0002VX\u0007\u0006\u0002\u0002WY",
-    "\u0005\u000e\b\u0002XW\u0003\u0002\u0002\u0002XY\u0003\u0002\u0002\u0002",
-    "YZ\u0003\u0002\u0002\u0002Z[\u0007\u0007\u0002\u0002[\u0013\u0003\u0002",
-    "\u0002\u0002\\]\u0007\u001b\u0002\u0002]^\u0005\u0016\f\u0002^_\u0007",
-    "\u001c\u0002\u0002_`\u0005\n\u0006\u0002`\u0015\u0003\u0002\u0002\u0002",
-    "ag\u0007\u0006\u0002\u0002bc\u0005\b\u0005\u0002cd\u0007\u000e\u0002",
-    "\u0002df\u0003\u0002\u0002\u0002eb\u0003\u0002\u0002\u0002fi\u0003\u0002",
-    "\u0002\u0002ge\u0003\u0002\u0002\u0002gh\u0003\u0002\u0002\u0002hn\u0003",
-    "\u0002\u0002\u0002ig\u0003\u0002\u0002\u0002jl\u0005\b\u0005\u0002k",
-    "m\u0007\u000e\u0002\u0002lk\u0003\u0002\u0002\u0002lm\u0003\u0002\u0002",
-    "\u0002mo\u0003\u0002\u0002\u0002nj\u0003\u0002\u0002\u0002no\u0003\u0002",
-    "\u0002\u0002op\u0003\u0002\u0002\u0002pq\u0007\u0007\u0002\u0002q\u0017",
-    "\u0003\u0002\u0002\u0002ru\u0007\u001d\u0002\u0002sv\u0005\b\u0005\u0002",
-    "tv\u0005\u0010\t\u0002us\u0003\u0002\u0002\u0002ut\u0003\u0002\u0002",
-    "\u0002vw\u0003\u0002\u0002\u0002wx\u0005.\u0018\u0002x\u0019\u0003\u0002",
-    "\u0002\u0002yz\u0007\u0011\u0002\u0002z\u001b\u0003\u0002\u0002\u0002",
-    "{|\u0007\u0016\u0002\u0002|}\u0005\u001e\u0010\u0002}~\u0007\r\u0002",
-    "\u0002~\u0081\u0005\u0012\n\u0002\u007f\u0080\u0007\u0017\u0002\u0002",
-    "\u0080\u0082\u0005\u0012\n\u0002\u0081\u007f\u0003\u0002\u0002\u0002",
-    "\u0081\u0082\u0003\u0002\u0002\u0002\u0082\u001d\u0003\u0002\u0002\u0002",
-    "\u0083\u0084\u0007\u0011\u0002\u0002\u0084\u001f\u0003\u0002\u0002\u0002",
-    "\u0085\u0086\u0007\u0018\u0002\u0002\u0086\u0087\u0005\u001e\u0010\u0002",
-    "\u0087\u0088\u0005\"\u0012\u0002\u0088!\u0003\u0002\u0002\u0002\u0089",
-    "\u008b\u0007\u0006\u0002\u0002\u008a\u008c\u0005$\u0013\u0002\u008b",
-    "\u008a\u0003\u0002\u0002\u0002\u008b\u008c\u0003\u0002\u0002\u0002\u008c",
-    "\u0091\u0003\u0002\u0002\u0002\u008d\u008f\u0005(\u0015\u0002\u008e",
-    "\u0090\u0005$\u0013\u0002\u008f\u008e\u0003\u0002\u0002\u0002\u008f",
-    "\u0090\u0003\u0002\u0002\u0002\u0090\u0092\u0003\u0002\u0002\u0002\u0091",
-    "\u008d\u0003\u0002\u0002\u0002\u0091\u0092\u0003\u0002\u0002\u0002\u0092",
-    "\u0093\u0003\u0002\u0002\u0002\u0093\u0094\u0007\u0007\u0002\u0002\u0094",
-    "#\u0003\u0002\u0002\u0002\u0095\u0097\u0005&\u0014\u0002\u0096\u0095",
-    "\u0003\u0002\u0002\u0002\u0097\u0098\u0003\u0002\u0002\u0002\u0098\u0096",
-    "\u0003\u0002\u0002\u0002\u0098\u0099\u0003\u0002\u0002\u0002\u0099%",
-    "\u0003\u0002\u0002\u0002\u009a\u009b\u0007\u0019\u0002\u0002\u009b\u009c",
-    "\u0005\u001e\u0010\u0002\u009c\u009e\u0007\r\u0002\u0002\u009d\u009f",
-    "\u0005\u0012\n\u0002\u009e\u009d\u0003\u0002\u0002\u0002\u009e\u009f",
-    "\u0003\u0002\u0002\u0002\u009f\'\u0003\u0002\u0002\u0002\u00a0\u00a1",
-    "\u0007\u001a\u0002\u0002\u00a1\u00a3\u0007\r\u0002\u0002\u00a2\u00a4",
-    "\u0005\u0012\n\u0002\u00a3\u00a2\u0003\u0002\u0002\u0002\u00a3\u00a4",
-    "\u0003\u0002\u0002\u0002\u00a4)\u0003\u0002\u0002\u0002\u00a5\u00a6",
-    "\u0007\u0015\u0002\u0002\u00a6\u00a7\u0005\b\u0005\u0002\u00a7+\u0003",
-    "\u0002\u0002\u0002\u00a8\u00ab\u0007\u0014\u0002\u0002\u00a9\u00ac\u0007",
-    "\u0010\u0002\u0002\u00aa\u00ac\u0005\u0010\t\u0002\u00ab\u00a9\u0003",
-    "\u0002\u0002\u0002\u00ab\u00aa\u0003\u0002\u0002\u0002\u00ac-\u0003",
-    "\u0002\u0002\u0002\u00ad\u00b2\u0007\u000f\u0002\u0002\u00ae\u00b2\u0007",
-    "\u0002\u0002\u0003\u00af\u00b2\u0006\u0018\u0002\u0002\u00b0\u00b2\u0006",
-    "\u0018\u0003\u0002\u00b1\u00ad\u0003\u0002\u0002\u0002\u00b1\u00ae\u0003",
-    "\u0002\u0002\u0002\u00b1\u00af\u0003\u0002\u0002\u0002\u00b1\u00b0\u0003",
-    "\u0002\u0002\u0002\u00b2/\u0003\u0002\u0002\u0002\u001614<AKPXglnu\u0081",
-    "\u008b\u008f\u0091\u0098\u009e\u00a3\u00ab\u00b1"].join("");
+    "\f\u0003\f\u0003\f\u0003\r\u0003\r\u0005\ru\n\r\u0003\u000e\u0003\u000e",
+    "\u0003\u000e\u0003\u000f\u0003\u000f\u0003\u0010\u0003\u0010\u0003\u0010",
+    "\u0003\u0010\u0003\u0010\u0003\u0010\u0005\u0010\u0082\n\u0010\u0003",
+    "\u0011\u0003\u0011\u0003\u0012\u0003\u0012\u0003\u0012\u0003\u0012\u0003",
+    "\u0013\u0003\u0013\u0005\u0013\u008c\n\u0013\u0003\u0013\u0003\u0013",
+    "\u0005\u0013\u0090\n\u0013\u0005\u0013\u0092\n\u0013\u0003\u0013\u0003",
+    "\u0013\u0003\u0014\u0006\u0014\u0097\n\u0014\r\u0014\u000e\u0014\u0098",
+    "\u0003\u0015\u0003\u0015\u0003\u0015\u0003\u0015\u0005\u0015\u009f\n",
+    "\u0015\u0003\u0016\u0003\u0016\u0003\u0016\u0005\u0016\u00a4\n\u0016",
+    "\u0003\u0017\u0003\u0017\u0003\u0017\u0003\u0018\u0003\u0018\u0003\u0018",
+    "\u0003\u0018\u0002\u0002\u0019\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012",
+    "\u0014\u0016\u0018\u001a\u001c\u001e \"$&(*,.\u0002\u0002\u0002\u00aa",
+    "\u00021\u0003\u0002\u0002\u0002\u0004<\u0003\u0002\u0002\u0002\u0006",
+    "?\u0003\u0002\u0002\u0002\bC\u0003\u0002\u0002\u0002\nE\u0003\u0002",
+    "\u0002\u0002\fK\u0003\u0002\u0002\u0002\u000eN\u0003\u0002\u0002\u0002",
+    "\u0010R\u0003\u0002\u0002\u0002\u0012V\u0003\u0002\u0002\u0002\u0014",
+    "\\\u0003\u0002\u0002\u0002\u0016a\u0003\u0002\u0002\u0002\u0018t\u0003",
+    "\u0002\u0002\u0002\u001av\u0003\u0002\u0002\u0002\u001cy\u0003\u0002",
+    "\u0002\u0002\u001e{\u0003\u0002\u0002\u0002 \u0083\u0003\u0002\u0002",
+    "\u0002\"\u0085\u0003\u0002\u0002\u0002$\u0089\u0003\u0002\u0002\u0002",
+    "&\u0096\u0003\u0002\u0002\u0002(\u009a\u0003\u0002\u0002\u0002*\u00a0",
+    "\u0003\u0002\u0002\u0002,\u00a5\u0003\u0002\u0002\u0002.\u00a8\u0003",
+    "\u0002\u0002\u000202\u0007\u0003\u0002\u000210\u0003\u0002\u0002\u0002",
+    "12\u0003\u0002\u0002\u000224\u0003\u0002\u0002\u000235\u0005\u0006\u0004",
+    "\u000243\u0003\u0002\u0002\u000245\u0003\u0002\u0002\u000256\u0003\u0002",
+    "\u0002\u000267\u0007\u0002\u0002\u00037\u0003\u0003\u0002\u0002\u0002",
+    "8=\u0005\u0010\t\u00029=\u0005\u0014\u000b\u0002:=\u0005\u001a\u000e",
+    "\u0002;=\u0005.\u0018\u0002<8\u0003\u0002\u0002\u0002<9\u0003\u0002",
+    "\u0002\u0002<:\u0003\u0002\u0002\u0002<;\u0003\u0002\u0002\u0002=\u0005",
+    "\u0003\u0002\u0002\u0002>@\u0005\u0004\u0003\u0002?>\u0003\u0002\u0002",
+    "\u0002@A\u0003\u0002\u0002\u0002A?\u0003\u0002\u0002\u0002AB\u0003\u0002",
+    "\u0002\u0002B\u0007\u0003\u0002\u0002\u0002CD\u0007\u0010\u0002\u0002",
+    "D\t\u0003\u0002\u0002\u0002EF\u0007\u0012\u0002\u0002F\u000b\u0003\u0002",
+    "\u0002\u0002GL\u0005\u001c\u000f\u0002HL\u0005\u001e\u0010\u0002IL\u0005",
+    "\"\u0012\u0002JL\u0005,\u0017\u0002KG\u0003\u0002\u0002\u0002KH\u0003",
+    "\u0002\u0002\u0002KI\u0003\u0002\u0002\u0002KJ\u0003\u0002\u0002\u0002",
+    "L\r\u0003\u0002\u0002\u0002MO\u0005\f\u0007\u0002NM\u0003\u0002\u0002",
+    "\u0002OP\u0003\u0002\u0002\u0002PN\u0003\u0002\u0002\u0002PQ\u0003\u0002",
+    "\u0002\u0002Q\u000f\u0003\u0002\u0002\u0002RS\u0005\b\u0005\u0002ST",
+    "\u0007\f\u0002\u0002TU\u0005\u0012\n\u0002U\u0011\u0003\u0002\u0002",
+    "\u0002VX\u0007\u0006\u0002\u0002WY\u0005\u000e\b\u0002XW\u0003\u0002",
+    "\u0002\u0002XY\u0003\u0002\u0002\u0002YZ\u0003\u0002\u0002\u0002Z[\u0007",
+    "\u0007\u0002\u0002[\u0013\u0003\u0002\u0002\u0002\\]\u0007\u001b\u0002",
+    "\u0002]^\u0005\u0016\f\u0002^_\u0007\u001c\u0002\u0002_`\u0005\n\u0006",
+    "\u0002`\u0015\u0003\u0002\u0002\u0002ag\u0007\u0006\u0002\u0002bc\u0005",
+    "\b\u0005\u0002cd\u0007\u000e\u0002\u0002df\u0003\u0002\u0002\u0002e",
+    "b\u0003\u0002\u0002\u0002fi\u0003\u0002\u0002\u0002ge\u0003\u0002\u0002",
+    "\u0002gh\u0003\u0002\u0002\u0002hn\u0003\u0002\u0002\u0002ig\u0003\u0002",
+    "\u0002\u0002jl\u0005\b\u0005\u0002km\u0007\u000e\u0002\u0002lk\u0003",
+    "\u0002\u0002\u0002lm\u0003\u0002\u0002\u0002mo\u0003\u0002\u0002\u0002",
+    "nj\u0003\u0002\u0002\u0002no\u0003\u0002\u0002\u0002op\u0003\u0002\u0002",
+    "\u0002pq\u0007\u0007\u0002\u0002q\u0017\u0003\u0002\u0002\u0002ru\u0005",
+    "\b\u0005\u0002su\u0005\u0010\t\u0002tr\u0003\u0002\u0002\u0002ts\u0003",
+    "\u0002\u0002\u0002u\u0019\u0003\u0002\u0002\u0002vw\u0007\u001d\u0002",
+    "\u0002wx\u0005\u0018\r\u0002x\u001b\u0003\u0002\u0002\u0002yz\u0007",
+    "\u0011\u0002\u0002z\u001d\u0003\u0002\u0002\u0002{|\u0007\u0016\u0002",
+    "\u0002|}\u0005 \u0011\u0002}~\u0007\r\u0002\u0002~\u0081\u0005\u0012",
+    "\n\u0002\u007f\u0080\u0007\u0017\u0002\u0002\u0080\u0082\u0005\u0012",
+    "\n\u0002\u0081\u007f\u0003\u0002\u0002\u0002\u0081\u0082\u0003\u0002",
+    "\u0002\u0002\u0082\u001f\u0003\u0002\u0002\u0002\u0083\u0084\u0007\u0011",
+    "\u0002\u0002\u0084!\u0003\u0002\u0002\u0002\u0085\u0086\u0007\u0018",
+    "\u0002\u0002\u0086\u0087\u0005 \u0011\u0002\u0087\u0088\u0005$\u0013",
+    "\u0002\u0088#\u0003\u0002\u0002\u0002\u0089\u008b\u0007\u0006\u0002",
+    "\u0002\u008a\u008c\u0005&\u0014\u0002\u008b\u008a\u0003\u0002\u0002",
+    "\u0002\u008b\u008c\u0003\u0002\u0002\u0002\u008c\u0091\u0003\u0002\u0002",
+    "\u0002\u008d\u008f\u0005*\u0016\u0002\u008e\u0090\u0005&\u0014\u0002",
+    "\u008f\u008e\u0003\u0002\u0002\u0002\u008f\u0090\u0003\u0002\u0002\u0002",
+    "\u0090\u0092\u0003\u0002\u0002\u0002\u0091\u008d\u0003\u0002\u0002\u0002",
+    "\u0091\u0092\u0003\u0002\u0002\u0002\u0092\u0093\u0003\u0002\u0002\u0002",
+    "\u0093\u0094\u0007\u0007\u0002\u0002\u0094%\u0003\u0002\u0002\u0002",
+    "\u0095\u0097\u0005(\u0015\u0002\u0096\u0095\u0003\u0002\u0002\u0002",
+    "\u0097\u0098\u0003\u0002\u0002\u0002\u0098\u0096\u0003\u0002\u0002\u0002",
+    "\u0098\u0099\u0003\u0002\u0002\u0002\u0099\'\u0003\u0002\u0002\u0002",
+    "\u009a\u009b\u0007\u0019\u0002\u0002\u009b\u009c\u0005 \u0011\u0002",
+    "\u009c\u009e\u0007\r\u0002\u0002\u009d\u009f\u0005\u0012\n\u0002\u009e",
+    "\u009d\u0003\u0002\u0002\u0002\u009e\u009f\u0003\u0002\u0002\u0002\u009f",
+    ")\u0003\u0002\u0002\u0002\u00a0\u00a1\u0007\u001a\u0002\u0002\u00a1",
+    "\u00a3\u0007\r\u0002\u0002\u00a2\u00a4\u0005\u0012\n\u0002\u00a3\u00a2",
+    "\u0003\u0002\u0002\u0002\u00a3\u00a4\u0003\u0002\u0002\u0002\u00a4+",
+    "\u0003\u0002\u0002\u0002\u00a5\u00a6\u0007\u0015\u0002\u0002\u00a6\u00a7",
+    "\u0005\b\u0005\u0002\u00a7-\u0003\u0002\u0002\u0002\u00a8\u00a9\u0007",
+    "\u0014\u0002\u0002\u00a9\u00aa\u0005\u0018\r\u0002\u00aa/\u0003\u0002",
+    "\u0002\u0002\u001414<AKPXglnt\u0081\u008b\u008f\u0091\u0098\u009e\u00a3"].join("");
 
 
 var atn = new antlr4.atn.ATNDeserializer().deserialize(serializedATN);
@@ -140,10 +132,10 @@ var symbolicNames = [ null, "HashBangLine", "SingleLineComment", "LineTerminator
 
 var ruleNames =  [ "program", "moduleStatement", "moduleStatements", "identifier", 
                    "path", "statement", "statementList", "inferenceDeclaration", 
-                   "block", "importStatement", "moduleItems", "exportStatement", 
-                   "stepStatement", "ifStatement", "expression", "switchStatement", 
-                   "switchBlock", "caseClauses", "caseClause", "defaultClause", 
-                   "gotoStatement", "startStatement", "eos" ];
+                   "block", "importStatement", "moduleItems", "module", 
+                   "exportStatement", "stepStatement", "ifStatement", "expression", 
+                   "switchStatement", "switchBlock", "caseClauses", "caseClause", 
+                   "defaultClause", "gotoStatement", "startStatement" ];
 
 function GraphParser (input) {
 	GraphParserBase.call(this, input);
@@ -204,18 +196,18 @@ GraphParser.RULE_inferenceDeclaration = 7;
 GraphParser.RULE_block = 8;
 GraphParser.RULE_importStatement = 9;
 GraphParser.RULE_moduleItems = 10;
-GraphParser.RULE_exportStatement = 11;
-GraphParser.RULE_stepStatement = 12;
-GraphParser.RULE_ifStatement = 13;
-GraphParser.RULE_expression = 14;
-GraphParser.RULE_switchStatement = 15;
-GraphParser.RULE_switchBlock = 16;
-GraphParser.RULE_caseClauses = 17;
-GraphParser.RULE_caseClause = 18;
-GraphParser.RULE_defaultClause = 19;
-GraphParser.RULE_gotoStatement = 20;
-GraphParser.RULE_startStatement = 21;
-GraphParser.RULE_eos = 22;
+GraphParser.RULE_module = 11;
+GraphParser.RULE_exportStatement = 12;
+GraphParser.RULE_stepStatement = 13;
+GraphParser.RULE_ifStatement = 14;
+GraphParser.RULE_expression = 15;
+GraphParser.RULE_switchStatement = 16;
+GraphParser.RULE_switchBlock = 17;
+GraphParser.RULE_caseClauses = 18;
+GraphParser.RULE_caseClause = 19;
+GraphParser.RULE_defaultClause = 20;
+GraphParser.RULE_gotoStatement = 21;
+GraphParser.RULE_startStatement = 22;
 
 
 function ProgramContext(parser, parent, invokingState) {
@@ -1203,6 +1195,92 @@ GraphParser.prototype.moduleItems = function() {
 };
 
 
+function ModuleContext(parser, parent, invokingState) {
+	if(parent===undefined) {
+	    parent = null;
+	}
+	if(invokingState===undefined || invokingState===null) {
+		invokingState = -1;
+	}
+	antlr4.ParserRuleContext.call(this, parent, invokingState);
+    this.parser = parser;
+    this.ruleIndex = GraphParser.RULE_module;
+    return this;
+}
+
+ModuleContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
+ModuleContext.prototype.constructor = ModuleContext;
+
+ModuleContext.prototype.identifier = function() {
+    return this.getTypedRuleContext(IdentifierContext,0);
+};
+
+ModuleContext.prototype.inferenceDeclaration = function() {
+    return this.getTypedRuleContext(InferenceDeclarationContext,0);
+};
+
+ModuleContext.prototype.enterRule = function(listener) {
+    if(listener instanceof GraphParserListener ) {
+        listener.enterModule(this);
+	}
+};
+
+ModuleContext.prototype.exitRule = function(listener) {
+    if(listener instanceof GraphParserListener ) {
+        listener.exitModule(this);
+	}
+};
+
+ModuleContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof GraphParserVisitor ) {
+        return visitor.visitModule(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
+
+
+
+GraphParser.ModuleContext = ModuleContext;
+
+GraphParser.prototype.module = function() {
+
+    var localctx = new ModuleContext(this, this._ctx, this.state);
+    this.enterRule(localctx, 22, GraphParser.RULE_module);
+    try {
+        this.state = 114;
+        this._errHandler.sync(this);
+        var la_ = this._interp.adaptivePredict(this._input,10,this._ctx);
+        switch(la_) {
+        case 1:
+            this.enterOuterAlt(localctx, 1);
+            this.state = 112;
+            this.identifier();
+            break;
+
+        case 2:
+            this.enterOuterAlt(localctx, 2);
+            this.state = 113;
+            this.inferenceDeclaration();
+            break;
+
+        }
+    } catch (re) {
+    	if(re instanceof antlr4.error.RecognitionException) {
+	        localctx.exception = re;
+	        this._errHandler.reportError(this, re);
+	        this._errHandler.recover(this, re);
+	    } else {
+	    	throw re;
+	    }
+    } finally {
+        this.exitRule();
+    }
+    return localctx;
+};
+
+
 function ExportStatementContext(parser, parent, invokingState) {
 	if(parent===undefined) {
 	    parent = null;
@@ -1219,58 +1297,34 @@ function ExportStatementContext(parser, parent, invokingState) {
 ExportStatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 ExportStatementContext.prototype.constructor = ExportStatementContext;
 
-
- 
-ExportStatementContext.prototype.copyFrom = function(ctx) {
-    antlr4.ParserRuleContext.prototype.copyFrom.call(this, ctx);
-};
-
-
-function ExportDeclarationContext(parser, ctx) {
-	ExportStatementContext.call(this, parser);
-    ExportStatementContext.prototype.copyFrom.call(this, ctx);
-    return this;
-}
-
-ExportDeclarationContext.prototype = Object.create(ExportStatementContext.prototype);
-ExportDeclarationContext.prototype.constructor = ExportDeclarationContext;
-
-GraphParser.ExportDeclarationContext = ExportDeclarationContext;
-
-ExportDeclarationContext.prototype.Export = function() {
+ExportStatementContext.prototype.Export = function() {
     return this.getToken(GraphParser.Export, 0);
 };
 
-ExportDeclarationContext.prototype.eos = function() {
-    return this.getTypedRuleContext(EosContext,0);
+ExportStatementContext.prototype.module = function() {
+    return this.getTypedRuleContext(ModuleContext,0);
 };
 
-ExportDeclarationContext.prototype.identifier = function() {
-    return this.getTypedRuleContext(IdentifierContext,0);
-};
-
-ExportDeclarationContext.prototype.inferenceDeclaration = function() {
-    return this.getTypedRuleContext(InferenceDeclarationContext,0);
-};
-ExportDeclarationContext.prototype.enterRule = function(listener) {
+ExportStatementContext.prototype.enterRule = function(listener) {
     if(listener instanceof GraphParserListener ) {
-        listener.enterExportDeclaration(this);
+        listener.enterExportStatement(this);
 	}
 };
 
-ExportDeclarationContext.prototype.exitRule = function(listener) {
+ExportStatementContext.prototype.exitRule = function(listener) {
     if(listener instanceof GraphParserListener ) {
-        listener.exitExportDeclaration(this);
+        listener.exitExportStatement(this);
 	}
 };
 
-ExportDeclarationContext.prototype.accept = function(visitor) {
+ExportStatementContext.prototype.accept = function(visitor) {
     if ( visitor instanceof GraphParserVisitor ) {
-        return visitor.visitExportDeclaration(this);
+        return visitor.visitExportStatement(this);
     } else {
         return visitor.visitChildren(this);
     }
 };
+
 
 
 
@@ -1279,29 +1333,13 @@ GraphParser.ExportStatementContext = ExportStatementContext;
 GraphParser.prototype.exportStatement = function() {
 
     var localctx = new ExportStatementContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 22, GraphParser.RULE_exportStatement);
+    this.enterRule(localctx, 24, GraphParser.RULE_exportStatement);
     try {
-        localctx = new ExportDeclarationContext(this, localctx);
         this.enterOuterAlt(localctx, 1);
-        this.state = 112;
+        this.state = 116;
         this.match(GraphParser.Export);
-        this.state = 115;
-        this._errHandler.sync(this);
-        var la_ = this._interp.adaptivePredict(this._input,10,this._ctx);
-        switch(la_) {
-        case 1:
-            this.state = 113;
-            this.identifier();
-            break;
-
-        case 2:
-            this.state = 114;
-            this.inferenceDeclaration();
-            break;
-
-        }
         this.state = 117;
-        this.eos();
+        this.module();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
 	        localctx.exception = re;
@@ -1365,7 +1403,7 @@ GraphParser.StepStatementContext = StepStatementContext;
 GraphParser.prototype.stepStatement = function() {
 
     var localctx = new StepStatementContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 24, GraphParser.RULE_stepStatement);
+    this.enterRule(localctx, 26, GraphParser.RULE_stepStatement);
     try {
         this.enterOuterAlt(localctx, 1);
         this.state = 119;
@@ -1456,7 +1494,7 @@ GraphParser.IfStatementContext = IfStatementContext;
 GraphParser.prototype.ifStatement = function() {
 
     var localctx = new IfStatementContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 26, GraphParser.RULE_ifStatement);
+    this.enterRule(localctx, 28, GraphParser.RULE_ifStatement);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
@@ -1541,7 +1579,7 @@ GraphParser.ExpressionContext = ExpressionContext;
 GraphParser.prototype.expression = function() {
 
     var localctx = new ExpressionContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 28, GraphParser.RULE_expression);
+    this.enterRule(localctx, 30, GraphParser.RULE_expression);
     try {
         this.enterOuterAlt(localctx, 1);
         this.state = 129;
@@ -1617,7 +1655,7 @@ GraphParser.SwitchStatementContext = SwitchStatementContext;
 GraphParser.prototype.switchStatement = function() {
 
     var localctx = new SwitchStatementContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 30, GraphParser.RULE_switchStatement);
+    this.enterRule(localctx, 32, GraphParser.RULE_switchStatement);
     try {
         this.enterOuterAlt(localctx, 1);
         this.state = 131;
@@ -1708,7 +1746,7 @@ GraphParser.SwitchBlockContext = SwitchBlockContext;
 GraphParser.prototype.switchBlock = function() {
 
     var localctx = new SwitchBlockContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 32, GraphParser.RULE_switchBlock);
+    this.enterRule(localctx, 34, GraphParser.RULE_switchBlock);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
@@ -1810,7 +1848,7 @@ GraphParser.CaseClausesContext = CaseClausesContext;
 GraphParser.prototype.caseClauses = function() {
 
     var localctx = new CaseClausesContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 34, GraphParser.RULE_caseClauses);
+    this.enterRule(localctx, 36, GraphParser.RULE_caseClauses);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
@@ -1899,7 +1937,7 @@ GraphParser.CaseClauseContext = CaseClauseContext;
 GraphParser.prototype.caseClause = function() {
 
     var localctx = new CaseClauseContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 36, GraphParser.RULE_caseClause);
+    this.enterRule(localctx, 38, GraphParser.RULE_caseClause);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
@@ -1988,7 +2026,7 @@ GraphParser.DefaultClauseContext = DefaultClauseContext;
 GraphParser.prototype.defaultClause = function() {
 
     var localctx = new DefaultClauseContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 38, GraphParser.RULE_defaultClause);
+    this.enterRule(localctx, 40, GraphParser.RULE_defaultClause);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
@@ -2071,7 +2109,7 @@ GraphParser.GotoStatementContext = GotoStatementContext;
 GraphParser.prototype.gotoStatement = function() {
 
     var localctx = new GotoStatementContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 40, GraphParser.RULE_gotoStatement);
+    this.enterRule(localctx, 42, GraphParser.RULE_gotoStatement);
     try {
         this.enterOuterAlt(localctx, 1);
         this.state = 163;
@@ -2113,12 +2151,8 @@ StartStatementContext.prototype.Start = function() {
     return this.getToken(GraphParser.Start, 0);
 };
 
-StartStatementContext.prototype.Identifier = function() {
-    return this.getToken(GraphParser.Identifier, 0);
-};
-
-StartStatementContext.prototype.inferenceDeclaration = function() {
-    return this.getTypedRuleContext(InferenceDeclarationContext,0);
+StartStatementContext.prototype.module = function() {
+    return this.getTypedRuleContext(ModuleContext,0);
 };
 
 StartStatementContext.prototype.enterRule = function(listener) {
@@ -2149,26 +2183,13 @@ GraphParser.StartStatementContext = StartStatementContext;
 GraphParser.prototype.startStatement = function() {
 
     var localctx = new StartStatementContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 42, GraphParser.RULE_startStatement);
+    this.enterRule(localctx, 44, GraphParser.RULE_startStatement);
     try {
         this.enterOuterAlt(localctx, 1);
         this.state = 166;
         this.match(GraphParser.Start);
-        this.state = 169;
-        this._errHandler.sync(this);
-        var la_ = this._interp.adaptivePredict(this._input,18,this._ctx);
-        switch(la_) {
-        case 1:
-            this.state = 167;
-            this.match(GraphParser.Identifier);
-            break;
-
-        case 2:
-            this.state = 168;
-            this.inferenceDeclaration();
-            break;
-
-        }
+        this.state = 167;
+        this.module();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
 	        localctx.exception = re;
@@ -2181,129 +2202,6 @@ GraphParser.prototype.startStatement = function() {
         this.exitRule();
     }
     return localctx;
-};
-
-
-function EosContext(parser, parent, invokingState) {
-	if(parent===undefined) {
-	    parent = null;
-	}
-	if(invokingState===undefined || invokingState===null) {
-		invokingState = -1;
-	}
-	antlr4.ParserRuleContext.call(this, parent, invokingState);
-    this.parser = parser;
-    this.ruleIndex = GraphParser.RULE_eos;
-    return this;
-}
-
-EosContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
-EosContext.prototype.constructor = EosContext;
-
-EosContext.prototype.SemiColon = function() {
-    return this.getToken(GraphParser.SemiColon, 0);
-};
-
-EosContext.prototype.EOF = function() {
-    return this.getToken(GraphParser.EOF, 0);
-};
-
-EosContext.prototype.enterRule = function(listener) {
-    if(listener instanceof GraphParserListener ) {
-        listener.enterEos(this);
-	}
-};
-
-EosContext.prototype.exitRule = function(listener) {
-    if(listener instanceof GraphParserListener ) {
-        listener.exitEos(this);
-	}
-};
-
-EosContext.prototype.accept = function(visitor) {
-    if ( visitor instanceof GraphParserVisitor ) {
-        return visitor.visitEos(this);
-    } else {
-        return visitor.visitChildren(this);
-    }
-};
-
-
-
-
-GraphParser.EosContext = EosContext;
-
-GraphParser.prototype.eos = function() {
-
-    var localctx = new EosContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 44, GraphParser.RULE_eos);
-    try {
-        this.state = 175;
-        this._errHandler.sync(this);
-        var la_ = this._interp.adaptivePredict(this._input,19,this._ctx);
-        switch(la_) {
-        case 1:
-            this.enterOuterAlt(localctx, 1);
-            this.state = 171;
-            this.match(GraphParser.SemiColon);
-            break;
-
-        case 2:
-            this.enterOuterAlt(localctx, 2);
-            this.state = 172;
-            this.match(GraphParser.EOF);
-            break;
-
-        case 3:
-            this.enterOuterAlt(localctx, 3);
-            this.state = 173;
-            if (!( this.lineTerminatorAhead())) {
-                throw new antlr4.error.FailedPredicateException(this, "this.lineTerminatorAhead()");
-            }
-            break;
-
-        case 4:
-            this.enterOuterAlt(localctx, 4);
-            this.state = 174;
-            if (!( this.closeBrace())) {
-                throw new antlr4.error.FailedPredicateException(this, "this.closeBrace()");
-            }
-            break;
-
-        }
-    } catch (re) {
-    	if(re instanceof antlr4.error.RecognitionException) {
-	        localctx.exception = re;
-	        this._errHandler.reportError(this, re);
-	        this._errHandler.recover(this, re);
-	    } else {
-	    	throw re;
-	    }
-    } finally {
-        this.exitRule();
-    }
-    return localctx;
-};
-
-
-GraphParser.prototype.sempred = function(localctx, ruleIndex, predIndex) {
-	switch(ruleIndex) {
-	case 22:
-			return this.eos_sempred(localctx, predIndex);
-    default:
-        throw "No predicate with index:" + ruleIndex;
-   }
-};
-
-GraphParser.prototype.eos_sempred = function(localctx, predIndex) {
-	switch(predIndex) {
-		case 0:
-			return this.lineTerminatorAhead();
-		case 1:
-			return this.closeBrace();
-		default:
-			throw "No predicate with index:" + predIndex;
-	}
 };
 
 
