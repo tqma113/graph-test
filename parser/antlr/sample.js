@@ -117,17 +117,3 @@ const obj = {
 }
 
 console.log(obj)
-
-global.Graph = obj
-
-// console.log(parser.p())
-
-// console.log({
-//   lexer,
-//   tokens,
-//   parser
-// })
-
-setTimeout(() => {
-
-}, 10000000)
