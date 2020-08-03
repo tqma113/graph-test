@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node scripts/build.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,10 @@
   "homepage": "https://github.com/tqma113/graph-render#readme",
   "dependencies": {
     "antlr4": "^4.8.0"
+  },
+  "devDependencies": {
+    "rollup": "^2.23.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
   }
 }

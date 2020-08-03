@@ -1,8 +1,8 @@
 var antlr4 = require('antlr4');
-var MyGrammarLexer = require('./GraphLexer').GraphLexer;
-var MyGrammarParser = require('./GraphParser').GraphParser;
-var MyGrammarListener = require('./GraphParserListener').GraphParserListener;
-var MyGrammarVisitor = require('./GraphParserVisitor').GraphParserVisitor;
+var MyGrammarLexer = require('../GraphLexer').GraphLexer;
+var MyGrammarParser = require('../GraphParser').GraphParser;
+var MyGrammarListener = require('../GraphParserListener').GraphParserListener;
+var MyGrammarVisitor = require('../GraphParserVisitor').GraphParserVisitor;
 
 
 var input = `
