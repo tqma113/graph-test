@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/tqma113/graph-render#readme",
   "dependencies": {
-    "antlr4": "^4.8.0"
+    "antlr4": "^4.8.0",
+    "monaco-editor": "^0.20.0"
   },
   "devDependencies": {
     "rollup": "^2.23.0",
