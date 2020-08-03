@@ -38,7 +38,7 @@ const inputOptions = {
 const outputOptions = {
   file: './parser/antlr/dist/index.js',
   format: 'cjs',
-  name: 'parser'
+  name: 'parser',
 }
 
 
