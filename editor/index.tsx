@@ -78,7 +78,7 @@ function MonacoEditor({
     monaco.languages.setMonarchTokensProvider('graph', {
       tokenizer: {
         root: [
-          [/#.*\r\n$/, 'comment'],
+          [/^#.*\r$/, 'comment'],
           [/start/, 'keyword'],
           [/goto/, 'keyword'],
           [/if/, 'keyword'],
@@ -101,11 +101,11 @@ function MonacoEditor({
     })
 
     monaco.editor.defineTheme('graphTheme', {
-      base: 'vs',
+      base: 'vs-dark',
       inherit: false,
       rules: [
-        { token: 'comment', foreground: 'cccccc' },
-        { token: 'keyword', foreground: '808080' },
+        { token: 'comment', foreground: '#7f848e' },
+        { token: 'keyword', foreground: '#e06c75' },
       ],
       colors: {}
     })
