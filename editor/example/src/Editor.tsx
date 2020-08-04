@@ -9,7 +9,7 @@ export type MonacoEditorProps = {
 
 const defaultStyle: React.CSSProperties = {
   width: '800px',
-  height: '1000px'
+  height: '900px'
 }
 
 function MonacoEditor({
@@ -41,7 +41,11 @@ function MonacoEditor({
       {
         value,
         language: 'graph',
-        theme: 'graphTheme'
+        theme: 'graphTheme',
+        suggestOnTriggerCharacters: true,
+        parameterHints: {
+          enabled: true,
+        }
       }
     )
     const model = editor.current.getModel()
@@ -97,6 +101,36 @@ function MonacoEditor({
           [/".*"/, 'path'],
           [/#.*/, 'comment'],
         ],
+      }
+    })
+
+    // monaco.languages.registerReferenceProvider('graph', {
+    //   provideReferences(model, position, context, token) {
+    //     console.log({
+    //       model, position, context, token
+    //     })
+    //     return null
+    //   }
+    // })
+
+    // monaco.languages.registerSignatureHelpProvider('graph', {
+    //   signatureHelpTriggerCharacters: ['['],
+    //   signatureHelpRetriggerCharacters: ['<'],
+    //   provideSignatureHelp(model, position, token, context) {
+    //     console.log({
+    //       model, position, context, token
+    //     })
+    //     return null
+    //   }
+    // })
+
+    monaco.languages.registerCompletionItemProvider('graph', {
+      triggerCharacters: ['['],
+      provideCompletionItems(model, position, context, token) {
+        console.log({
+          model, position, context, token
+        })
+        return null
       }
     })
 
