@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useRef } from "react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import register from './register'
 
 export type MonacoEditorProps = {
   onChange?: (content: string, event: monaco.editor.IModelContentChangedEvent) => void
@@ -41,14 +42,45 @@ function MonacoEditor({
       {
         value,
         language: 'graph',
-        theme: 'graphTheme'
+        theme: 'graphTheme',
       }
     )
+    editor.current.addAction({
+      // An unique identifier of the contributed action.
+      id: 'save',
+    
+      // A label of the action that will be presented to the user.
+      label: 'Save',
+    
+      // An optional array of keybindings for the action.
+      keybindings: [
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S,
+      ],
+    
+      // A precondition for this action.
+      precondition: undefined,
+    
+      // A rule to evaluate on top of the precondition in order to dispatch the keybindings.
+      keybindingContext: undefined,
+    
+      contextMenuGroupId: 'navigation',
+    
+      contextMenuOrder: 1.5,
+    
+      // Method that will be executed when the action is triggered.
+      // @param editor The editor instance is passed in as a convinience
+      run: function(ed) {
+        // TODO
+        console.log("i'm running => " + ed.getPosition());
+      }
+    });
+
     const model = editor.current.getModel()
     if (model) {
-      subscription.current = model.onDidChangeContent((e) => {
+      subscription.current = model.onDidChangeContent((e: monaco.editor.IModelContentChangedEvent) => {
         if (onChange) {
           const lines = model.getLinesContent()
+
           const content = lines.join('\n')
           onChange(content, e)
         }
@@ -70,52 +102,7 @@ function MonacoEditor({
     }
   }
 
-  const register = () => {
-    monaco.languages.register({
-      id: 'graph'
-    })
 
-    monaco.languages.setMonarchTokensProvider('graph', {
-      tokenizer: {
-        root: [
-          [/->/, 'operator.arrow'],
-          [/=/, 'operator.assign'],
-          [/,/, 'operator.comma'],
-          [/;/, 'operator.semicolon'],
-          [/\bstart\b/, 'keyword'],
-          [/\bgoto\b/, 'keyword'],
-          [/\bif\b/, 'keyword'],
-          [/\belse\b/, 'keyword'],
-          [/\bswitch\b/, 'keyword'],
-          [/\bcase\b/, 'keyword'],
-          [/\bdefault\b/, 'keyword'],
-          [/\bimport\b/, 'keyword'],
-          [/\bfrom\b/, 'keyword'],
-          [/\bexport\b/, 'keyword'],
-          [/\[.*\]/, 'action'],
-          [/<.*>/, 'identifier'],
-          [/".*"/, 'path'],
-          [/#.*/, 'comment'],
-        ],
-      }
-    })
-
-    monaco.editor.defineTheme('graphTheme', {
-      base: 'vs-dark',
-      inherit: true,
-      rules: [
-        { token: '', background: '#282c34' },
-        { token: 'comment', foreground: '#7f848e' },
-        { token: 'keyword', foreground: '#c678dd' },
-        { token: 'path', foreground: '98c379' },
-        { token: 'identifier', foreground: '61afef' },
-        { token: 'action', foreground: 'e5c07b' },
-        { token: 'operator.arrow', foreground: 'c678dd' },
-        { token: 'operator.assign', foreground: '61afef' },
-      ],
-      colors: {}
-    })
-  }
 
   style = {
     ...defaultStyle,
