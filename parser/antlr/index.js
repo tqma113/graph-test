@@ -13,7 +13,8 @@ module.exports = function parser(input) {
     var tokens = new antlr4.CommonTokenStream(lexer);
     var parser = new MyGrammarParser(tokens);
     parser.removeErrorListeners()
-    parser.addErrorListener(ErrorListener)
+    var listener = new ErrorListener()
+    parser.addErrorListener(listener)
     parser.buildParseTrees = true;
     var ctx = parser.program()
     var visitor = new MyGrammarVisitor()
