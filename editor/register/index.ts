@@ -8,6 +8,23 @@ export default () => {
     id: 'graph'
   })
 
+  monaco.languages.setLanguageConfiguration('graph', {
+    autoClosingPairs: [
+      {
+        open: '<',
+        close: '>'
+      },
+      {
+        open: '{',
+        close: '}'
+      },
+      {
+        open: '[',
+        close: ']'
+      }
+    ]
+  })
+
   monaco.languages.setMonarchTokensProvider('graph', {
     tokenizer: {
       root: [
@@ -84,7 +101,7 @@ export default () => {
       var suggestions =[
         ...getKeyowrdSuggestions(range)
       ]
-      
+
       return {
         suggestions
       }
