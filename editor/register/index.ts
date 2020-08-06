@@ -1,7 +1,10 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import getKeyowrdSuggestions from './getKeyowrdSuggestions'
-
-const keywords = ['start', 'goto', 'if', 'else', 'switch', 'case', 'default', 'import', 'export', 'from']
+import getKeywordHover from './getKeywordHover'
+import getTokenizer from './getTokenizer'
+import getAutoClosingPairs from './getAutoClosingPairs'
+import getThemeRules from './getThemeRules'
+import { isKeyword, isReference, isAction } from '../utils'
 
 export default () => {
   monaco.languages.register({
@@ -9,49 +12,17 @@ export default () => {
   })
 
   monaco.languages.setLanguageConfiguration('graph', {
-    autoClosingPairs: [
-      {
-        open: '<',
-        close: '>'
-      },
-      {
-        open: '{',
-        close: '}'
-      },
-      {
-        open: '[',
-        close: ']'
-      }
-    ]
+    autoClosingPairs: getAutoClosingPairs()
   })
 
   monaco.languages.setMonarchTokensProvider('graph', {
-    tokenizer: {
-      root: [
-        [/->/, 'operator.arrow'],
-        [/=/, 'operator.assign'],
-        [/,/, 'operator.comma'],
-        [/;/, 'operator.semicolon'],
-        [/\bstart\b/, 'keyword'],
-        [/\bgoto\b/, 'keyword'],
-        [/\bif\b/, 'keyword'],
-        [/\belse\b/, 'keyword'],
-        [/\bswitch\b/, 'keyword'],
-        [/\bcase\b/, 'keyword'],
-        [/\bdefault\b/, 'keyword'],
-        [/\bimport\b/, 'keyword'],
-        [/\bfrom\b/, 'keyword'],
-        [/\bexport\b/, 'keyword'],
-        [/\[.*\]/, 'action'],
-        [/<.*>/, 'identifier'],
-        [/".*"/, 'path'],
-        [/#.*/, 'comment'],
-      ],
-    }
+    tokenizer: getTokenizer()
   })
 
   monaco.languages.registerReferenceProvider('graph', {
     provideReferences(model, position, context, token) {
+      // model.uri
+      // context.includeDeclaration
       console.log({
         model, position, context, token
       })
@@ -59,32 +30,79 @@ export default () => {
     }
   })
 
-  monaco.languages.registerSignatureHelpProvider('graph', {
-    signatureHelpTriggerCharacters: ['['],
-    signatureHelpRetriggerCharacters: ['<'],
-    provideSignatureHelp(model, position, token, context) {
-      console.log({
-        model, position, context, token
-      })
-      return null
-    }
-  })
+  // monaco.languages.registerSignatureHelpProvider('graph', {
+  //   signatureHelpTriggerCharacters: ['['],
+  //   signatureHelpRetriggerCharacters: ['<'],
+  //   provideSignatureHelp(model, position, token, context) {
+  //     console.log({
+  //       model, position, context, token
+  //     })
+  //     return null
+  //   }
+  // })
 
   monaco.languages.registerHoverProvider('graph', {
     provideHover: function (model, position, token) {
-      var word = model.getWordAtPosition(position);
-      if (keywords.includes(word?.word || '')) {
-        const contents = [
-          {
-            value: `**KEYWORD: ${word?.word}**`
+      let word = model.getWordAtPosition(position);
+      if (word) {
+        if (isKeyword(word.word)) {
+          const contents = getKeywordHover(word.word)
+          const range = new monaco.Range(
+            position.lineNumber,
+            word.startColumn || 0,
+            position.lineNumber, word?.endColumn || 0
+          )
+          return {
+            range,
+            contents
           }
-        ]
-        return {
-          range: new monaco.Range(position.lineNumber, word?.startColumn || 0, position.lineNumber, word?.endColumn || 0),
-          contents
+        } else {
+          const line = model.getLineContent(position.lineNumber)
+          const start = Math.max(0, word.startColumn - 2)
+          const end = Math.min(line.length, word.endColumn + 2)
+          const content = line.slice(start, end)
+          
+          if (isReference(content)) {
+            const contents = [
+              {
+                value: 'Reference'
+              },
+              {
+                value: word.word
+              }
+            ]
+            const range = new monaco.Range(
+              position.lineNumber,
+              word.startColumn || 0,
+              position.lineNumber, word?.endColumn || 0
+            )
+            return {
+              range,
+              contents
+            }
+          } else if (isAction(content)) {
+            const contents = [
+              {
+                value: 'Action'
+              },
+              {
+                value: word.word
+              }
+            ]
+            const range = new monaco.Range(
+              position.lineNumber,
+              word.startColumn || 0,
+              position.lineNumber, word?.endColumn || 0
+            )
+            return {
+              range,
+              contents
+            }
+          }
         }
+      } else {
+        return null
       }
-      return null
     }
   });
 
@@ -133,7 +151,14 @@ export default () => {
               })
             }
           }
-          match = model.findNextMatch('[{|}]', position, true, true, null, true)
+          match = model.findNextMatch(
+            '[{|}]',
+            position,
+            true,
+            true,
+            null,
+            true
+          )
         }
       }
 
@@ -144,16 +169,7 @@ export default () => {
   monaco.editor.defineTheme('graphTheme', {
     base: 'vs-dark',
     inherit: true,
-    rules: [
-      { token: '', background: '#282c34' },
-      { token: 'comment', foreground: '#7f848e' },
-      { token: 'keyword', foreground: '#c678dd' },
-      { token: 'path', foreground: '98c379' },
-      { token: 'identifier', foreground: '61afef' },
-      { token: 'action', foreground: 'e5c07b' },
-      { token: 'operator.arrow', foreground: 'c678dd' },
-      { token: 'operator.assign', foreground: '61afef' },
-    ],
+    rules: getThemeRules(),
     colors: {}
   })
 }
