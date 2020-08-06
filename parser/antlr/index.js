@@ -3,13 +3,17 @@ var MyGrammarLexer = require('./GraphLexer').GraphLexer;
 var MyGrammarParser = require('./GraphParser').GraphParser;
 var MyGrammarListener = require('./GraphParserListener').GraphParserListener;
 var MyGrammarVisitor = require('./GraphParserVisitor').GraphParserVisitor;
+var ErrorListener = require('./ErrorListener')
 
 module.exports = function parser(input) {
   try {
+    let error = null
     var chars = new antlr4.InputStream(input);
     var lexer = new MyGrammarLexer(chars);
     var tokens = new antlr4.CommonTokenStream(lexer);
     var parser = new MyGrammarParser(tokens);
+    parser.removeErrorListeners()
+    parser.addErrorListener(ErrorListener)
     parser.buildParseTrees = true;
     var ctx = parser.program()
     var visitor = new MyGrammarVisitor()
