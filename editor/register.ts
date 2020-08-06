@@ -2,6 +2,127 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 const keywords = ['start', 'goto', 'if', 'else', 'switch', 'case', 'default', 'import', 'export', 'from']
 
+const getKeyowrdSuggestions = (range: monaco.IRange) => {
+  return [
+    {
+      label: 'declaration',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: '<${1:identifier}> = {\n\t[${2:step}]\n}',
+      insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      range
+    },
+    {
+      label: 'start',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: 'start <${1:identifier}>',
+      insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      range
+    },
+    {
+      label: 'goto',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: 'goto <${1:identifier}>',
+      insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      range
+    },
+    {
+      label: 'if',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: 'if [${1:condition}] -> {\n\t\n}',
+      insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      range
+    },
+    {
+      label: 'ifelse',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: 'if [${1:condition}] -> {\n\t\n} else -> {\n\t\n}',
+      insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      range
+    },
+    {
+      label: 'switch',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: 'switch [${1:accept}] {\n\tcase [${2:expect}] -> {\n\t\n\t}\n\tdefault -> {\n\t\n\n\t}\n}',
+      insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      range
+    },
+    {
+      label: 'import',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: 'import { <${1:identifier}> } from "${2:path}"',
+      insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      range
+    },
+    {
+      label: 'export',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: 'export <${1:identifier}>',
+      insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      range
+    },
+    {
+      label: 'start',
+      kind: monaco.languages.CompletionItemKind.Text,
+      insertText: 'start',
+      range
+    },
+    {
+      label: 'goto',
+      kind: monaco.languages.CompletionItemKind.Text,
+      insertText: 'goto',
+      range
+    },
+    {
+      label: 'if',
+      kind: monaco.languages.CompletionItemKind.Text,
+      insertText: 'if',
+      range
+    },
+    {
+      label: 'else',
+      kind: monaco.languages.CompletionItemKind.Text,
+      insertText: 'else',
+      range
+    },
+    {
+      label: 'switch',
+      kind: monaco.languages.CompletionItemKind.Text,
+      insertText: 'switch',
+      range
+    },
+    {
+      label: 'case',
+      kind: monaco.languages.CompletionItemKind.Text,
+      insertText: 'case',
+      range
+    },
+    {
+      label: 'default',
+      kind: monaco.languages.CompletionItemKind.Text,
+      insertText: 'default',
+      range
+    },
+    {
+      label: 'import',
+      kind: monaco.languages.CompletionItemKind.Text,
+      insertText: 'import',
+      range
+    },
+    {
+      label: 'from',
+      kind: monaco.languages.CompletionItemKind.Text,
+      insertText: 'from',
+      range
+    },
+    {
+      label: 'export',
+      kind: monaco.languages.CompletionItemKind.Text,
+      insertText: 'export',
+      range
+    },
+  ]
+}
+
 export default () => {
   monaco.languages.register({
     id: 'graph'
@@ -79,124 +200,11 @@ export default () => {
           startColumn: word.startColumn,
           endColumn: word.endColumn
       };
-      var suggestions = [
-        {
-          label: 'declaration',
-          kind: monaco.languages.CompletionItemKind.Keyword,
-          insertText: '<${1:identifier}> = {\n\t[${2:step}]\n}',
-          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-          range
-        },
-        {
-          label: 'start',
-          kind: monaco.languages.CompletionItemKind.Keyword,
-          insertText: 'start <${1:identifier}>',
-          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-          range
-        },
-        {
-          label: 'goto',
-          kind: monaco.languages.CompletionItemKind.Keyword,
-          insertText: 'goto <${1:identifier}>',
-          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-          range
-        },
-        {
-          label: 'if',
-          kind: monaco.languages.CompletionItemKind.Keyword,
-          insertText: 'if [${1:condition}] -> {\n\t\n}',
-          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-          range
-        },
-        {
-          label: 'ifelse',
-          kind: monaco.languages.CompletionItemKind.Keyword,
-          insertText: 'if [${1:condition}] -> {\n\t\n} else -> {\n\t\n}',
-          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-          range
-        },
-        {
-          label: 'switch',
-          kind: monaco.languages.CompletionItemKind.Keyword,
-          insertText: 'switch [${1:accept}] {\n\tcase [${2:expect}] -> {\n\t\n\t}\n\tdefault -> {\n\t\n\n\t}\n}',
-          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-          range
-        },
-        {
-          label: 'import',
-          kind: monaco.languages.CompletionItemKind.Keyword,
-          insertText: 'import { <${1:identifier}> } from "${2:path}"',
-          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-          range
-        },
-        {
-          label: 'export',
-          kind: monaco.languages.CompletionItemKind.Keyword,
-          insertText: 'export <${1:identifier}>',
-          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-          range
-        },
-        {
-          label: 'start',
-          kind: monaco.languages.CompletionItemKind.Text,
-          insertText: 'start',
-          range
-        },
-        {
-          label: 'goto',
-          kind: monaco.languages.CompletionItemKind.Text,
-          insertText: 'goto',
-          range
-        },
-        {
-          label: 'if',
-          kind: monaco.languages.CompletionItemKind.Text,
-          insertText: 'if',
-          range
-        },
-        {
-          label: 'else',
-          kind: monaco.languages.CompletionItemKind.Text,
-          insertText: 'else',
-          range
-        },
-        {
-          label: 'switch',
-          kind: monaco.languages.CompletionItemKind.Text,
-          insertText: 'switch',
-          range
-        },
-        {
-          label: 'case',
-          kind: monaco.languages.CompletionItemKind.Text,
-          insertText: 'case',
-          range
-        },
-        {
-          label: 'default',
-          kind: monaco.languages.CompletionItemKind.Text,
-          insertText: 'default',
-          range
-        },
-        {
-          label: 'import',
-          kind: monaco.languages.CompletionItemKind.Text,
-          insertText: 'import',
-          range
-        },
-        {
-          label: 'from',
-          kind: monaco.languages.CompletionItemKind.Text,
-          insertText: 'from',
-          range
-        },
-        {
-          label: 'export',
-          kind: monaco.languages.CompletionItemKind.Text,
-          insertText: 'export',
-          range
-        },
+
+      var suggestions =[
+        ...getKeyowrdSuggestions(range)
       ]
+      
       return {
         suggestions
       }
@@ -206,25 +214,32 @@ export default () => {
   monaco.languages.registerFoldingRangeProvider("graph", {
     provideFoldingRanges: function(model, context, token) {
       let foldRanges: monaco.languages.FoldingRange[] = []
-      let start: monaco.editor.FindMatch | null = null
-      let close: monaco.editor.FindMatch | null = null
-      while ((start = model.findNextMatch('{', { lineNumber: Math.max(close?.range.endLineNumber || 0, start?.range.endLineNumber || 0) + 1, column: Math.max(close?.range.endColumn || 0, start?.range.endColumn || 0) + 1 }, false, true, null, false))) {
-        console.log(start)
-        setTimeout(() => {
-
-        }, 1000)
-        close = model.findNextMatch('}', { lineNumber: start?.range.endLineNumber, column: start?.range.endColumn }, false, true, null, false)
-        if (close) {
-          foldRanges.push({
-            start: start.range.startLineNumber,
-            end: close?.range.endLineNumber
-          })
+      let match: monaco.editor.FindMatch | null = null
+      let position = new monaco.Position(0, 0)
+      let stack: monaco.Position[] = []
+      match = model.findNextMatch('[{|}]', position, true, true, null, true)
+      
+      while (match !== null) {
+        let nextPosition = match.range.getEndPosition()
+        if (nextPosition.isBefore(position)) {
+          break
+        } else {
+          position = nextPosition
+          if (match.matches && match.matches[0] === '{') {
+            stack.push(position)
+          } else {
+            if (stack.length > 0) {
+              let start = stack.pop()
+              foldRanges.push({
+                start: start?.lineNumber || 0,
+                end: position.lineNumber
+              })
+            }
+          }
+          match = model.findNextMatch('[{|}]', position, true, true, null, true)
         }
       }
-      console.log(start)
-      console.log({
-        model,context, token
-      })
+
       return foldRanges;
     }
   })

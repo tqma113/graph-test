@@ -53,6 +53,7 @@ function MonacoEditor({
       label: 'Save',
     
       // An optional array of keybindings for the action.
+      // Ctrl + S
       keybindings: [
         monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S,
       ],
@@ -70,7 +71,7 @@ function MonacoEditor({
       // Method that will be executed when the action is triggered.
       // @param editor The editor instance is passed in as a convinience
       run: function(ed) {
-        // TODO
+        // TODO: do save operation
         console.log("i'm running => " + ed.getPosition());
       }
     });
@@ -101,8 +102,6 @@ function MonacoEditor({
       subscription.current.dispose()
     }
   }
-
-
 
   style = {
     ...defaultStyle,
