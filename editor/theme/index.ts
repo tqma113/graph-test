@@ -1,6 +1,6 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
-export const GRAPH_THEME = 'GRAPH_THEME'
+export const GRAPH_THEME = 'graph-dark'
 
 const getTheme = (): monaco.editor.IStandaloneThemeData => {
   return {
@@ -21,5 +21,5 @@ const getTheme = (): monaco.editor.IStandaloneThemeData => {
 }
 
 export const initTheme = () => {
-  monaco.editor.defineTheme('graphTheme', getTheme())
+  monaco.editor.defineTheme(GRAPH_THEME, getTheme())
 }

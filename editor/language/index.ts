@@ -1,9 +1,9 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import registerDiagnosticsAdapter from './registerDiagnosticsAdapter'
 import getDocumentHighlightProvider from './getDocumentHighlightProvider'
 import getCompletionItemProvider from './getCompletionItemProvider'
 import getLanguageConfiguration from './getLanguageConfiguration'
 import getSignatureHelpProvider from './getSignatureHelpProvider'
-import getFoldingRangeProvider from './getFoldingRangeProvider'
 import getDefinitionProvider from './getDefinitionProvider'
 import getReferenceProvider from './getReferenceProvider'
 import getHoverProvider from './getHoverProvider'
@@ -22,5 +22,6 @@ export default () => {
   monaco.languages.registerDocumentHighlightProvider(MODE_ID, getDocumentHighlightProvider())
   monaco.languages.registerReferenceProvider(MODE_ID, getReferenceProvider())
   monaco.languages.registerDefinitionProvider(MODE_ID, getDefinitionProvider())
-  monaco.languages.registerFoldingRangeProvider(MODE_ID, getFoldingRangeProvider())
+  
+  registerDiagnosticsAdapter()
 }
