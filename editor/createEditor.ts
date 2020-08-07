@@ -1,13 +1,13 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import { MODE_ID } from './language'
 
 export default (container: HTMLElement, value: string) => {
-
-  const model = monaco.editor.createModel(value, 'graph')
+  const model = monaco.editor.createModel(value, MODE_ID)
   const editor = monaco.editor.create(
     container,
     {
       value,
-      language: 'graph',
+      language: MODE_ID,
       theme: 'graphTheme',
       model
     }

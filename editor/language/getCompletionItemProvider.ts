@@ -139,4 +139,28 @@ const getKeyowrdSuggestions = (range: monaco.IRange): monaco.languages.Completio
   ]
 }
 
-export default getKeyowrdSuggestions
+const getCompletionItemProvider = (): monaco.languages.CompletionItemProvider => {
+  return {
+    provideCompletionItems(model, position, context, token) {
+      var word = model.getWordUntilPosition(position);
+      var range = {
+          startLineNumber: position.lineNumber,
+          endLineNumber: position.lineNumber,
+          startColumn: word.startColumn,
+          endColumn: word.endColumn
+      };
+
+      var suggestions =[
+        // TODO:
+        ...getKeyowrdSuggestions(range)
+      ]
+
+      return {
+        suggestions
+      }
+    }
+  }
+}
+
+export default getCompletionItemProvider
+

@@ -1,12 +1,14 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import register from './register'
+import registerLanguage from './language'
+import { initTheme } from './theme'
 import createEditor from './createEditor'
 
 export type MonacoEditorProps = {
-  onChange?: (content: string, event: monaco.editor.IModelContentChangedEvent) => void
+  onChange?: (content: string) => void
+  onSave?: (content: string) => void
   style?: React.CSSProperties
-  value?: string
+  initialValue?: string
 }
 
 const defaultStyle: React.CSSProperties = {
@@ -17,20 +19,19 @@ const defaultStyle: React.CSSProperties = {
 function MonacoEditor({
   onChange,
   style,
-  value
+  initialValue
 }: MonacoEditorProps) {
+  const [value, setValue] = useState(initialValue)
   const containerRef = useRef<HTMLDivElement>(null)
   const editor = useRef<monaco.editor.IStandaloneCodeEditor>()
   const subscription = useRef<monaco.IDisposable>()
 
   useLayoutEffect(() => {
-    value = value || '# start from here\n\n'
+    setValue(value || '# start from here\n\n')
   }, [])
 
   useLayoutEffect(() => {
-    register()
     initMonaco()
-
     return () => {
       destoryMonaco()
     }
@@ -38,6 +39,8 @@ function MonacoEditor({
 
 
   const initMonaco = () => {
+    registerLanguage()
+    initTheme()
     editor.current = createEditor(
       containerRef.current as HTMLElement,
       value as string
@@ -50,7 +53,7 @@ function MonacoEditor({
           const lines = model.getLinesContent()
 
           const content = lines.join('\n')
-          onChange(content, e)
+          onChange(content)
         }
       })
     }
