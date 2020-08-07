@@ -1,3 +1,3 @@
 export const isReference = (word: string) => {
-  return /<.*>/.test(word)
+  return /<([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)>/g.test(word)
 }

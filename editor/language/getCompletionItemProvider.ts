@@ -158,7 +158,7 @@ const getCompletionItemProvider = (): monaco.languages.CompletionItemProvider =>
       return {
         suggestions
       }
-    }
+    },
   }
 }
 
