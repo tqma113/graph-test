@@ -3,8 +3,6 @@ const parser = require('../index')
 var input = `
 import { <测试>, <测试> } from "state"
 
-<
-
 export <从首页进入旅游频道>
 
 export <从首页进入旅游频道> = {
