@@ -20,6 +20,7 @@ Assign:                         '=';
 Result:                         '->';
 Comma:                          ',';
 SemiColon:                      ';';
+Quote:                          '"';
 
 fragment StringPart
     : UnicodeLetter
