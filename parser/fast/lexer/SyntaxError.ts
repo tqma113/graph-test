@@ -1,8 +1,8 @@
 import type { Position } from '../index'
 
 export class SyntaxError extends Error {
-  position: Position
   type = 'error' as const
+  position: Position
 
   constructor(message: string, postion: Position) {
     super(message)
