@@ -1,13 +1,13 @@
 import type { Position } from '../index'
 
-export class SyntaxError extends Error {
+export class LexicalError extends Error {
   type = 'error' as const
   position: Position
 
   constructor(message: string, postion: Position) {
     super(message)
 
-    this.name = 'SyntaxError'
+    this.name = 'LexicalError'
     this.message = message
     this.position = postion
   }

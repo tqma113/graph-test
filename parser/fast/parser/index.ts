@@ -1,17 +1,41 @@
 import { createLexer } from '../lexer'
-import { SemanticError } from './SemanticError'
-import type { Program } from './ast'
+import { SyntaxError } from './SyntaxError'
+import type {
+  Program,
+  ModuleStatement,
+  InferenceDeclaration,
+  ImportStatement,
+  ExportStatement,
+  StartStatement,
+  Statement,
+  StepStatement,
+  IfStatement,
+  SwitchStatement,
+  GotoStatement
+} from './ast'
 
 export const createParser = (input: string) => {
   const lexer = createLexer(input)
 
   let program: Program | null = null
-  let errors: SemanticError[] = []
+  let errors: SyntaxError[] = []
 
   const parse = () => {
     if (program) {
       return
     }
+
+  }
+
+  const matchProgram = (): Program => {
+
+  }
+
+  const matchModuleStatement = (): ModuleStatement => {
+
+  }
+
+  const InferenceDeclaration = (): InferenceDeclaration => {
 
   }
 

@@ -1,5 +1,5 @@
 import { SymbolChar, TokenType, Operator } from './constants'
-import { SyntaxError } from './SyntaxError'
+import { LexicalError } from './LexicalError'
 import {
   isLetter,
   isValidContentChar,
@@ -17,8 +17,8 @@ export type Token = {
 
 export type Lexer = {
   tokens: Token[]
-  errors: SyntaxError[]
-  nextToken: () => Token | SyntaxError
+  errors: LexicalError[]
+  nextToken: () => Token | LexicalError
   run: () => void
 }
 
@@ -30,7 +30,7 @@ export const createLexer = (input: string): Lexer => {
 
 
   let tokens: Token[] = []
-  let errors: SyntaxError[] = []
+  let errors: LexicalError[] = []
 
   const run = () => {
     while (!isEoP()) {
@@ -43,7 +43,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const nextToken = (): Token | SyntaxError => {
+  const nextToken = (): Token | LexicalError => {
     const result = consumeWhitespace()
     if (result) {
       return result
@@ -97,7 +97,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const matchComment = (): Token | SyntaxError => {
+  const matchComment = (): Token | LexicalError => {
     while (!isEoP() && !isNewLineChar(nextChar()));
 
     const word = getCurrentWord()
@@ -112,7 +112,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const matchIdentifier = (): Token | SyntaxError => {
+  const matchIdentifier = (): Token | LexicalError => {
     let char: string
     while (true) {
       char = nextChar()
@@ -131,7 +131,7 @@ export const createLexer = (input: string): Lexer => {
       }
       if (isEoP() || !isValidContentChar(char)) {
         const word = getCurrentWord()
-        return new SyntaxError(
+        return new LexicalError(
           `Identifier: ${word} has not been closed`,
           getPosition()
         )
@@ -139,7 +139,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const matchAction = (): Token | SyntaxError => {
+  const matchAction = (): Token | LexicalError => {
     let char: string
     while (true) {
       char = nextChar()
@@ -157,7 +157,7 @@ export const createLexer = (input: string): Lexer => {
       }
       if (isEoP() || !isValidContentChar(char)) {
         const word = getCurrentWord()
-        return new SyntaxError(
+        return new LexicalError(
           `Action: ${word} has not been closed`,
           getPosition()
         )
@@ -165,7 +165,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const matchPath = (): Token | SyntaxError => {
+  const matchPath = (): Token | LexicalError => {
     let char: string
     while (true) {
       char = nextChar()
@@ -183,7 +183,7 @@ export const createLexer = (input: string): Lexer => {
       }
       if (isEoP() || !isValidContentChar(char)) {
         const word = getCurrentWord()
-        return new SyntaxError(
+        return new LexicalError(
           `Path: ${word} has not been closed`,
           getPosition()
         )
@@ -191,7 +191,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
   
-  const matchKeyword = (): Token | SyntaxError => {
+  const matchKeyword = (): Token | LexicalError => {
     let char: string
     while (true) {
       char = nextChar()
@@ -207,7 +207,7 @@ export const createLexer = (input: string): Lexer => {
             range
           }
         } else {
-          return new SyntaxError(
+          return new LexicalError(
             `Unknown token: ${word}`,
             getPosition()
           )
@@ -216,7 +216,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const matchOperator = (): Token | SyntaxError => {
+  const matchOperator = (): Token | LexicalError => {
     const char = getCurrentChar()
     switch (char) {
       case Operator.OpenBrace: {
@@ -267,7 +267,7 @@ export const createLexer = (input: string): Lexer => {
         } else {
           nextChar()
           const word = getCurrentWord()
-          return new SyntaxError(
+          return new LexicalError(
             `Unknown token: ${word}`,
             getPosition()
           )
@@ -286,7 +286,7 @@ export const createLexer = (input: string): Lexer => {
       }
       default: {
         nextChar()
-        return new SyntaxError(
+        return new LexicalError(
           `Unknown token: ${char}`,
           getPosition()
         )
