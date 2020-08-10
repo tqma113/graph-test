@@ -1,6 +1,12 @@
-import { isLetter, isValidContentChar, isNewLineChar, isWhitespace, isKeyword } from './util'
 import { SymbolChar, TokenType, Operator } from './constants'
 import { SyntaxError } from './SyntaxError'
+import {
+  isLetter,
+  isValidContentChar,
+  isNewLineChar,
+  isWhitespace,
+  isKeyword
+} from './util'
 import type { Range, Position } from '../index'
 
 export type Token = {
@@ -29,8 +35,7 @@ export const createLexer = (input: string): Lexer => {
   const run = () => {
     while (!isEoP()) {
       const result = nextToken()
-      console.log(result)
-      if (result instanceof SyntaxError) {
+      if (result.type === 'error') {
         errors.push(result)
       } else {
         tokens.push(result)
@@ -88,24 +93,23 @@ export const createLexer = (input: string): Lexer => {
 
       endWord()
 
-      break
+      return null
     }
-    return null
   }
 
   const matchComment = (): Token | SyntaxError => {
     while (!isEoP() && !isNewLineChar(nextChar()));
 
-    const comment = getCurrentWord()
-    const token = {
-      type: TokenType.Comment,
-      word: comment,
-      range: getRange()
-    }
+    const word = getCurrentWord()
+    const range = getRange()
 
     endWord()
 
-    return token
+    return {
+      type: TokenType.Comment,
+      word,
+      range
+    }
   }
 
   const matchIdentifier = (): Token | SyntaxError => {
@@ -115,15 +119,15 @@ export const createLexer = (input: string): Lexer => {
       if (char === SymbolChar.CloseAngleBracket) {
         nextChar()
         const word = getCurrentWord()
-        const token = {
-          type: TokenType.Identifier,
-          word,
-          range: getRange()
-        }
+        const range = getRange()
 
         endWord()
 
-        return token
+        return {
+          type: TokenType.Identifier,
+          word,
+          range
+        }
       }
       if (isEoP() || !isValidContentChar(char)) {
         const word = getCurrentWord()
@@ -142,15 +146,14 @@ export const createLexer = (input: string): Lexer => {
       if (char === SymbolChar.CloseBracket) {
         nextChar()
         const word = getCurrentWord()
-        const token = {
-          type: TokenType.Action,
-          word,
-          range: getRange()
-        }
-
+        const range = getRange()
         endWord()
 
-        return token
+        return {
+          type: TokenType.Action,
+          word,
+          range
+        }
       }
       if (isEoP() || !isValidContentChar(char)) {
         const word = getCurrentWord()
@@ -169,15 +172,14 @@ export const createLexer = (input: string): Lexer => {
       if (char === SymbolChar.Quote) {
         nextChar()
         const word = getCurrentWord()
-        const token = {
-          type: TokenType.Path,
-          word,
-          range: getRange()
-        }
-
+        const range = getRange()
         endWord()
 
-        return token
+        return {
+          type: TokenType.Path,
+          word,
+          range
+        }
       }
       if (isEoP() || !isValidContentChar(char)) {
         const word = getCurrentWord()
@@ -196,15 +198,14 @@ export const createLexer = (input: string): Lexer => {
       if (isEoP() || !isLetter(char)) {
         const word = getCurrentWord()
         if (isKeyword(word)) {
-          const token = {
-            type: TokenType.Keyword,
-            word,
-            range: getRange()
-          }
-  
+          const range = getRange()
           endWord()
   
-          return token
+          return {
+            type: TokenType.Keyword,
+            word,
+            range
+          }
         } else {
           return new SyntaxError(
             `Unknown token: ${word}`,
@@ -220,58 +221,51 @@ export const createLexer = (input: string): Lexer => {
     switch (char) {
       case Operator.OpenBrace: {
         nextChar()
-
-        const token = {
-          type: TokenType.Operator,
-          word: Operator.OpenBrace,
-          range: getRange()
-        }
-
+        const range = getRange()
         endWord()
 
-        return token
+        return {
+          type: TokenType.Operator,
+          word: Operator.OpenBrace,
+          range
+        }
       }
       case Operator.CloseBrace: {
         nextChar()
-
-        const token = {
-          type: TokenType.Operator,
-          word: Operator.CloseBrace,
-          range: getRange()
-        }
-
+        const range = getRange()
         endWord()
 
-        return token
+        return {
+          type: TokenType.Operator,
+          word: Operator.CloseBrace,
+          range
+        }
       }
       case Operator.Assign: {
         nextChar()
-
-        const token = {
-          type: TokenType.Operator,
-          word: Operator.Assign,
-          range: getRange()
-        }
-
+        const range = getRange()
         endWord()
 
-        return token
+        return {
+          type: TokenType.Operator,
+          word: Operator.Assign,
+          range
+        }
       }
       case Operator.Result[0]: {
         const nc = nextChar()
         if (nc === Operator.Result[1]) {
           nextChar()
-
-          const token = {
-            type: TokenType.Operator,
-            word: Operator.Result,
-            range: getRange()
-          }
-
+          const range = getRange()
           endWord()
 
-          return token
+          return {
+            type: TokenType.Operator,
+            word: Operator.Result,
+            range
+          }
         } else {
+          nextChar()
           const word = getCurrentWord()
           return new SyntaxError(
             `Unknown token: ${word}`,
@@ -281,18 +275,17 @@ export const createLexer = (input: string): Lexer => {
       }
       case Operator.Comma: {
         nextChar()
-
-        const token = {
-          type: TokenType.Operator,
-          word: Operator.Comma,
-          range: getRange()
-        }
-
+        const range = getRange()
         endWord()
 
-        return token
+        return {
+          type: TokenType.Operator,
+          word: Operator.Comma,
+          range
+        }
       }
       default: {
+        nextChar()
         return new SyntaxError(
           `Unknown token: ${char}`,
           getPosition()
@@ -337,11 +330,11 @@ export const createLexer = (input: string): Lexer => {
     return {
       start: {
         line,
-        column: column - length
+        column: column - length - 1
       },
       end: {
         line,
-        column
+        column: column - 1
       }
     }
   }
