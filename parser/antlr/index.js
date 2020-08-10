@@ -7,7 +7,6 @@ var ErrorListener = require('./ErrorListener')
 
 module.exports = function parser(input) {
   try {
-    let error = null
     var chars = new antlr4.InputStream(input);
     var lexer = new MyGrammarLexer(chars);
     var tokens = new antlr4.CommonTokenStream(lexer);
