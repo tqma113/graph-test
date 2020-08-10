@@ -433,20 +433,23 @@ Export:        'export';
 ### White characters
 
 ```
-Space:         ' ';
-
-Tabulations:   '\t;
+WhiteSpaces:   [\t\u000B\u000C\u0020\u00A0]+ -> channel(HIDDEN);
 ```
 
 ### Operator
 
 ```
+OpenBrace:                      '{';
+CloseBrace:                     '}';
 OpenBracket:                    '[';
 CloseBracket:                   ']';
 OpenAngleBracket:               '<';
-CloseAngleBracket:              '>;
+CloseAngleBracket:              '>';
 Assign:                         '=';
 Result:                         '->';
+Comma:                          ',';
+SemiColon:                      ';';
+Quote:                          '"';
 ```
 
 ### End of line
@@ -499,17 +502,19 @@ Action start with a letter, followed by any number of alphanumeric characters pl
 Action:                          ('[' StringLiteral ']');
 ```
 
+### Path
+
+```
+Path:          '"' DoubleStringCharacter* '"';
+```
+
 ## Syntax
 
 ### Program
 
 ```
 program
-    : HashBangLine? module? EOF
-    ;
-
-module
-    : moduleStatement*
+    : HashBangLine? moduleStatements? EOF
     ;
 
 moduleStatement
@@ -517,6 +522,10 @@ moduleStatement
     | importStatement
     | exportStatement
     | startStatement
+    ;
+
+moduleStatements
+    : moduleStatement+
     ;
 
 identifier
@@ -528,7 +537,7 @@ identifier
 
 ```
 statement
-    | stepStatement
+    : stepStatement
     | ifStatement
     | switchStatement
     | gotoStatement
@@ -554,12 +563,16 @@ block
 ### Import Statement
 
 ```
+
 importStatement
-    : Import moduleItems From StringLiteral
+    : Import moduleItems From path
     ;
 
 moduleItems
     : '{' (identifier ',')* (identifier ','?)? '}'
+    ;
+path
+    : Path
     ;
 ```
 
@@ -567,7 +580,12 @@ moduleItems
 
 ```
 exportStatement
-    : Export (identifier | inferenceDeclaration) eos    # ExportDeclaration
+    : Export module
+    ;
+
+module
+    : identifier
+    | inferenceDeclaration
     ;
 ```
 
@@ -627,6 +645,6 @@ gotoStatement
 
 ```
 startStatement
-    : Start (identifier | inferenceDeclaration)
+    : Start module
     ;
 ```
