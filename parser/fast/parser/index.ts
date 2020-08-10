@@ -35,7 +35,7 @@ export const createParser = (input: string) => {
 
   }
 
-  const InferenceDeclaration = (): InferenceDeclaration => {
+  const matchInferenceDeclaration = (): InferenceDeclaration => {
 
   }
 
