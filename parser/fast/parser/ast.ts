@@ -16,8 +16,13 @@ export type InferenceDeclaration = {
 }
 
 export type ImportStatement = {
-  identifiers: Token[],
+  moduleItems: ModuleItems,
   path: Token,
+  range: Range
+}
+
+export type ModuleItems = {
+  identifiers: Token[],
   range: Range
 }
 
@@ -28,7 +33,6 @@ export type ExportStatement = {
 
 export type StartStatement = {
   identifier: Token,
-  declaration: InferenceDeclaration | null,
   range: Range
 }
 
@@ -55,12 +59,12 @@ export type IfStatement = {
 export type SwitchStatement = {
   expression: Token,
   switchBlock: SwitchBlock,
-
+  range: Range
 }
 
 export type SwitchBlock = {
   caseClauses: CaseClause[],
-  defaultClause: DefaultClause,
+  defaultClause: DefaultClause | null,
   range: Range
 }
 

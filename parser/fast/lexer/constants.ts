@@ -34,7 +34,7 @@ export enum Keyword {
 }
 
 
-export enum TokenType {
+export enum TokenKind {
   Comment               =         'comment',
   Operator              =         'operator',
   Keyword               =         'keyword',

@@ -1,4 +1,4 @@
-import { SymbolChar, TokenType, Operator } from './constants'
+import { SymbolChar, TokenKind, Operator, Keyword } from './constants'
 import { LexicalError } from './LexicalError'
 import {
   isLetter,
@@ -10,8 +10,32 @@ import {
 import type { Range, Position } from '../index'
 
 export type Token = {
-  type: TokenType,
+  type: TokenKind.Keyword,
+  word: Keyword,
+  range: Range
+} | {
+  type: TokenKind.Operator,
+  word: Operator,
+  range: Range
+} | {
+  type: TokenKind.Identifier,
   word: string,
+  range: Range
+} | {
+  type: TokenKind.Action,
+  word: string,
+  range: Range
+} | {
+  type: TokenKind.Path,
+  word: string,
+  range: Range
+} | {
+  type: TokenKind.Comment,
+  word: string,
+  range: Range
+} | {
+  type: TokenKind.EOP,
+  word: null,
   range: Range
 }
 
@@ -78,8 +102,8 @@ export const createLexer = (input: string): Lexer => {
       const char = getCurrentChar()
       if (isEoP()) {
         return {
-          type: TokenType.EOP,
-          word: char,
+          type: TokenKind.EOP,
+          word: null,
           range: getRange()
         }
       }
@@ -106,7 +130,7 @@ export const createLexer = (input: string): Lexer => {
     endWord()
 
     return {
-      type: TokenType.Comment,
+      type: TokenKind.Comment,
       word,
       range
     }
@@ -124,7 +148,7 @@ export const createLexer = (input: string): Lexer => {
         endWord()
 
         return {
-          type: TokenType.Identifier,
+          type: TokenKind.Identifier,
           word,
           range
         }
@@ -150,7 +174,7 @@ export const createLexer = (input: string): Lexer => {
         endWord()
 
         return {
-          type: TokenType.Action,
+          type: TokenKind.Action,
           word,
           range
         }
@@ -176,7 +200,7 @@ export const createLexer = (input: string): Lexer => {
         endWord()
 
         return {
-          type: TokenType.Path,
+          type: TokenKind.Path,
           word,
           range
         }
@@ -202,8 +226,8 @@ export const createLexer = (input: string): Lexer => {
           endWord()
   
           return {
-            type: TokenType.Keyword,
-            word,
+            type: TokenKind.Keyword,
+            word: word as Keyword,
             range
           }
         } else {
@@ -225,7 +249,7 @@ export const createLexer = (input: string): Lexer => {
         endWord()
 
         return {
-          type: TokenType.Operator,
+          type: TokenKind.Operator,
           word: Operator.OpenBrace,
           range
         }
@@ -236,7 +260,7 @@ export const createLexer = (input: string): Lexer => {
         endWord()
 
         return {
-          type: TokenType.Operator,
+          type: TokenKind.Operator,
           word: Operator.CloseBrace,
           range
         }
@@ -247,7 +271,7 @@ export const createLexer = (input: string): Lexer => {
         endWord()
 
         return {
-          type: TokenType.Operator,
+          type: TokenKind.Operator,
           word: Operator.Assign,
           range
         }
@@ -260,7 +284,7 @@ export const createLexer = (input: string): Lexer => {
           endWord()
 
           return {
-            type: TokenType.Operator,
+            type: TokenKind.Operator,
             word: Operator.Result,
             range
           }
@@ -279,7 +303,7 @@ export const createLexer = (input: string): Lexer => {
         endWord()
 
         return {
-          type: TokenType.Operator,
+          type: TokenKind.Operator,
           word: Operator.Comma,
           range
         }

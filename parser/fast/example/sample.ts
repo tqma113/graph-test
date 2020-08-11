@@ -1,4 +1,4 @@
-import { createLexer } from '../lexer'
+import { createParser } from '../parser'
 
 var input = `
 import { <测试>, <测试> } from "state"
@@ -94,9 +94,9 @@ start <选择上海站> = {
 }
 `
 
-const lexer = createLexer(input)
-lexer.run()
-console.log(lexer)
+const parser = createParser(input)
+parser.parse()
+console.log(parser)
 
 setTimeout(() => {
 
