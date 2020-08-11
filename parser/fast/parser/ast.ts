@@ -78,36 +78,56 @@ export const createModuleItems = (
   }
 }
 
+export type Module = {
+  type: 'Module',
+  identifier: Token,
+  declaration: InferenceDeclaration | null,
+  range: Range
+}
+
+export const createModule = (
+  identifier: Token,
+  declaration: InferenceDeclaration | null,
+  range: Range
+): Module => {
+  return {
+    type: 'Module',
+    identifier,
+    declaration,
+    range
+  }
+}
+
 export type ExportStatement = {
   type: 'ExportStatement',
-  identifier: Token,
+  module: Module,
   range: Range
 }
 
 export const createExportStatement = (
-  identifier: Token,
+  module: Module,
   range: Range
 ): ExportStatement => {
   return {
     type: 'ExportStatement',
-    identifier,
+    module,
     range
   }
 }
 
 export type StartStatement = {
   type: 'StartStatement',
-  identifier: Token,
+  module: Module,
   range: Range
 }
 
 export const createStartStatement = (
-  identifier: Token,
+  module: Module,
   range: Range
 ): StartStatement => {
   return {
     type: 'StartStatement',
-    identifier,
+    module,
     range
   }
 }

@@ -15,7 +15,8 @@ import {
   createSwitchBlock,
   createCaseClause,
   createDefaultClause,
-  createModuleItems
+  createModuleItems,
+  createModule
 } from './ast'
 import type {
   Program,
@@ -33,7 +34,8 @@ import type {
   SwitchBlock,
   CaseClause,
   DefaultClause,
-  ModuleItems
+  ModuleItems,
+  Module
 } from './ast'
 
 export type BlockType = 'global' | 'local'
@@ -42,6 +44,7 @@ export const createParser = (input: string) => {
   const lexer = createLexer(input)
 
   let token = null as any as Token
+  let cache: Token[] = []
 
   let program: Program | null = null
   let errors: SyntaxError[] = []
@@ -55,7 +58,7 @@ export const createParser = (input: string) => {
     program = matchProgram()
   }
 
-  const nextToken = (): Token => {
+  const getNextToken = (): Token => {
     while (true) {
       let tok = lexer.nextToken()
       if (tok.type !== 'error' && tok.type !== TokenKind.Comment) {
@@ -66,10 +69,24 @@ export const createParser = (input: string) => {
           blockStack.pop()
         }
 
-        token = tok
-        return token
+        return tok
       }
     }
+  }
+
+  const nextToken = (): Token => {
+    if (cache.length > 0) {
+      token = cache.shift() as Token
+    } else {
+      token = getNextToken()
+    }
+    return token
+  }
+
+  const predict = (): Token => {
+    const token = getNextToken()
+    cache.push(token)
+    return token
   }
 
   const matchProgram = (): Program | null => {
@@ -149,6 +166,7 @@ export const createParser = (input: string) => {
       let start = token.range.start
       let list: Statement[] = []
       while (true) {
+        nextToken()
         if (token.type === TokenKind.Operator && token.word === Operator.CloseBrace) {
           break
         }
@@ -252,23 +270,63 @@ export const createParser = (input: string) => {
   }
 
   const matchExportStatement = (): ExportStatement | null => {
-    if (matchIdentifier()) {
+    const start = token.range.start
+    const module = matchModule()
+    if (module) {
       return createExportStatement(
-        token,
-        token.range
+        module,
+        {
+          start,
+          end: module.range.end
+        }
       )
     } else {
-      addError('Identifier: <somethings>', token)
       return null
     }
   }
 
   const matchStartStatement = (): StartStatement | null => {
-    if (matchIdentifier()) {
+    const start = token.range.start
+    const module = matchModule()
+    if (module) {
       return createStartStatement(
-        token,
-        token.range
+        module,
+        {
+          start,
+          end: module.range.end
+        }
       )
+    } else {
+      return null
+    }
+  }
+
+  const matchModule = (): Module | null => {
+    if (matchIdentifier()) {
+      const identifier = token
+      const nt = predict()
+      if (nt.type === TokenKind.Operator && nt.word === Operator.Assign) {
+        const declaration = matchInferenceDeclaration()
+        if (declaration) {
+          return createModule(
+            identifier,
+            declaration,
+            declaration.range
+          )
+        } else {
+          return createModule(
+            identifier,
+            null,
+            identifier.range
+          )
+        }
+      } else {
+        return createModule(
+          identifier,
+          null,
+          identifier.range
+        )
+      }
     } else {
       addError('Identifier: <somethings>', token)
       return null
@@ -311,7 +369,9 @@ export const createParser = (input: string) => {
       if (matchOperator(Operator.Result)) {
         let ifBlock = matchBlock()
         if (ifBlock) {
-          if (matchKeyword(Keyword.Else)) {
+          const nt = predict()
+          if (nt.type === TokenKind.Keyword && nt.word === Keyword.Else) {
+            nextToken()
             const elseBlock = matchBlock()
             if (elseBlock) {
               return createIfStatement(
@@ -513,6 +573,7 @@ export const createParser = (input: string) => {
       `Expect { ${expect} }, accept '${token.word}'`,
       token
     ))
+    console.log(errors[errors.length - 1])
   }
 
   const recovery = () => {
