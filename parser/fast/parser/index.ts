@@ -1,6 +1,22 @@
 import { createLexer, Token } from '../lexer'
 import { TokenKind, Keyword, Operator } from '../lexer/constants'
 import { SyntaxError } from './SyntaxError'
+import {
+  createProgram,
+  createInferenceDeclaration,
+  createImportStatement,
+  createExportStatement,
+  createStartStatement,
+  createStepStatement,
+  createIfStatement,
+  createSwitchStatement,
+  createGotoStatement,
+  createBlock,
+  createSwitchBlock,
+  createCaseClause,
+  createDefaultClause,
+  createModuleItems
+} from './ast'
 import type {
   Program,
   ModuleStatement,
@@ -75,13 +91,13 @@ export const createParser = (input: string) => {
       }
     }
 
-    return {
+    return createProgram(
       moduleStatemens,
-      range: {
+      {
         start,
         end: token.range.end
       }
-    }
+    )
   }
 
   const matchModuleStatement = (): ModuleStatement | null => {
@@ -102,10 +118,7 @@ export const createParser = (input: string) => {
         return matchInferenceDeclaration()
       }
     }
-    addError(new SyntaxError(
-      `Expect 'start', 'export', 'import', Identifier: <somethings>, accept ${token.word}`,
-      token
-    ))
+    addError(`'${Keyword.Start}', '${Keyword.Export}', '${Keyword.Import}', Identifier: <somethings>`, token)
     return null
   }
 
@@ -116,20 +129,17 @@ export const createParser = (input: string) => {
       if (block === null) {
         return null
       } else {
-        return {
+        return createInferenceDeclaration(
           identifier,
           block,
-          range: {
+          {
             start: identifier.range.start,
             end: block.range.end
           }
-        }
+        )
       }
     } else {
-      addError(new SyntaxError(
-        `Expect ${Operator.Assign}, accept ${token.word}`,
-        token
-      ))
+      addError(Operator.Assign, token)
       return null
     }
   }
@@ -150,18 +160,15 @@ export const createParser = (input: string) => {
           list.push(statement)
         }
       }
-      return {
+      return createBlock(
         list,
-        range: {
+        {
           start,
           end: token.range.end
         }
-      }
+      )
     } else {
-      addError(new SyntaxError(
-        `Expect ${Operator.OpenBrace}, accept ${token.word}`,
-        token
-      ))
+      addError(Operator.OpenBrace, token)
       return null
     }
   }
@@ -172,26 +179,20 @@ export const createParser = (input: string) => {
     if (moduleItems) {
       if (matchKeyword(Keyword.From)) {
         if (matchPath()) {
-          return {
+          return createImportStatement(
             moduleItems,
-            path: token,
-            range: {
+            token,
+            {
               start,
               end: token.range.end
             }
-          }
+          )
         } else {
-          addError(new SyntaxError(
-            `Expect Path: "somethings", accept ${token.word}`,
-            token
-          ))
+          addError('Path: "somethings"', token)
           return null
         }
       } else {
-        addError(new SyntaxError(
-          `Expect ${Keyword.From}, accept ${token.word}`,
-          token
-        ))
+        addError(Keyword.From, token)
         return null
       }
     } else {
@@ -210,82 +211,66 @@ export const createParser = (input: string) => {
             if (matchIdentifier()) {
               identifiers.push(token)
             } else if (token.type === TokenKind.Operator && token.word === Operator.CloseBrace) {
-              return {
+              return createModuleItems(
                 identifiers,
-                range: {
+                {
                   start,
                   end: token.range.end
                 }
-              }
+              )
             } else {
               recovery()
-              return {
+              return createModuleItems(
                 identifiers,
-                range: {
+                {
                   start,
                   end: token.range.end
                 }
-              }
+              )
             }
           } else if (token.type === TokenKind.Operator && token.word === Operator.CloseBrace) {
-            return {
+            return createModuleItems(
               identifiers,
-              range: {
+              {
                 start,
                 end: token.range.end
               }
-            }
+            )
           } else {
-            addError(new SyntaxError(
-              `Expect Identifier: <somethings>, accept ${token.word}`,
-              token
-            ))
+            addError('Identifier: <somethings>', token)
             return null
           }
         }
       } else {
-        addError(new SyntaxError(
-          `Expect Identifier: <somethings>, accept ${token.word}`,
-          token
-        ))
+        addError('Identifier: <somethings>', token)
         return null
       }
     } else {
-      addError(new SyntaxError(
-        `Expect ${Operator.OpenBrace}, accept ${token.word}`,
-        token
-      ))
+      addError(Operator.OpenBrace, token)
       return null
     }
   }
 
   const matchExportStatement = (): ExportStatement | null => {
     if (matchIdentifier()) {
-      return {
-        identifier: token,
-        range: token.range
-      }
+      return createExportStatement(
+        token,
+        token.range
+      )
     } else {
-      addError(new SyntaxError(
-        `Expect Identifier: <somethings>, accept ${token.word}`,
-        token
-      ))
+      addError('Identifier: <somethings>', token)
       return null
     }
   }
 
   const matchStartStatement = (): StartStatement | null => {
     if (matchIdentifier()) {
-      let identifier = token
-      return {
-        identifier,
-        range: token.range
-      }
+      return createStartStatement(
+        token,
+        token.range
+      )
     } else {
-      addError(new SyntaxError(
-        `Expect Identifier: <somethings>, accept ${token.word}`,
-        token
-      ))
+      addError('Identifier: <somethings>', token)
       return null
     }
   }
@@ -308,18 +293,15 @@ export const createParser = (input: string) => {
         return matchStepStatement()
       }
     }
-    addError(new SyntaxError(
-      `Expect 'if', 'switch', 'goto', Action: [somethings], accept ${token.word}`,
-      token
-    ))
+    addError(`'${Keyword.If}', '${Keyword.Switch}', '${Keyword.Goto}', Action: [somethings]`, token)
     return null
   }
 
   const matchStepStatement = (): StepStatement => {
-    return {
-      action: token,
-      range: token.range
-    }
+    return createStepStatement(
+      token,
+      token.range
+    )
   }
 
   const matchIfStatement = (): IfStatement | null => {
@@ -327,57 +309,51 @@ export const createParser = (input: string) => {
     if (matchAction()) {
       const expression = token
       if (matchOperator(Operator.Result)) {
-        let block = matchBlock()
-        if (block) {
+        let ifBlock = matchBlock()
+        if (ifBlock) {
           if (matchKeyword(Keyword.Else)) {
             const elseBlock = matchBlock()
             if (elseBlock) {
-              return {
+              return createIfStatement(
                 expression,
-                ifBlock: block,
+                ifBlock,
                 elseBlock,
-                range: {
+                {
                   start,
                   end: elseBlock.range.end
                 }
-              }
+              )
             } else {
-              return {
+              return createIfStatement(
                 expression,
-                ifBlock: block,
-                elseBlock,
-                range: {
+                ifBlock,
+                null,
+                {
                   start,
-                  end: block.range.end
+                  end: ifBlock.range.end
                 }
-              }
+              )
             }
           } else {
-            return {
+            return createIfStatement(
               expression,
-              ifBlock: block,
-              elseBlock: null,
-              range: {
+              ifBlock,
+              null,
+              {
                 start,
-                end: block.range.end
+                end: ifBlock.range.end
               }
-            }
+            )
           }
         } else {
           return null
         }
       } else {
-        addError(new SyntaxError(
-          `Expect ${Operator.Result}, accept ${token.word}`,
-          token
-        ))
+        addError(Operator.Result, token)
         return null
       }
     } else {
-      addError(new SyntaxError(
-        `Expect Action: [somethings], accept ${token.word}`,
-        token
-      ))
+      addError('Action: [somethings]', token)
       return null
     }
   }
@@ -388,22 +364,19 @@ export const createParser = (input: string) => {
       const expression = token
       const switchBlock = matchSwitchBlock()
       if (switchBlock) {
-        return {
+        return createSwitchStatement(
           expression,
           switchBlock,
-          range: {
+          {
             start,
             end: switchBlock.range.end
           }
-        }
+        )
       } else {
         return null
       }
     } else {
-      addError(new SyntaxError(
-        `Expect Action: [somethings], accept ${token.word}`,
-        token
-      ))
+      addError('Action: [somethings]', token)
       return null
     }
   }
@@ -416,14 +389,14 @@ export const createParser = (input: string) => {
       while(true) {
         nextToken()
         if (token.type === TokenKind.Operator && token.word === Operator.CloseBrace) {
-          return {
+          return createSwitchBlock(
             caseClauses,
             defaultClause,
-            range: {
+            {
               start,
               end: token.range.end
             }
-          }
+          )
         } else if (token.type === TokenKind.Keyword && token.word === Keyword.Case) {
           const caseClause = matchCaseClause()
           if (caseClause) {
@@ -435,18 +408,12 @@ export const createParser = (input: string) => {
             defaultClause = dc
           }
         } else {
-          addError(new SyntaxError(
-            `Expect 'case', 'default', '}', accept ${token.word}`,
-            token
-          ))
+          addError(`'${Keyword.Case}', '${Keyword.Default}', '${Operator.CloseBrace}'`, token)
           return null
         }
       }
     } else {
-      addError(new SyntaxError(
-        `Expect ${Operator.OpenBrace}, accept ${token.word}`,
-        token
-      ))
+      addError(Operator.OpenBrace, token)
       return null
     }
   }
@@ -458,29 +425,23 @@ export const createParser = (input: string) => {
       if (matchOperator(Operator.Result)) {
         const block = matchBlock()
         if (block) {
-          return {
+          return createCaseClause(
             expression,
             block,
-            range: {
+            {
               start,
               end: block.range.end
             }
-          }
+          )
         } else {
           return null
         }
       } else {
-        addError(new SyntaxError(
-          `Expect ${Operator.Result}, accept ${token.word}`,
-          token
-        ))
+        addError(Operator.Result, token)
         return null
       }
     } else {
-      addError(new SyntaxError(
-        `Expect Action: [somethings], accept ${token.word}`,
-        token
-      ))
+      addError('Action: [somethings]', token)
       return null
     }
   }
@@ -490,21 +451,18 @@ export const createParser = (input: string) => {
     if (matchOperator(Operator.Result)) {
       const block = matchBlock()
       if (block) {
-        return {
+        return createDefaultClause(
           block,
-          range: {
+          {
             start,
             end: block.range.end
           }
-        }
+        )
       } else {
         return null
       }
     } else {
-      addError(new SyntaxError(
-        `Expect ${Operator.Result}, accept ${token.word}`,
-        token
-      ))
+      addError(Operator.Result, token)
       return null
     }
   }
@@ -512,18 +470,15 @@ export const createParser = (input: string) => {
   const matchGotoStatement = (): GotoStatement | null => {
     const start = token.range.start
     if (matchIdentifier()) {
-      return {
-        identifier: token,
-        range: {
+      return createGotoStatement(
+        token,
+        {
           start,
           end: token.range.end
         }
-      }
+      )
     } else {
-      addError(new SyntaxError(
-        `Expect Identifier: <somethings>, accept ${token.word}`,
-        token
-      ))
+      addError(`Identifier: <somethings>`, token)
       return null
     }
   }
@@ -553,8 +508,11 @@ export const createParser = (input: string) => {
     return token.type === TokenKind.Operator && token.word === operator
   }
 
-  const addError = (err: SyntaxError) => {
-    errors.push(err)
+  const addError = (expect: string, token: Token) => {
+    errors.push(new SyntaxError(
+      `Expect ${expect}, accept ${token.word}`,
+      token
+    ))
   }
 
   const recovery = () => {
