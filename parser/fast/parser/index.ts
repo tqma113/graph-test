@@ -510,7 +510,7 @@ export const createParser = (input: string) => {
 
   const addError = (expect: string, token: Token) => {
     errors.push(new SyntaxError(
-      `Expect ${expect}, accept ${token.word}`,
+      `Expect { ${expect} }, accept '${token.word}'`,
       token
     ))
   }
@@ -531,10 +531,10 @@ export const createParser = (input: string) => {
     get tokens() {
       return lexer.tokens
     },
-    get syntaxErrors() {
+    get lexcialErrors() {
       return lexer.errors
     },
-    get semanticErrors() {
+    get syntaxErrors() {
       return errors
     },
 

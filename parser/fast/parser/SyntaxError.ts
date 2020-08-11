@@ -8,11 +8,7 @@ export class SyntaxError extends Error {
     super(message)
 
     this.name = 'SyntaxError'
-    this.message = message
+    this.message = `${message} at line: ${token.range.start.line}, column: ${token.range.start.column}`
     this.token = token
-  }
-
-  toString() {
-    return `${this.message} at line: ${this.token.range.start.line}, column: ${this.token.range.start.column}`
   }
 }
