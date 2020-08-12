@@ -55,7 +55,6 @@ export const createParser = (input: string) => {
       return
     }
 
-    nextToken()
     program = matchProgram()
   }
 
@@ -84,10 +83,17 @@ export const createParser = (input: string) => {
     return token
   }
 
-  const predict = (): Token => {
-    const token = getNextToken()
-    cache.push(token)
-    return token
+  const predict = (key: number = 0): Token => {
+    if (token && token.type === TokenKind.EOP) {
+      return token
+    }
+    if (cache.length > key) {
+      return cache[key]
+    } else {
+      const token = getNextToken()
+      cache.push(token)
+      return token
+    }
   }
 
   /**
@@ -96,10 +102,10 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchProgram = (): Program | null => {
-    const start = token.range.start
     let moduleStatemens: ModuleStatement[] = []
 
     while (true) {
+      const token = predict()
       if (token.type !== TokenKind.EOP) {
         const moduleStatement = matchModuleStatement()
         if (moduleStatement === null) {
@@ -107,7 +113,6 @@ export const createParser = (input: string) => {
         } else {
           moduleStatemens.push(moduleStatement)
         }
-        nextToken()
       } else {
         break
       }
@@ -116,7 +121,10 @@ export const createParser = (input: string) => {
     return createProgram(
       moduleStatemens,
       {
-        start,
+        start: {
+          line: 1,
+          column: 1
+        },
         end: token.range.end
       }
     )
@@ -131,6 +139,7 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchModuleStatement = (): ModuleStatement | null => {
+    const token = predict()
     if (token.type === TokenKind.Keyword) {
       switch (token.word) {
         case Keyword.Import: {
@@ -158,23 +167,28 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchInferenceDeclaration = (): InferenceDeclaration | null => {
-    const identifier = token
-    if (requireOperator(Operator.Assign)) {
-      const block = matchBlock()
-      if (block === null) {
-        return null
+    if (requireIdentifier()) {
+      const identifier = token
+      if (requireOperator(Operator.Assign)) {
+        const block = matchBlock()
+        if (block === null) {
+          return null
+        } else {
+          return createInferenceDeclaration(
+            identifier,
+            block,
+            {
+              start: identifier.range.start,
+              end: block.range.end
+            }
+          )
+        }
       } else {
-        return createInferenceDeclaration(
-          identifier,
-          block,
-          {
-            start: identifier.range.start,
-            end: block.range.end
-          }
-        )
+        reportError(Operator.Assign, token)
+        return null
       }
     } else {
-      reportError(Operator.Assign, token)
+      reportError('Identifier: <somethings>', token)
       return null
     }
   }
@@ -189,9 +203,16 @@ export const createParser = (input: string) => {
       const start = token.range.start
       let list: Statement[] = []
       while (true) {
-        nextToken()
+        const token = predict()
         if (token.type === TokenKind.Operator && token.word === Operator.CloseBrace) {
-          break
+          nextToken()
+          return createBlock(
+            list,
+            {
+              start,
+              end: token.range.end
+            }
+          )
         }
 
         const statement = matchStatement()
@@ -201,13 +222,7 @@ export const createParser = (input: string) => {
           list.push(statement)
         }
       }
-      return createBlock(
-        list,
-        {
-          start,
-          end: token.range.end
-        }
-      )
+      
     } else {
       reportError(Operator.OpenBrace, token)
       return null
@@ -220,28 +235,33 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchImportStatement = (): ImportStatement | null => {
-    const start = token.range.start
-    const moduleItems = matchModuleItems()
-    if (moduleItems) {
-      if (requireKeyword(Keyword.From)) {
-        if (requirePath()) {
-          return createImportStatement(
-            moduleItems,
-            token,
-            {
-              start,
-              end: token.range.end
-            }
-          )
+    if (requireKeyword(Keyword.Import)) {
+      const start = token.range.start
+      const moduleItems = matchModuleItems()
+      if (moduleItems) {
+        if (requireKeyword(Keyword.From)) {
+          if (requirePath()) {
+            return createImportStatement(
+              moduleItems,
+              token,
+              {
+                start,
+                end: token.range.end
+              }
+            )
+          } else {
+            reportError('Path: "somethings"', token)
+            return null
+          }
         } else {
-          reportError('Path: "somethings"', token)
+          reportError(Keyword.From, token)
           return null
         }
       } else {
-        reportError(Keyword.From, token)
         return null
       }
     } else {
+      reportError(Keyword.Import, token)
       return null
     }
   }
@@ -308,17 +328,22 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchExportStatement = (): ExportStatement | null => {
-    const start = token.range.start
-    const module = matchModule()
-    if (module) {
-      return createExportStatement(
-        module,
-        {
-          start,
-          end: module.range.end
-        }
-      )
+    if (requireKeyword(Keyword.Export)) {
+      const start = token.range.start
+      const module = matchModule()
+      if (module) {
+        return createExportStatement(
+          module,
+          {
+            start,
+            end: module.range.end
+          }
+        )
+      } else {
+        return null
+      }
     } else {
+      reportError(Keyword.Export, token)
       return null
     }
   }
@@ -329,17 +354,22 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchStartStatement = (): StartStatement | null => {
-    const start = token.range.start
-    const module = matchModule()
-    if (module) {
-      return createStartStatement(
-        module,
-        {
-          start,
-          end: module.range.end
-        }
-      )
+    if (requireKeyword(Keyword.Start)) {
+      const start = token.range.start
+      const module = matchModule()
+      if (module) {
+        return createStartStatement(
+          module,
+          {
+            start,
+            end: module.range.end
+          }
+        )
+      } else {
+        return null
+      }
     } else {
+      reportError(Keyword.Start, token)
       return null
     }
   }
@@ -351,10 +381,11 @@ export const createParser = (input: string) => {
    * ;
    */
   const matchModule = (): Module | null => {
-    if (requireIdentifier()) {
-      const identifier = token
-      const nt = predict()
-      if (nt.type === TokenKind.Operator && nt.word === Operator.Assign) {
+    const nt = predict()
+    if (nt.type === TokenKind.Identifier) {
+      const identifier = nt
+      const nt2 = predict(1)
+      if (nt2.type === TokenKind.Operator && nt2.word === Operator.Assign) {
         const declaration = matchInferenceDeclaration()
         if (declaration) {
           return createModule(
@@ -391,6 +422,7 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchStatement = (): Statement | null => {
+    const token = predict()
     if (token.type === TokenKind.Keyword) {
       switch (token.word) {
         case Keyword.If: {
@@ -418,6 +450,7 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchStepStatement = (): StepStatement => {
+    nextToken()
     return createStepStatement(
       token,
       token.range
@@ -430,26 +463,38 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchIfStatement = (): IfStatement | null => {
-    const start = token.range.start
-    if (requireAction()) {
-      const expression = token
-      if (requireOperator(Operator.Result)) {
-        let ifBlock = matchBlock()
-        if (ifBlock) {
-          const nt = predict()
-          if (nt.type === TokenKind.Keyword && nt.word === Keyword.Else) {
-            nextToken()
-            const elseBlock = matchBlock()
-            if (elseBlock) {
-              return createIfStatement(
-                expression,
-                ifBlock,
-                elseBlock,
-                {
-                  start,
-                  end: elseBlock.range.end
-                }
-              )
+    if (requireKeyword(Keyword.If)) {
+      const start = token.range.start
+      if (requireAction()) {
+        const expression = token
+        if (requireOperator(Operator.Result)) {
+          let ifBlock = matchBlock()
+          if (ifBlock) {
+            const nt = predict()
+            if (nt.type === TokenKind.Keyword && nt.word === Keyword.Else) {
+              nextToken()
+              const elseBlock = matchBlock()
+              if (elseBlock) {
+                return createIfStatement(
+                  expression,
+                  ifBlock,
+                  elseBlock,
+                  {
+                    start,
+                    end: elseBlock.range.end
+                  }
+                )
+              } else {
+                return createIfStatement(
+                  expression,
+                  ifBlock,
+                  null,
+                  {
+                    start,
+                    end: ifBlock.range.end
+                  }
+                )
+              }
             } else {
               return createIfStatement(
                 expression,
@@ -462,25 +507,18 @@ export const createParser = (input: string) => {
               )
             }
           } else {
-            return createIfStatement(
-              expression,
-              ifBlock,
-              null,
-              {
-                start,
-                end: ifBlock.range.end
-              }
-            )
+            return null
           }
         } else {
+          reportError(Operator.Result, token)
           return null
         }
       } else {
-        reportError(Operator.Result, token)
+        reportError('Action: [somethings]', token)
         return null
       }
     } else {
-      reportError('Action: [somethings]', token)
+      reportError(Keyword.If, token)
       return null
     }
   }
@@ -491,24 +529,29 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchSwitchStatement = (): SwitchStatement | null => {
-    const start = token.range.start
-    if (requireAction()) {
-      const expression = token
-      const switchBlock = matchSwitchBlock()
-      if (switchBlock) {
-        return createSwitchStatement(
-          expression,
-          switchBlock,
-          {
-            start,
-            end: switchBlock.range.end
-          }
-        )
+    if (requireKeyword(Keyword.Switch)) {
+      const start = token.range.start
+      if (requireAction()) {
+        const expression = token
+        const switchBlock = matchSwitchBlock()
+        if (switchBlock) {
+          return createSwitchStatement(
+            expression,
+            switchBlock,
+            {
+              start,
+              end: switchBlock.range.end
+            }
+          )
+        } else {
+          return null
+        }
       } else {
+        reportError('Action: [somethings]', token)
         return null
       }
     } else {
-      reportError('Action: [somethings]', token)
+      reportError(Keyword.Switch, token)
       return null
     }
   }
@@ -620,17 +663,22 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchGotoStatement = (): GotoStatement | null => {
-    const start = token.range.start
-    if (requireIdentifier()) {
-      return createGotoStatement(
-        token,
-        {
-          start,
-          end: token.range.end
-        }
-      )
+    if (requireKeyword(Keyword.Goto)) {
+      const start = token.range.start
+      if (requireIdentifier()) {
+        return createGotoStatement(
+          token,
+          {
+            start,
+            end: token.range.end
+          }
+        )
+      } else {
+        reportError(`Identifier: <somethings>`, token)
+        return null
+      }
     } else {
-      reportError(`Identifier: <somethings>`, token)
+      reportError(Keyword.Goto, token)
       return null
     }
   }
@@ -671,7 +719,8 @@ export const createParser = (input: string) => {
   const recovery = () => {
     while (true) {
       nextToken()
-      if (token.type === TokenKind.Operator && token.word === '}') {
+      console.trace(token)
+      if ((token.type === TokenKind.Operator && token.word === '}') || token.type === TokenKind.EOP) {
         break
       }
     }
