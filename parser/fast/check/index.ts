@@ -1,8 +1,5 @@
 import { SemanticError } from './SemanticError'
 import {
-  TokenKind
-} from '../lexer/constants'
-import {
   FragmentKind
 } from '../parser/ast'
 import type {
@@ -10,6 +7,18 @@ import type {
   InferenceDeclaration,
   ImportStatement,
   StartStatement,
+  ExportStatement,
+  Block,
+  Module,
+  StepStatement,
+  IfStatement,
+  SwitchStatement,
+  SwitchBlock,
+  CaseClause,
+  DefaultClause,
+  GotoStatement,
+  ModuleStatement,
+  ModuleItems
 } from '../parser/ast'
 import type {
   Identifier
@@ -76,6 +85,69 @@ export const check = (program: Program, table?: Map<string, Inference>): Semanti
   let inferenceTable = table || getInferences(program)
   let errors: SemanticError[] = []
 
+  const checkProgram = (program: Program) => {
+
+  }
+
+  const checkModuleStatement = (moduleStatement: ModuleStatement) => {
+
+  }
+
+  const checkInferenceDeclaration = (inferenceDeclaration: InferenceDeclaration) => {
+
+  }
+
+  const checkImportStatement = (importStatement: ImportStatement) => {
+
+  }
+
+  const checkModuleItems = (moduleItems: ModuleItems) => {
+
+  }
+
+  const checkModule = (module: Module) => {
+
+  }
+
+  const checkExportStatement = (exportStatement: ExportStatement) => {
+
+  }
+
+  const checkStartStatement = (startStatement: StartStatement) => {
+
+  }
+
+  const checkBlock = (block: Block) => {
+
+  }
+
+  const checkStepStatement = (stepStatement: StepStatement) => {
+
+  }
+
+  const checkIfStatement = (ifStatement: IfStatement) => {
+
+  }
+
+  const checkSwitchStatement = (switchStatement: SwitchStatement) => {
+
+  }
+
+  const checkSwitchBlock = (switchBlock: SwitchBlock) => {
+
+  }
+
+  const checkCaseClause = (caseClause: CaseClause) => {
+
+  }
+
+  const checkDefaultClause = (defaultClause: DefaultClause) => {
+
+  }
+
+  const checkGotoStatement = (gotoStatement: GotoStatement) => {
+
+  }
 
   return errors
 }
