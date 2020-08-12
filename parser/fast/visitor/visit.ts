@@ -6,6 +6,7 @@ import type {
   ExportStatement,
   Block,
   Module,
+  Statement,
   StepStatement,
   IfStatement,
   SwitchStatement,
@@ -54,6 +55,11 @@ export const visit = (program: Program) => {
   const visitBlock = (block: Block) => {
 
   }
+
+  const checkStatement = (statement: Statement) => {
+
+  }
+
 
   const visitStepStatement = (stepStatement: StepStatement) => {
 
