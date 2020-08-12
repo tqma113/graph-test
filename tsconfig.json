@@ -23,6 +23,8 @@
     "jsx": "react",
     "lib": [
       "esnext",
+      "DOM",
+      "DOM.Iterable"
     ],
     "types": [
       "node"
