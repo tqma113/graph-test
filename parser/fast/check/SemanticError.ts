@@ -8,11 +8,11 @@ export class SemanticError extends Error {
     super(message)
 
     this.name = 'SemanticError'
-    this.message = message
+    this.message = `${message} at line: ${fragment.range.start.line}, column: ${fragment.range.start.column}`
     this.fragment = fragment
   }
 
   toString() {
-    return `${this.message} at line: ${this.fragment.range.start.line}, column: ${this.fragment.range.start.column}`
+    return 
   }
 }

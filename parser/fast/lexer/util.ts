@@ -1,11 +1,11 @@
-import { Keyword, Operator } from './constants'
+import { KeywordEnum, OperatorEnum } from './constants'
 
-const keywords = Object.values(Keyword)
+const keywords = Object.values(KeywordEnum)
 export const isKeyword = (word: string) => {
   return keywords.includes(word as any)
 }
 
-const operators = Object.values(Operator)
+const operators = Object.values(OperatorEnum)
 export const isOperator = (word: string) => {
   return operators.includes(word as any)
 }
