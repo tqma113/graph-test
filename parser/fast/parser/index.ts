@@ -1,5 +1,5 @@
-import { createLexer, Token } from '../lexer'
-import { TokenKind, Keyword, Operator } from '../lexer/constants'
+import { createLexer, Token, Identifier, Action, Path } from '../lexer'
+import { TokenKind, KeywordEnum, OperatorEnum } from '../lexer/constants'
 import { SyntaxError } from './SyntaxError'
 import {
   createProgram,
@@ -35,7 +35,7 @@ import type {
   CaseClause,
   DefaultClause,
   ModuleItems,
-  Module
+  Module,
 } from './ast'
 
 export type BlockType = 'global' | 'local'
@@ -142,13 +142,13 @@ export const createParser = (input: string) => {
     const token = predict()
     if (token.type === TokenKind.Keyword) {
       switch (token.word) {
-        case Keyword.Import: {
+        case KeywordEnum.Import: {
           return matchImportStatement()
         }
-        case Keyword.Export: {
+        case KeywordEnum.Export: {
           return matchExportStatement()
         }
-        case Keyword.Start: {
+        case KeywordEnum.Start: {
           return matchStartStatement()
         }
       }
@@ -157,7 +157,7 @@ export const createParser = (input: string) => {
         return matchInferenceDeclaration()
       }
     }
-    reportError(`'${Keyword.Start}', '${Keyword.Export}', '${Keyword.Import}', Identifier: <somethings>`, token)
+    reportError(`'${KeywordEnum.Start}', '${KeywordEnum.Export}', '${KeywordEnum.Import}', Identifier: <somethings>`, token)
     return null
   }
 
@@ -168,8 +168,8 @@ export const createParser = (input: string) => {
    */
   const matchInferenceDeclaration = (): InferenceDeclaration | null => {
     if (requireIdentifier()) {
-      const identifier = token
-      if (requireOperator(Operator.Assign)) {
+      const identifier = token as Identifier
+      if (requireOperator(OperatorEnum.Assign)) {
         const block = matchBlock()
         if (block === null) {
           return null
@@ -184,7 +184,7 @@ export const createParser = (input: string) => {
           )
         }
       } else {
-        reportError(Operator.Assign, token)
+        reportError(OperatorEnum.Assign, token)
         return null
       }
     } else {
@@ -199,12 +199,12 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchBlock = (): Block | null => {
-    if (requireOperator(Operator.OpenBrace)) {
+    if (requireOperator(OperatorEnum.OpenBrace)) {
       const start = token.range.start
       let list: Statement[] = []
       while (true) {
         const token = predict()
-        if (token.type === TokenKind.Operator && token.word === Operator.CloseBrace) {
+        if (token.type === TokenKind.Operator && token.word === OperatorEnum.CloseBrace) {
           nextToken()
           return createBlock(
             list,
@@ -224,7 +224,7 @@ export const createParser = (input: string) => {
       }
       
     } else {
-      reportError(Operator.OpenBrace, token)
+      reportError(OperatorEnum.OpenBrace, token)
       return null
     }
   }
@@ -235,15 +235,16 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchImportStatement = (): ImportStatement | null => {
-    if (requireKeyword(Keyword.Import)) {
+    if (requireKeyword(KeywordEnum.Import)) {
       const start = token.range.start
       const moduleItems = matchModuleItems()
       if (moduleItems) {
-        if (requireKeyword(Keyword.From)) {
+        if (requireKeyword(KeywordEnum.From)) {
           if (requirePath()) {
+            const path = token as Path
             return createImportStatement(
               moduleItems,
-              token,
+              path,
               {
                 start,
                 end: token.range.end
@@ -254,14 +255,14 @@ export const createParser = (input: string) => {
             return null
           }
         } else {
-          reportError(Keyword.From, token)
+          reportError(KeywordEnum.From, token)
           return null
         }
       } else {
         return null
       }
     } else {
-      reportError(Keyword.Import, token)
+      reportError(KeywordEnum.Import, token)
       return null
     }
   }
@@ -272,16 +273,16 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchModuleItems = (): ModuleItems | null => {
-    let identifiers: Token[] = []
-    if (requireOperator(Operator.OpenBrace)) {
+    let identifiers: Identifier[] = []
+    if (requireOperator(OperatorEnum.OpenBrace)) {
       const start = token.range.start
       if (requireIdentifier()) {
-        identifiers.push(token)
+        identifiers.push(token as Identifier)
         while (true) {
-          if (requireOperator(Operator.Comma)) {
+          if (requireOperator(OperatorEnum.Comma)) {
             if (requireIdentifier()) {
-              identifiers.push(token)
-            } else if (token.type === TokenKind.Operator && token.word === Operator.CloseBrace) {
+              identifiers.push(token as Identifier)
+            } else if (token.type === TokenKind.Operator && token.word === OperatorEnum.CloseBrace) {
               return createModuleItems(
                 identifiers,
                 {
@@ -299,7 +300,7 @@ export const createParser = (input: string) => {
                 }
               )
             }
-          } else if (token.type === TokenKind.Operator && token.word === Operator.CloseBrace) {
+          } else if (token.type === TokenKind.Operator && token.word === OperatorEnum.CloseBrace) {
             return createModuleItems(
               identifiers,
               {
@@ -317,7 +318,7 @@ export const createParser = (input: string) => {
         return null
       }
     } else {
-      reportError(Operator.OpenBrace, token)
+      reportError(OperatorEnum.OpenBrace, token)
       return null
     }
   }
@@ -328,7 +329,7 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchExportStatement = (): ExportStatement | null => {
-    if (requireKeyword(Keyword.Export)) {
+    if (requireKeyword(KeywordEnum.Export)) {
       const start = token.range.start
       const module = matchModule()
       if (module) {
@@ -343,7 +344,7 @@ export const createParser = (input: string) => {
         return null
       }
     } else {
-      reportError(Keyword.Export, token)
+      reportError(KeywordEnum.Export, token)
       return null
     }
   }
@@ -354,7 +355,7 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchStartStatement = (): StartStatement | null => {
-    if (requireKeyword(Keyword.Start)) {
+    if (requireKeyword(KeywordEnum.Start)) {
       const start = token.range.start
       const module = matchModule()
       if (module) {
@@ -369,7 +370,7 @@ export const createParser = (input: string) => {
         return null
       }
     } else {
-      reportError(Keyword.Start, token)
+      reportError(KeywordEnum.Start, token)
       return null
     }
   }
@@ -385,7 +386,7 @@ export const createParser = (input: string) => {
     if (nt.type === TokenKind.Identifier) {
       const identifier = nt
       const nt2 = predict(1)
-      if (nt2.type === TokenKind.Operator && nt2.word === Operator.Assign) {
+      if (nt2.type === TokenKind.Operator && nt2.word === OperatorEnum.Assign) {
         const declaration = matchInferenceDeclaration()
         if (declaration) {
           return createModule(
@@ -425,13 +426,13 @@ export const createParser = (input: string) => {
     const token = predict()
     if (token.type === TokenKind.Keyword) {
       switch (token.word) {
-        case Keyword.If: {
+        case KeywordEnum.If: {
           return matchIfStatement()
         }
-        case Keyword.Switch: {
+        case KeywordEnum.Switch: {
           return matchSwitchStatement()
         }
-        case Keyword.Goto: {
+        case KeywordEnum.Goto: {
           return matchGotoStatement()
         }
       }
@@ -440,7 +441,7 @@ export const createParser = (input: string) => {
         return matchStepStatement()
       }
     }
-    reportError(`'${Keyword.If}', '${Keyword.Switch}', '${Keyword.Goto}', Action: [somethings]`, token)
+    reportError(`'${KeywordEnum.If}', '${KeywordEnum.Switch}', '${KeywordEnum.Goto}', Action: [somethings]`, token)
     return null
   }
 
@@ -451,8 +452,9 @@ export const createParser = (input: string) => {
    */
   const matchStepStatement = (): StepStatement => {
     nextToken()
+    const expression = token as Action
     return createStepStatement(
-      token,
+      expression,
       token.range
     )
   }
@@ -463,15 +465,15 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchIfStatement = (): IfStatement | null => {
-    if (requireKeyword(Keyword.If)) {
+    if (requireKeyword(KeywordEnum.If)) {
       const start = token.range.start
       if (requireAction()) {
-        const expression = token
-        if (requireOperator(Operator.Result)) {
+        const expression = token as Action
+        if (requireOperator(OperatorEnum.Result)) {
           let ifBlock = matchBlock()
           if (ifBlock) {
             const nt = predict()
-            if (nt.type === TokenKind.Keyword && nt.word === Keyword.Else) {
+            if (nt.type === TokenKind.Keyword && nt.word === KeywordEnum.Else) {
               nextToken()
               const elseBlock = matchBlock()
               if (elseBlock) {
@@ -510,7 +512,7 @@ export const createParser = (input: string) => {
             return null
           }
         } else {
-          reportError(Operator.Result, token)
+          reportError(OperatorEnum.Result, token)
           return null
         }
       } else {
@@ -518,7 +520,7 @@ export const createParser = (input: string) => {
         return null
       }
     } else {
-      reportError(Keyword.If, token)
+      reportError(KeywordEnum.If, token)
       return null
     }
   }
@@ -529,10 +531,10 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchSwitchStatement = (): SwitchStatement | null => {
-    if (requireKeyword(Keyword.Switch)) {
+    if (requireKeyword(KeywordEnum.Switch)) {
       const start = token.range.start
       if (requireAction()) {
-        const expression = token
+        const expression = token as Action
         const switchBlock = matchSwitchBlock()
         if (switchBlock) {
           return createSwitchStatement(
@@ -551,7 +553,7 @@ export const createParser = (input: string) => {
         return null
       }
     } else {
-      reportError(Keyword.Switch, token)
+      reportError(KeywordEnum.Switch, token)
       return null
     }
   }
@@ -562,13 +564,13 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchSwitchBlock = (): SwitchBlock | null => {
-    if (requireOperator(Operator.OpenBrace)) {
+    if (requireOperator(OperatorEnum.OpenBrace)) {
       const start = token.range.start
       let caseClauses: CaseClause[] = []
       let defaultClause: DefaultClause | null = null
       while(true) {
         nextToken()
-        if (token.type === TokenKind.Operator && token.word === Operator.CloseBrace) {
+        if (token.type === TokenKind.Operator && token.word === OperatorEnum.CloseBrace) {
           return createSwitchBlock(
             caseClauses,
             defaultClause,
@@ -577,23 +579,23 @@ export const createParser = (input: string) => {
               end: token.range.end
             }
           )
-        } else if (token.type === TokenKind.Keyword && token.word === Keyword.Case) {
+        } else if (token.type === TokenKind.Keyword && token.word === KeywordEnum.Case) {
           const caseClause = matchCaseClause()
           if (caseClause) {
             caseClauses.push(caseClause)
           }
-        } else if (token.type === TokenKind.Keyword && token.word === Keyword.Default) {
+        } else if (token.type === TokenKind.Keyword && token.word === KeywordEnum.Default) {
           const dc = matchDefaultClause()
           if (dc) {
             defaultClause = dc
           }
         } else {
-          reportError(`'${Keyword.Case}', '${Keyword.Default}', '${Operator.CloseBrace}'`, token)
+          reportError(`'${KeywordEnum.Case}', '${KeywordEnum.Default}', '${OperatorEnum.CloseBrace}'`, token)
           return null
         }
       }
     } else {
-      reportError(Operator.OpenBrace, token)
+      reportError(OperatorEnum.OpenBrace, token)
       return null
     }
   }
@@ -606,8 +608,8 @@ export const createParser = (input: string) => {
   const matchCaseClause = (): CaseClause | null => {
     const start = token.range.start
     if (requireAction()) {
-      const expression = token
-      if (requireOperator(Operator.Result)) {
+      const expression = token as Action
+      if (requireOperator(OperatorEnum.Result)) {
         const block = matchBlock()
         if (block) {
           return createCaseClause(
@@ -622,7 +624,7 @@ export const createParser = (input: string) => {
           return null
         }
       } else {
-        reportError(Operator.Result, token)
+        reportError(OperatorEnum.Result, token)
         return null
       }
     } else {
@@ -638,7 +640,7 @@ export const createParser = (input: string) => {
    */
   const matchDefaultClause = (): DefaultClause | null => {
     const start = token.range.start
-    if (requireOperator(Operator.Result)) {
+    if (requireOperator(OperatorEnum.Result)) {
       const block = matchBlock()
       if (block) {
         return createDefaultClause(
@@ -652,7 +654,7 @@ export const createParser = (input: string) => {
         return null
       }
     } else {
-      reportError(Operator.Result, token)
+      reportError(OperatorEnum.Result, token)
       return null
     }
   }
@@ -663,11 +665,12 @@ export const createParser = (input: string) => {
    *  ;
    */
   const matchGotoStatement = (): GotoStatement | null => {
-    if (requireKeyword(Keyword.Goto)) {
+    if (requireKeyword(KeywordEnum.Goto)) {
       const start = token.range.start
       if (requireIdentifier()) {
+        const identifier = token as Identifier
         return createGotoStatement(
-          token,
+          identifier,
           {
             start,
             end: token.range.end
@@ -678,7 +681,7 @@ export const createParser = (input: string) => {
         return null
       }
     } else {
-      reportError(Keyword.Goto, token)
+      reportError(KeywordEnum.Goto, token)
       return null
     }
   }
@@ -698,12 +701,12 @@ export const createParser = (input: string) => {
     return token.type === TokenKind.Identifier
   }
 
-  const requireKeyword = (keyword: Keyword): boolean => {
+  const requireKeyword = (keyword: KeywordEnum): boolean => {
     nextToken()
     return token.type === TokenKind.Keyword && token.word === keyword
   }
 
-  const requireOperator = (operator: Operator): boolean => {
+  const requireOperator = (operator: OperatorEnum): boolean => {
     nextToken()
     return token.type === TokenKind.Operator && token.word === operator
   }

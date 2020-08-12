@@ -1,4 +1,4 @@
-import { SymbolChar, TokenKind, Operator, Keyword } from './constants'
+import { SymbolChar, TokenKind, OperatorEnum, KeywordEnum } from './constants'
 import { LexicalError } from './LexicalError'
 import {
   isLetter,
@@ -9,35 +9,49 @@ import {
 } from './util'
 import type { Range, Position } from '../index'
 
-export type Token = {
+export type Keyword = {
   type: TokenKind.Keyword,
-  word: Keyword,
+  word: KeywordEnum,
   range: Range
-} | {
+}
+
+export type Operator = {
   type: TokenKind.Operator,
-  word: Operator,
+  word: OperatorEnum,
   range: Range
-} | {
+}
+
+export type Identifier = {
   type: TokenKind.Identifier,
   word: string,
   range: Range
-} | {
+}
+
+export type Action = {
   type: TokenKind.Action,
   word: string,
   range: Range
-} | {
+}
+
+export type Path = {
   type: TokenKind.Path,
   word: string,
   range: Range
-} | {
+}
+
+export type Comment = {
   type: TokenKind.Comment,
   word: string,
   range: Range
-} | {
+}
+
+export type EOP = {
   type: TokenKind.EOP,
   word: null,
   range: Range
 }
+
+export type Token = Keyword | Operator | Identifier | Action | Path | Comment | EOP
 
 export type Lexer = {
   tokens: Token[]
@@ -227,7 +241,7 @@ export const createLexer = (input: string): Lexer => {
   
           return {
             type: TokenKind.Keyword,
-            word: word as Keyword,
+            word: word as KeywordEnum,
             range
           }
         } else {
@@ -243,49 +257,49 @@ export const createLexer = (input: string): Lexer => {
   const matchOperator = (): Token | LexicalError => {
     const char = getCurrentChar()
     switch (char) {
-      case Operator.OpenBrace: {
+      case OperatorEnum.OpenBrace: {
         nextChar()
         const range = getRange()
         endWord()
 
         return {
           type: TokenKind.Operator,
-          word: Operator.OpenBrace,
+          word: OperatorEnum.OpenBrace,
           range
         }
       }
-      case Operator.CloseBrace: {
+      case OperatorEnum.CloseBrace: {
         nextChar()
         const range = getRange()
         endWord()
 
         return {
           type: TokenKind.Operator,
-          word: Operator.CloseBrace,
+          word: OperatorEnum.CloseBrace,
           range
         }
       }
-      case Operator.Assign: {
+      case OperatorEnum.Assign: {
         nextChar()
         const range = getRange()
         endWord()
 
         return {
           type: TokenKind.Operator,
-          word: Operator.Assign,
+          word: OperatorEnum.Assign,
           range
         }
       }
-      case Operator.Result[0]: {
+      case OperatorEnum.Result[0]: {
         const nc = nextChar()
-        if (nc === Operator.Result[1]) {
+        if (nc === OperatorEnum.Result[1]) {
           nextChar()
           const range = getRange()
           endWord()
 
           return {
             type: TokenKind.Operator,
-            word: Operator.Result,
+            word: OperatorEnum.Result,
             range
           }
         } else {
@@ -297,14 +311,14 @@ export const createLexer = (input: string): Lexer => {
           )
         }
       }
-      case Operator.Comma: {
+      case OperatorEnum.Comma: {
         nextChar()
         const range = getRange()
         endWord()
 
         return {
           type: TokenKind.Operator,
-          word: Operator.Comma,
+          word: OperatorEnum.Comma,
           range
         }
       }

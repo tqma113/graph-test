@@ -12,7 +12,7 @@ export enum SymbolChar {
   Well                  =         '#'
 }
 
-export enum Operator {
+export enum OperatorEnum {
   OpenBrace             =         '{',
   CloseBrace            =         '}',
   Assign                =         '=',
@@ -20,7 +20,7 @@ export enum Operator {
   Comma                 =         ',',
 }
 
-export enum Keyword {
+export enum KeywordEnum {
   Start                 =         'start',
   Goto                  =         'goto',
   If                    =         'if',
