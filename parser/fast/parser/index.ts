@@ -135,7 +135,7 @@ export const createParser = (input: string) => {
         return matchInferenceDeclaration()
       }
     }
-    addError(`'${Keyword.Start}', '${Keyword.Export}', '${Keyword.Import}', Identifier: <somethings>`, token)
+    reportError(`'${Keyword.Start}', '${Keyword.Export}', '${Keyword.Import}', Identifier: <somethings>`, token)
     return null
   }
 
@@ -156,7 +156,7 @@ export const createParser = (input: string) => {
         )
       }
     } else {
-      addError(Operator.Assign, token)
+      reportError(Operator.Assign, token)
       return null
     }
   }
@@ -186,7 +186,7 @@ export const createParser = (input: string) => {
         }
       )
     } else {
-      addError(Operator.OpenBrace, token)
+      reportError(Operator.OpenBrace, token)
       return null
     }
   }
@@ -206,11 +206,11 @@ export const createParser = (input: string) => {
             }
           )
         } else {
-          addError('Path: "somethings"', token)
+          reportError('Path: "somethings"', token)
           return null
         }
       } else {
-        addError(Keyword.From, token)
+        reportError(Keyword.From, token)
         return null
       }
     } else {
@@ -255,16 +255,16 @@ export const createParser = (input: string) => {
               }
             )
           } else {
-            addError('Identifier: <somethings>', token)
+            reportError('Identifier: <somethings>', token)
             return null
           }
         }
       } else {
-        addError('Identifier: <somethings>', token)
+        reportError('Identifier: <somethings>', token)
         return null
       }
     } else {
-      addError(Operator.OpenBrace, token)
+      reportError(Operator.OpenBrace, token)
       return null
     }
   }
@@ -328,7 +328,7 @@ export const createParser = (input: string) => {
         )
       }
     } else {
-      addError('Identifier: <somethings>', token)
+      reportError('Identifier: <somethings>', token)
       return null
     }
   }
@@ -351,7 +351,7 @@ export const createParser = (input: string) => {
         return matchStepStatement()
       }
     }
-    addError(`'${Keyword.If}', '${Keyword.Switch}', '${Keyword.Goto}', Action: [somethings]`, token)
+    reportError(`'${Keyword.If}', '${Keyword.Switch}', '${Keyword.Goto}', Action: [somethings]`, token)
     return null
   }
 
@@ -409,11 +409,11 @@ export const createParser = (input: string) => {
           return null
         }
       } else {
-        addError(Operator.Result, token)
+        reportError(Operator.Result, token)
         return null
       }
     } else {
-      addError('Action: [somethings]', token)
+      reportError('Action: [somethings]', token)
       return null
     }
   }
@@ -436,7 +436,7 @@ export const createParser = (input: string) => {
         return null
       }
     } else {
-      addError('Action: [somethings]', token)
+      reportError('Action: [somethings]', token)
       return null
     }
   }
@@ -468,12 +468,12 @@ export const createParser = (input: string) => {
             defaultClause = dc
           }
         } else {
-          addError(`'${Keyword.Case}', '${Keyword.Default}', '${Operator.CloseBrace}'`, token)
+          reportError(`'${Keyword.Case}', '${Keyword.Default}', '${Operator.CloseBrace}'`, token)
           return null
         }
       }
     } else {
-      addError(Operator.OpenBrace, token)
+      reportError(Operator.OpenBrace, token)
       return null
     }
   }
@@ -497,11 +497,11 @@ export const createParser = (input: string) => {
           return null
         }
       } else {
-        addError(Operator.Result, token)
+        reportError(Operator.Result, token)
         return null
       }
     } else {
-      addError('Action: [somethings]', token)
+      reportError('Action: [somethings]', token)
       return null
     }
   }
@@ -522,7 +522,7 @@ export const createParser = (input: string) => {
         return null
       }
     } else {
-      addError(Operator.Result, token)
+      reportError(Operator.Result, token)
       return null
     }
   }
@@ -538,7 +538,7 @@ export const createParser = (input: string) => {
         }
       )
     } else {
-      addError(`Identifier: <somethings>`, token)
+      reportError(`Identifier: <somethings>`, token)
       return null
     }
   }
@@ -568,7 +568,7 @@ export const createParser = (input: string) => {
     return token.type === TokenKind.Operator && token.word === operator
   }
 
-  const addError = (expect: string, token: Token) => {
+  const reportError = (expect: string, token: Token) => {
     errors.push(new SyntaxError(
       `Expect { ${expect} }, accept '${token.word}'`,
       token
