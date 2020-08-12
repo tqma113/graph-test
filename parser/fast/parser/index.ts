@@ -55,6 +55,7 @@ export const createParser = (input: string) => {
       return
     }
 
+    nextToken()
     program = matchProgram()
   }
 
@@ -89,9 +90,13 @@ export const createParser = (input: string) => {
     return token
   }
 
+  /**
+   * program
+   *  : moduleStatement* EOP
+   *  ;
+   */
   const matchProgram = (): Program | null => {
-    nextToken()
-    let start = token.range.start
+    const start = token.range.start
     let moduleStatemens: ModuleStatement[] = []
 
     while (true) {
@@ -117,6 +122,14 @@ export const createParser = (input: string) => {
     )
   }
 
+  /**
+   * moduleStatement
+   *  : inferenceDeclaration
+   *  | importStatement
+   *  | exportStatement
+   *  | startStatement
+   *  ;
+   */
   const matchModuleStatement = (): ModuleStatement | null => {
     if (token.type === TokenKind.Keyword) {
       switch (token.word) {
@@ -139,9 +152,14 @@ export const createParser = (input: string) => {
     return null
   }
 
+  /**
+   * inferenceDeclaration
+   *  : identifier '=' block
+   *  ;
+   */
   const matchInferenceDeclaration = (): InferenceDeclaration | null => {
-    let identifier = token
-    if (matchOperator(Operator.Assign)) {
+    const identifier = token
+    if (requireOperator(Operator.Assign)) {
       const block = matchBlock()
       if (block === null) {
         return null
@@ -161,9 +179,14 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * block
+   *  : '{' statement*'}'
+   *  ;
+   */
   const matchBlock = (): Block | null => {
-    if (matchOperator(Operator.OpenBrace)) {
-      let start = token.range.start
+    if (requireOperator(Operator.OpenBrace)) {
+      const start = token.range.start
       let list: Statement[] = []
       while (true) {
         nextToken()
@@ -191,12 +214,17 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * importStatement
+   *  : Import moduleItems From path
+   *  ;
+   */
   const matchImportStatement = (): ImportStatement | null => {
-    let start = token.range.start
-    let moduleItems = matchModuleItems()
+    const start = token.range.start
+    const moduleItems = matchModuleItems()
     if (moduleItems) {
-      if (matchKeyword(Keyword.From)) {
-        if (matchPath()) {
+      if (requireKeyword(Keyword.From)) {
+        if (requirePath()) {
           return createImportStatement(
             moduleItems,
             token,
@@ -218,15 +246,20 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * moduleItems
+   *  : '{' (identifier ',')* (identifier ','?)? '}'
+   *  ;
+   */
   const matchModuleItems = (): ModuleItems | null => {
     let identifiers: Token[] = []
-    if (matchOperator(Operator.OpenBrace)) {
-      let start = token.range.start
-      if (matchIdentifier()) {
+    if (requireOperator(Operator.OpenBrace)) {
+      const start = token.range.start
+      if (requireIdentifier()) {
         identifiers.push(token)
         while (true) {
-          if (matchOperator(Operator.Comma)) {
-            if (matchIdentifier()) {
+          if (requireOperator(Operator.Comma)) {
+            if (requireIdentifier()) {
               identifiers.push(token)
             } else if (token.type === TokenKind.Operator && token.word === Operator.CloseBrace) {
               return createModuleItems(
@@ -269,6 +302,11 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * exportStatement
+   *  : Export module
+   *  ;
+   */
   const matchExportStatement = (): ExportStatement | null => {
     const start = token.range.start
     const module = matchModule()
@@ -285,6 +323,11 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * startStatement
+   *  : Start module
+   *  ;
+   */
   const matchStartStatement = (): StartStatement | null => {
     const start = token.range.start
     const module = matchModule()
@@ -301,8 +344,14 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * module
+   * : identifier
+   * | inferenceDeclaration
+   * ;
+   */
   const matchModule = (): Module | null => {
-    if (matchIdentifier()) {
+    if (requireIdentifier()) {
       const identifier = token
       const nt = predict()
       if (nt.type === TokenKind.Operator && nt.word === Operator.Assign) {
@@ -333,6 +382,14 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * statement
+   *  : stepStatement
+   *  | ifStatement
+   *  | switchStatement
+   *  | gotoStatement
+   *  ;
+   */
   const matchStatement = (): Statement | null => {
     if (token.type === TokenKind.Keyword) {
       switch (token.word) {
@@ -355,6 +412,11 @@ export const createParser = (input: string) => {
     return null
   }
 
+  /**
+   * stepStatement
+   *  : Action
+   *  ;
+   */
   const matchStepStatement = (): StepStatement => {
     return createStepStatement(
       token,
@@ -362,11 +424,16 @@ export const createParser = (input: string) => {
     )
   }
 
+  /**
+   * ifStatement
+   *  : If expression '->' block (Else block)?
+   *  ;
+   */
   const matchIfStatement = (): IfStatement | null => {
     const start = token.range.start
-    if (matchAction()) {
+    if (requireAction()) {
       const expression = token
-      if (matchOperator(Operator.Result)) {
+      if (requireOperator(Operator.Result)) {
         let ifBlock = matchBlock()
         if (ifBlock) {
           const nt = predict()
@@ -418,9 +485,14 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * switchStatement
+   *  : Switch expression switchBlock
+   *  ;
+   */
   const matchSwitchStatement = (): SwitchStatement | null => {
     const start = token.range.start
-    if (matchAction()) {
+    if (requireAction()) {
       const expression = token
       const switchBlock = matchSwitchBlock()
       if (switchBlock) {
@@ -441,8 +513,13 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * switchBlock
+   *  : '{' caseClause* (defaultClause caseClause*)? '}'
+   *  ;
+   */
   const matchSwitchBlock = (): SwitchBlock | null => {
-    if (matchOperator(Operator.OpenBrace)) {
+    if (requireOperator(Operator.OpenBrace)) {
       const start = token.range.start
       let caseClauses: CaseClause[] = []
       let defaultClause: DefaultClause | null = null
@@ -478,11 +555,16 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * caseClause
+   *  : Case expression '->' block?
+   *  ;
+   */
   const matchCaseClause = (): CaseClause | null => {
     const start = token.range.start
-    if (matchAction()) {
+    if (requireAction()) {
       const expression = token
-      if (matchOperator(Operator.Result)) {
+      if (requireOperator(Operator.Result)) {
         const block = matchBlock()
         if (block) {
           return createCaseClause(
@@ -506,9 +588,14 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * defaultClause
+   *  : Default '->' block?
+   *  ;
+   */
   const matchDefaultClause = (): DefaultClause | null => {
     const start = token.range.start
-    if (matchOperator(Operator.Result)) {
+    if (requireOperator(Operator.Result)) {
       const block = matchBlock()
       if (block) {
         return createDefaultClause(
@@ -527,9 +614,14 @@ export const createParser = (input: string) => {
     }
   }
 
+  /**
+   * gotoStatement
+   *  : Goto identifier
+   *  ;
+   */
   const matchGotoStatement = (): GotoStatement | null => {
     const start = token.range.start
-    if (matchIdentifier()) {
+    if (requireIdentifier()) {
       return createGotoStatement(
         token,
         {
@@ -543,27 +635,27 @@ export const createParser = (input: string) => {
     }
   }
 
-  const matchPath = (): boolean => {
+  const requirePath = (): boolean => {
     nextToken()
     return token.type === TokenKind.Path
   }
 
-  const matchAction = (): boolean => {
+  const requireAction = (): boolean => {
     nextToken()
     return token.type === TokenKind.Action
   }
 
-  const matchIdentifier = (): boolean => {
+  const requireIdentifier = (): boolean => {
     nextToken()
     return token.type === TokenKind.Identifier
   }
 
-  const matchKeyword = (keyword: Keyword): boolean => {
+  const requireKeyword = (keyword: Keyword): boolean => {
     nextToken()
     return token.type === TokenKind.Keyword && token.word === keyword
   }
 
-  const matchOperator = (operator: Operator): boolean => {
+  const requireOperator = (operator: Operator): boolean => {
     nextToken()
     return token.type === TokenKind.Operator && token.word === operator
   }
