@@ -8,7 +8,8 @@ export class LexicalError extends Error {
     super(message)
 
     this.name = 'LexicalError'
-    this.message = `${message} at line: ${position.line}, column: ${position.column}`
+    this.message = message
     this.position = position
+    this.stack = `${message} at line: ${position.line}, column: ${position.column}`
   }
 }
