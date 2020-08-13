@@ -1,7 +1,7 @@
 import type { Position } from '../index'
 
 export class LexicalError extends Error {
-  type = 'error' as const
+  kind = 'error' as const
   position: Position
 
   constructor(message: string, position: Position) {

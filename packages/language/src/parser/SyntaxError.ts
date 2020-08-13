@@ -1,7 +1,7 @@
 import type { Token } from '../lexer'
 
 export class SyntaxError extends Error {
-  type = 'error' as const
+  kind = 'error' as const
   token: Token
 
   constructor(message: string, token: Token) {

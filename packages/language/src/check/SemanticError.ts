@@ -2,7 +2,7 @@ import type { Range } from '../index'
 import type { Fragment } from '../parser/ast'
 
 export class SemanticError extends Error {
-  type = 'error' as const
+  kind = 'error' as const
   fragment: Fragment
   range: Range
 

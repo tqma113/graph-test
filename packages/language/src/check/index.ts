@@ -37,7 +37,7 @@ export const check = (program: Program): SemanticError[] => {
 
   const record = () => {
     program.moduleStatemens.forEach((moduleStatement) => {
-      switch (moduleStatement.type) {
+      switch (moduleStatement.kind) {
         case FragmentKind.ImportStatement: {
           recordImport(moduleStatement)
           break
@@ -93,7 +93,7 @@ export const check = (program: Program): SemanticError[] => {
   }
 
   const checkModuleStatement = (moduleStatement: ModuleStatement) => {
-    switch (moduleStatement.type) {
+    switch (moduleStatement.kind) {
       case FragmentKind.ImportStatement: {
         checkImportStatement(moduleStatement)
         break
@@ -148,7 +148,7 @@ export const check = (program: Program): SemanticError[] => {
   }
 
   const checkStatement = (statement: Statement) => {
-    switch (statement.type) {
+    switch (statement.kind) {
       case FragmentKind.StepStatement: {
         checkStepStatement(statement)
         break
