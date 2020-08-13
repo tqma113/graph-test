@@ -20,6 +20,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "removeComments": false,
+    "jsx": "react",
     "lib": [
       "esnext",
       "dom"

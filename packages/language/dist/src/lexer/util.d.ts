@@ -1,0 +1,10 @@
+export declare const isKeyword: (word: string) => boolean;
+export declare const isOperator: (word: string) => boolean;
+export declare const isValidContentChar: (char: string) => boolean;
+export declare const isAction: (word: string) => boolean;
+export declare const isPath: (word: string) => boolean;
+export declare const isReference: (word: string) => boolean;
+export declare const isWhitespace: (char: string) => boolean;
+export declare const isNewLineChar: (char: string) => boolean;
+export declare const isDigit: (char: string) => boolean;
+export declare const isLetter: (char: string) => boolean;

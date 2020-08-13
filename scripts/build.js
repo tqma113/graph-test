@@ -1,24 +1,30 @@
-const path = require('path')
+const fs = require('fs')
 const execa = require('execa')
 
-const rollupDir = path.resolve(__dirname, 'rollup')
-
-async function build(config) {
+async function build(target) {
   await execa(
     'rollup', [
       '-c',
-      path.resolve(rollupDir, config)
+      '--environment', [
+        `TARGET:${target}`
+      ]
     ], { stdio: 'inherit' }
   )
 }
 
 async function run() {
-  const targets = [
-    'language.config.js',
-    // 'editor.config.js'
-  ]
-  for (const config of targets) {
-    await build(config)
+  const targets = fs.readdirSync('packages').filter(f => {
+    if (!fs.statSync(`packages/${f}`).isDirectory()) {
+      return false
+    }
+    const pkg = require(`../packages/${f}/package.json`)
+    if (pkg.private && !pkg.buildOptions) {
+      return false
+    }
+    return true
+  })
+  for (const target of targets) {
+    await build(target)
   }
 }
 

@@ -2,9 +2,10 @@ const path = require('path')
 const commonjs = require('rollup-plugin-commonjs');
 const nodeResolve = require('rollup-plugin-node-resolve');
 
-const input = path.resolve(__dirname, '../../packages/language/antlr/index.js')
-const output = path.resolve(__dirname, '../../packages/language/antlr/dist/index.js')
-const include = path.resolve(__dirname, '../../packages/language/antlr/**/*.js')
+const dir = path.resolve(__dirname, '../../packages/language/antlr')
+const input = path.resolve(dir, 'index.js')
+const output = path.resolve(dir, 'dist/index.js')
+const include = path.resolve(dir, '**/*.js')
 
 export default {
   input,
