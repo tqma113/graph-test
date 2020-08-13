@@ -1,8 +1,7 @@
 {
-  "name": "graph-render",
+  "private": true,
   "version": "1.0.0",
   "description": "A graph render.",
-  "main": "index.js",
   "directories": {
     "doc": "docs"
   },

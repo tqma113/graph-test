@@ -1,0 +1,33 @@
+{
+  "name": "graph-language",
+  "version": "1.0.0",
+  "description": "A graph language.",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tqma113/graph-render.git"
+  },
+  "author": "Ma Tianqi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tqma113/graph-render/issues"
+  },
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "buildOptions": {
+    "name": "language",
+    "formats": [
+      "esm-bundler",
+      "cjs"
+    ]
+  },
+  "homepage": "https://github.com/tqma113/graph-render/packages/language#readme",
+  "dependencies": {
+    "antlr4": "^4.8.0"
+  }
+}
