@@ -23,8 +23,7 @@
     "jsx": "react",
     "lib": [
       "esnext",
-      "DOM",
-      "DOM.Iterable"
+      "dom"
     ],
     "types": [
       "node"
@@ -32,7 +31,6 @@
     "rootDir": "."
   },
   "include": [
-    "src",
-    "parser"
+    "packages/*/src"
   ]
 }

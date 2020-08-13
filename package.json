@@ -1,14 +1,17 @@
 {
   "private": true,
   "version": "1.0.0",
-  "description": "A graph render.",
-  "directories": {
-    "doc": "docs"
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "build": "node scripts/build.js",
     "antlr": "antlr4 -Dlanguage=JavaScript ./src/language/antlr/GraphLexer.g4&antlr4 -Dlanguage=JavaScript ./src/language/antlr/GraphParser.g4",
-    "fast:debug": "node inspect -r ts-node/register ./src/language/fast/example/sample.ts"
+    "fast:debug": "node inspect -r ts-node/register ./src/language/fast/example/sample.ts",
+    "preinstall": "node ./scripts/checkYarn.js"
+  },
+  "directories": {
+    "doc": "docs"
   },
   "repository": {
     "type": "git",
@@ -20,9 +23,17 @@
     "url": "https://github.com/tqma113/graph-render/issues"
   },
   "homepage": "https://github.com/tqma113/graph-render#readme",
-  "dependencies": {
-    "antlr4": "^4.8.0",
-    "monaco-editor": "^0.20.0"
+  "lint-staged": {
+    "*.js": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "eslint",
+      "prettier --parser=typescript --write"
+    ]
+  },
+  "engines": {
+    "node": ">=10.0.0"
   },
   "devDependencies": {
     "@types/react": "^16.9.44",

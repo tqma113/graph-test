@@ -1,8 +1,8 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import registerLanguage from './language'
-import { initTheme } from './theme'
 import createEditor from './createEditor'
+import { initTheme } from './theme'
 import { FontSizeSelect } from './component'
 
 export type MonacoEditorProps = {

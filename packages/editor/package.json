@@ -27,6 +27,7 @@
     ]
   },
   "dependencies": {
-    "monaco-editor": "^0.20.0"
+    "monaco-editor": "^0.20.0",
+    "graph-language": "1.0.0"
   }
 }
