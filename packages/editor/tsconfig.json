@@ -4,7 +4,7 @@
     "outDir": "dist",
     "declaration": true,
     "sourceMap": false,
-    "target": "esnext",
+    "target": "es5",
     "module": "esnext",
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
@@ -20,7 +20,6 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "removeComments": false,
-    "jsx": "react",
     "lib": [
       "esnext",
       "dom"
@@ -31,6 +30,6 @@
     "rootDir": "."
   },
   "include": [
-    "packages/*/src"
+    "src"
   ]
 }

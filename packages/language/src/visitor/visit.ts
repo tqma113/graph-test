@@ -1,3 +1,9 @@
+/**
+ * ast visit template
+ */
+
+ // @ts-nocheck
+
 import type {
   Program,
   InferenceDeclaration,

@@ -1,13 +1,12 @@
 'use strict';
 
-function _interopDefault(ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var antlr4 = _interopDefault(require('antlr4'));
-var antlr4$1 = _interopDefault(require('antlr4'));
 require('path');
 
 function GraphLexerBase(input) {
-  antlr4$1.Lexer.call(this, input);
+  antlr4.Lexer.call(this, input);
 
   this.scopeStrictModes = new Array();
   this.lastToken = null;
@@ -15,7 +14,7 @@ function GraphLexerBase(input) {
   this.useStrictCurrent = false;
 }
 
-GraphLexerBase.prototype = Object.create(antlr4$1.Lexer.prototype);
+GraphLexerBase.prototype = Object.create(antlr4.Lexer.prototype);
 
 GraphLexerBase.prototype.getStrictDefault = function() {
   return this.useStrictDefault;
@@ -31,13 +30,13 @@ GraphLexerBase.prototype.IsStrictMode = function() {
 };
 
 GraphLexerBase.prototype.getCurrentToken = function() {
-  return antlr4$1.Lexer.prototype.nextToken.call(this);
+  return antlr4.Lexer.prototype.nextToken.call(this);
 };
 
 GraphLexerBase.prototype.nextToken = function() {
-  var next = antlr4$1.Lexer.prototype.nextToken.call(this);
+  var next = antlr4.Lexer.prototype.nextToken.call(this);
 
-  if (next.channel === antlr4$1.Token.DEFAULT_CHANNEL) {
+  if (next.channel === antlr4.Token.DEFAULT_CHANNEL) {
     this.lastToken = next;
   }
   return next;
@@ -107,7 +106,7 @@ GraphLexerBase.prototype.IsStartOfFile = function() {
 var GraphLexerBase_2 = GraphLexerBase;
 
 var GraphLexerBase_1 = {
-  GraphLexerBase: GraphLexerBase_2
+	GraphLexerBase: GraphLexerBase_2
 };
 
 // Generated from GraphLexer.g4 by ANTLR 4.8
@@ -443,13 +442,13 @@ var serializedATN = ["\u0003\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964",
 ].join("");
 
 
-var atn = new antlr4$1.atn.ATNDeserializer().deserialize(serializedATN);
+var atn = new antlr4.atn.ATNDeserializer().deserialize(serializedATN);
 
-var decisionsToDFA = atn.decisionToState.map(function(ds, index) { return new antlr4$1.dfa.DFA(ds, index); });
+var decisionsToDFA = atn.decisionToState.map(function(ds, index) { return new antlr4.dfa.DFA(ds, index); });
 
 function GraphLexer(input) {
   GraphLexerBase$1.call(this, input);
-  this._interp = new antlr4$1.atn.LexerATNSimulator(this, atn, decisionsToDFA, new antlr4$1.PredictionContextCache());
+  this._interp = new antlr4.atn.LexerATNSimulator(this, atn, decisionsToDFA, new antlr4.PredictionContextCache());
   return this;
 }
 
@@ -462,7 +461,7 @@ Object.defineProperty(GraphLexer.prototype, "atn", {
   }
 });
 
-GraphLexer.EOF = antlr4$1.Token.EOF;
+GraphLexer.EOF = antlr4.Token.EOF;
 GraphLexer.HashBangLine = 1;
 GraphLexer.SingleLineComment = 2;
 GraphLexer.LineTerminator = 3;
@@ -598,7 +597,7 @@ GraphLexer.prototype.HashBangLine_sempred = function(localctx, predIndex) {
 var GraphLexer_2 = GraphLexer;
 
 var GraphLexer_1 = {
-  GraphLexer: GraphLexer_2
+	GraphLexer: GraphLexer_2
 };
 
 // Generated from GraphParser.g4 by ANTLR 4.8
@@ -607,11 +606,11 @@ var GraphLexer_1 = {
 
 // This class defines a complete listener for a parse tree produced by GraphParser.
 function GraphParserListener() {
-  antlr4$1.tree.ParseTreeListener.call(this);
+  antlr4.tree.ParseTreeListener.call(this);
   return this;
 }
 
-GraphParserListener.prototype = Object.create(antlr4$1.tree.ParseTreeListener.prototype);
+GraphParserListener.prototype = Object.create(antlr4.tree.ParseTreeListener.prototype);
 GraphParserListener.prototype.constructor = GraphParserListener;
 
 // Enter a parse tree produced by GraphParser#program.
@@ -779,7 +778,7 @@ GraphParserListener.prototype.exitStartStatement = function(ctx) {};
 var GraphParserListener_2 = GraphParserListener;
 
 var GraphParserListener_1 = {
-  GraphParserListener: GraphParserListener_2
+	GraphParserListener: GraphParserListener_2
 };
 
 // Generated from GraphParser.g4 by ANTLR 4.8
@@ -789,11 +788,11 @@ var GraphParserListener_1 = {
 // This class defines a complete generic visitor for a parse tree produced by GraphParser.
 
 function GraphParserVisitor() {
-  antlr4$1.tree.ParseTreeVisitor.call(this);
+  antlr4.tree.ParseTreeVisitor.call(this);
   return this;
 }
 
-GraphParserVisitor.prototype = Object.create(antlr4$1.tree.ParseTreeVisitor.prototype);
+GraphParserVisitor.prototype = Object.create(antlr4.tree.ParseTreeVisitor.prototype);
 GraphParserVisitor.prototype.constructor = GraphParserVisitor;
 
 // Visit a parse tree produced by GraphParser#program.
@@ -1184,14 +1183,14 @@ GraphParserVisitor.prototype.visitStartStatement = function(ctx) {
 var GraphParserVisitor_2 = GraphParserVisitor;
 
 var GraphParserVisitor_1 = {
-  GraphParserVisitor: GraphParserVisitor_2
+	GraphParserVisitor: GraphParserVisitor_2
 };
 
 function GraphParserBase(input) {
-  antlr4$1.Parser.call(this, input);
+  antlr4.Parser.call(this, input);
 }
 
-GraphParserBase.prototype = Object.create(antlr4$1.Parser.prototype);
+GraphParserBase.prototype = Object.create(antlr4.Parser.prototype);
 
 GraphParserBase.prototype.p = function(str) {
   return this.prev(str);
@@ -1224,13 +1223,13 @@ GraphParserBase.prototype.closeBrace = function() {
 GraphParserBase.prototype.here = function(type) {
   const possibleIndexEosToken = this.getCurrentToken().tokenIndex - 1;
   const ahead = this._input.get(possibleIndexEosToken);
-  return ahead.channel === antlr4$1.Lexer.HIDDEN && ahead.type === type;
+  return ahead.channel === antlr4.Lexer.HIDDEN && ahead.type === type;
 };
 
 GraphParserBase.prototype.lineTerminatorAhead = function() {
   let possibleIndexEosToken = this.getCurrentToken().tokenIndex - 1;
   let ahead = this._input.get(possibleIndexEosToken);
-  if (ahead.channel !== antlr4$1.Lexer.HIDDEN) {
+  if (ahead.channel !== antlr4.Lexer.HIDDEN) {
     return false;
   }
 
@@ -1256,7 +1255,7 @@ GraphParserBase.prototype.lineTerminatorAhead = function() {
 var GraphParserBase_2 = GraphParserBase;
 
 var GraphParserBase_1 = {
-  GraphParserBase: GraphParserBase_2
+	GraphParserBase: GraphParserBase_2
 };
 
 // Generated from GraphParser.g4 by ANTLR 4.8
@@ -1370,11 +1369,11 @@ var serializedATN$1 = ["\u0003\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964",
 ].join("");
 
 
-var atn$1 = new antlr4$1.atn.ATNDeserializer().deserialize(serializedATN$1);
+var atn$1 = new antlr4.atn.ATNDeserializer().deserialize(serializedATN$1);
 
-var decisionsToDFA$1 = atn$1.decisionToState.map(function(ds, index) { return new antlr4$1.dfa.DFA(ds, index); });
+var decisionsToDFA$1 = atn$1.decisionToState.map(function(ds, index) { return new antlr4.dfa.DFA(ds, index); });
 
-var sharedContextCache = new antlr4$1.PredictionContextCache();
+var sharedContextCache = new antlr4.PredictionContextCache();
 
 var literalNames = [null, null, null, null, "'{'", "'}'", "'['", "']'",
   "'<'", "'>'", "'='", "'->'", "','", "';'", null, null,
@@ -1402,7 +1401,7 @@ var ruleNames = ["program", "moduleStatement", "moduleStatements", "identifier",
 
 function GraphParser(input) {
   GraphParserBase$1.call(this, input);
-  this._interp = new antlr4$1.atn.ParserATNSimulator(this, atn$1, decisionsToDFA$1, sharedContextCache);
+  this._interp = new antlr4.atn.ParserATNSimulator(this, atn$1, decisionsToDFA$1, sharedContextCache);
   this.ruleNames = ruleNames;
   this.literalNames = literalNames;
   this.symbolicNames = symbolicNames;
@@ -1418,7 +1417,7 @@ Object.defineProperty(GraphParser.prototype, "atn", {
   }
 });
 
-GraphParser.EOF = antlr4$1.Token.EOF;
+GraphParser.EOF = antlr4.Token.EOF;
 GraphParser.HashBangLine = 1;
 GraphParser.SingleLineComment = 2;
 GraphParser.LineTerminator = 3;
@@ -1480,13 +1479,13 @@ function ProgramContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_program;
   return this;
 }
 
-ProgramContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+ProgramContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 ProgramContext.prototype.constructor = ProgramContext;
 
 ProgramContext.prototype.EOF = function() {
@@ -1552,7 +1551,7 @@ GraphParser.prototype.program = function() {
     this.state = 52;
     this.match(GraphParser.EOF);
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -1573,13 +1572,13 @@ function ModuleStatementContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_moduleStatement;
   return this;
 }
 
-ModuleStatementContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+ModuleStatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 ModuleStatementContext.prototype.constructor = ModuleStatementContext;
 
 ModuleStatementContext.prototype.inferenceDeclaration = function() {
@@ -1652,10 +1651,10 @@ GraphParser.prototype.moduleStatement = function() {
         this.startStatement();
         break;
       default:
-        throw new antlr4$1.error.NoViableAltException(this);
+        throw new antlr4.error.NoViableAltException(this);
     }
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -1676,13 +1675,13 @@ function ModuleStatementsContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_moduleStatements;
   return this;
 }
 
-ModuleStatementsContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+ModuleStatementsContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 ModuleStatementsContext.prototype.constructor = ModuleStatementsContext;
 
 ModuleStatementsContext.prototype.moduleStatement = function(i) {
@@ -1739,7 +1738,7 @@ GraphParser.prototype.moduleStatements = function() {
       _la = this._input.LA(1);
     } while ((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << GraphParser.Identifier) | (1 << GraphParser.Start) | (1 << GraphParser.Import) | (1 << GraphParser.Export))) !== 0));
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -1760,13 +1759,13 @@ function IdentifierContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_identifier;
   return this;
 }
 
-IdentifierContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+IdentifierContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 IdentifierContext.prototype.constructor = IdentifierContext;
 
 IdentifierContext.prototype.Identifier = function() {
@@ -1807,7 +1806,7 @@ GraphParser.prototype.identifier = function() {
     this.state = 65;
     this.match(GraphParser.Identifier);
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -1828,13 +1827,13 @@ function PathContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_path;
   return this;
 }
 
-PathContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+PathContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 PathContext.prototype.constructor = PathContext;
 
 PathContext.prototype.Path = function() {
@@ -1875,7 +1874,7 @@ GraphParser.prototype.path = function() {
     this.state = 67;
     this.match(GraphParser.Path);
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -1896,13 +1895,13 @@ function StatementContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_statement;
   return this;
 }
 
-StatementContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+StatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 StatementContext.prototype.constructor = StatementContext;
 
 StatementContext.prototype.stepStatement = function() {
@@ -1975,10 +1974,10 @@ GraphParser.prototype.statement = function() {
         this.gotoStatement();
         break;
       default:
-        throw new antlr4$1.error.NoViableAltException(this);
+        throw new antlr4.error.NoViableAltException(this);
     }
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -1999,13 +1998,13 @@ function StatementListContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_statementList;
   return this;
 }
 
-StatementListContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+StatementListContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 StatementListContext.prototype.constructor = StatementListContext;
 
 StatementListContext.prototype.statement = function(i) {
@@ -2062,7 +2061,7 @@ GraphParser.prototype.statementList = function() {
       _la = this._input.LA(1);
     } while ((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << GraphParser.Action) | (1 << GraphParser.Goto) | (1 << GraphParser.If) | (1 << GraphParser.Switch))) !== 0));
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -2083,13 +2082,13 @@ function InferenceDeclarationContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_inferenceDeclaration;
   return this;
 }
 
-InferenceDeclarationContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+InferenceDeclarationContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 InferenceDeclarationContext.prototype.constructor = InferenceDeclarationContext;
 
 InferenceDeclarationContext.prototype.identifier = function() {
@@ -2142,7 +2141,7 @@ GraphParser.prototype.inferenceDeclaration = function() {
     this.state = 82;
     this.block();
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -2163,13 +2162,13 @@ function BlockContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_block;
   return this;
 }
 
-BlockContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+BlockContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 BlockContext.prototype.constructor = BlockContext;
 
 BlockContext.prototype.OpenBrace = function() {
@@ -2229,7 +2228,7 @@ GraphParser.prototype.block = function() {
     this.state = 88;
     this.match(GraphParser.CloseBrace);
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -2250,13 +2249,13 @@ function ImportStatementContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_importStatement;
   return this;
 }
 
-ImportStatementContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+ImportStatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 ImportStatementContext.prototype.constructor = ImportStatementContext;
 
 ImportStatementContext.prototype.Import = function() {
@@ -2315,7 +2314,7 @@ GraphParser.prototype.importStatement = function() {
     this.state = 93;
     this.path();
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -2336,13 +2335,13 @@ function ModuleItemsContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_moduleItems;
   return this;
 }
 
-ModuleItemsContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+ModuleItemsContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 ModuleItemsContext.prototype.constructor = ModuleItemsContext;
 
 ModuleItemsContext.prototype.OpenBrace = function() {
@@ -2413,7 +2412,7 @@ GraphParser.prototype.moduleItems = function() {
     this.state = 101;
     this._errHandler.sync(this);
     var _alt = this._interp.adaptivePredict(this._input, 7, this._ctx);
-    while (_alt != 2 && _alt != antlr4$1.atn.ATN.INVALID_ALT_NUMBER) {
+    while (_alt != 2 && _alt != antlr4.atn.ATN.INVALID_ALT_NUMBER) {
       if (_alt === 1) {
         this.state = 96;
         this.identifier();
@@ -2444,7 +2443,7 @@ GraphParser.prototype.moduleItems = function() {
     this.state = 110;
     this.match(GraphParser.CloseBrace);
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -2465,13 +2464,13 @@ function ModuleContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_module;
   return this;
 }
 
-ModuleContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+ModuleContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 ModuleContext.prototype.constructor = ModuleContext;
 
 ModuleContext.prototype.identifier = function() {
@@ -2530,7 +2529,7 @@ GraphParser.prototype.module = function() {
 
     }
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -2551,13 +2550,13 @@ function ExportStatementContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_exportStatement;
   return this;
 }
 
-ExportStatementContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+ExportStatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 ExportStatementContext.prototype.constructor = ExportStatementContext;
 
 ExportStatementContext.prototype.Export = function() {
@@ -2604,7 +2603,7 @@ GraphParser.prototype.exportStatement = function() {
     this.state = 117;
     this.module();
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -2625,13 +2624,13 @@ function StepStatementContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_stepStatement;
   return this;
 }
 
-StepStatementContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+StepStatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 StepStatementContext.prototype.constructor = StepStatementContext;
 
 StepStatementContext.prototype.Action = function() {
@@ -2672,7 +2671,7 @@ GraphParser.prototype.stepStatement = function() {
     this.state = 119;
     this.match(GraphParser.Action);
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -2693,13 +2692,13 @@ function IfStatementContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_ifStatement;
   return this;
 }
 
-IfStatementContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+IfStatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 IfStatementContext.prototype.constructor = IfStatementContext;
 
 IfStatementContext.prototype.If = function() {
@@ -2780,7 +2779,7 @@ GraphParser.prototype.ifStatement = function() {
     }
 
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -2801,13 +2800,13 @@ function ExpressionContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_expression;
   return this;
 }
 
-ExpressionContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+ExpressionContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 ExpressionContext.prototype.constructor = ExpressionContext;
 
 ExpressionContext.prototype.Action = function() {
@@ -2848,7 +2847,7 @@ GraphParser.prototype.expression = function() {
     this.state = 129;
     this.match(GraphParser.Action);
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -2869,13 +2868,13 @@ function SwitchStatementContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_switchStatement;
   return this;
 }
 
-SwitchStatementContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+SwitchStatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 SwitchStatementContext.prototype.constructor = SwitchStatementContext;
 
 SwitchStatementContext.prototype.Switch = function() {
@@ -2928,7 +2927,7 @@ GraphParser.prototype.switchStatement = function() {
     this.state = 133;
     this.switchBlock();
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -2949,13 +2948,13 @@ function SwitchBlockContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_switchBlock;
   return this;
 }
 
-SwitchBlockContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+SwitchBlockContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 SwitchBlockContext.prototype.constructor = SwitchBlockContext;
 
 SwitchBlockContext.prototype.OpenBrace = function() {
@@ -3042,7 +3041,7 @@ GraphParser.prototype.switchBlock = function() {
     this.state = 145;
     this.match(GraphParser.CloseBrace);
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -3063,13 +3062,13 @@ function CaseClausesContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_caseClauses;
   return this;
 }
 
-CaseClausesContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+CaseClausesContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 CaseClausesContext.prototype.constructor = CaseClausesContext;
 
 CaseClausesContext.prototype.caseClause = function(i) {
@@ -3126,7 +3125,7 @@ GraphParser.prototype.caseClauses = function() {
       _la = this._input.LA(1);
     } while (_la === GraphParser.Case);
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -3147,13 +3146,13 @@ function CaseClauseContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_caseClause;
   return this;
 }
 
-CaseClauseContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+CaseClauseContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 CaseClauseContext.prototype.constructor = CaseClauseContext;
 
 CaseClauseContext.prototype.Case = function() {
@@ -3219,7 +3218,7 @@ GraphParser.prototype.caseClause = function() {
     }
 
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -3240,13 +3239,13 @@ function DefaultClauseContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_defaultClause;
   return this;
 }
 
-DefaultClauseContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+DefaultClauseContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 DefaultClauseContext.prototype.constructor = DefaultClauseContext;
 
 DefaultClauseContext.prototype.Default = function() {
@@ -3306,7 +3305,7 @@ GraphParser.prototype.defaultClause = function() {
     }
 
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -3327,13 +3326,13 @@ function GotoStatementContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_gotoStatement;
   return this;
 }
 
-GotoStatementContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+GotoStatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 GotoStatementContext.prototype.constructor = GotoStatementContext;
 
 GotoStatementContext.prototype.Goto = function() {
@@ -3380,7 +3379,7 @@ GraphParser.prototype.gotoStatement = function() {
     this.state = 164;
     this.identifier();
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -3401,13 +3400,13 @@ function StartStatementContext(parser, parent, invokingState) {
   if (invokingState === undefined || invokingState === null) {
     invokingState = -1;
   }
-  antlr4$1.ParserRuleContext.call(this, parent, invokingState);
+  antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
   this.ruleIndex = GraphParser.RULE_startStatement;
   return this;
 }
 
-StartStatementContext.prototype = Object.create(antlr4$1.ParserRuleContext.prototype);
+StartStatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 StartStatementContext.prototype.constructor = StartStatementContext;
 
 StartStatementContext.prototype.Start = function() {
@@ -3454,7 +3453,7 @@ GraphParser.prototype.startStatement = function() {
     this.state = 167;
     this.module();
   } catch (re) {
-    if (re instanceof antlr4$1.error.RecognitionException) {
+    if (re instanceof antlr4.error.RecognitionException) {
       localctx.exception = re;
       this._errHandler.reportError(this, re);
       this._errHandler.recover(this, re);
@@ -3471,7 +3470,7 @@ GraphParser.prototype.startStatement = function() {
 var GraphParser_2 = GraphParser;
 
 var GraphParser_1 = {
-  GraphParser: GraphParser_2
+	GraphParser: GraphParser_2
 };
 
 class SyntaxError extends Error {

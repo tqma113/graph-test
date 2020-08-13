@@ -31,7 +31,7 @@ export type Inference = {
   declaration: InferenceDeclaration | ImportStatement
 }
 
-export const check = (program: Program): SemanticError[] => {
+export const checkSemantic = (program: Program): SemanticError[] => {
   let inferenceTable = new Map<string, Inference>()
   let errors: SemanticError[] = []
 
@@ -122,7 +122,7 @@ export const check = (program: Program): SemanticError[] => {
   }
 
   const checkModuleItems = (moduleItems: ModuleItems) => {
-    
+
   }
 
   const checkModule = (module: Module) => {

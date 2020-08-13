@@ -26,3 +26,6 @@ export type Range = {
 	 */
   end: Position
 }
+
+export { createParser } from './parser'
+export { checkSemantic } from './semantic'

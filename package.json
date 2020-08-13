@@ -6,6 +6,8 @@
   ],
   "scripts": {
     "build": "node scripts/build.js",
+    "dts": "tsc -p ./packages/language/tsconfig.json",
+    "build:antlr": "node scripts/build.antlr.js",
     "antlr": "antlr4 -Dlanguage=JavaScript ./src/language/antlr/GraphLexer.g4&antlr4 -Dlanguage=JavaScript ./src/language/antlr/GraphParser.g4",
     "fast:debug": "node inspect -r ts-node/register ./src/language/fast/example/sample.ts",
     "preinstall": "node ./scripts/checkYarn.js"
@@ -37,10 +39,12 @@
   },
   "devDependencies": {
     "@types/react": "^16.9.44",
+    "execa": "^4.0.3",
     "react": "^16.13.1",
     "rollup": "^2.23.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.27.2",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"
   }
