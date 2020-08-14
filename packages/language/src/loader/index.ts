@@ -1,0 +1,5 @@
+// loader
+
+export const load = () => {
+  
+}
