@@ -5,4 +5,4 @@ const reverse = (tree: Tree): Program => {
 
 }
 
-export default convert
+export default reverse
