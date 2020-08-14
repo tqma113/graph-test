@@ -1,4 +1,5 @@
 import { createLexer, Token, Identifier, Action, Path } from '../lexer'
+import { LexicalError } from '../lexer/LexicalError'
 import { TokenKind, KeywordEnum, OperatorEnum } from '../lexer/constants'
 import { SyntaxError } from './SyntaxError'
 import {
@@ -40,7 +41,15 @@ import type {
 
 export type BlockType = 'global' | 'local'
 
-export const createParser = (input: string) => {
+export type Parser = {
+  program: Program | null,
+  tokens: Token[],
+  lexcialErrors: LexicalError[],
+  syntaxErrors: SyntaxError[],
+  parse: () => void
+}
+
+export const createParser = (input: string): Parser => {
   const lexer = createLexer(input)
 
   let token = null as any as Token

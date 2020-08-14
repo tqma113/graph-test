@@ -48,6 +48,7 @@ export default (container: HTMLElement, value: string, options?: monaco.editor.I
 
   model.onDidChangeContent((e) => {
     const lines = model.getLinesContent()
+    // @ts-ignore
     const content = lines.join('\n')
 
     // TODO: Validation

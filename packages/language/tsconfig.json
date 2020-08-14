@@ -2,16 +2,14 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",
-    "noEmit": true,
+    "emitDeclarationOnly": true,
     "declaration": true,
     "sourceMap": false,
     "target": "es5",
     "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "experimentalDecorators": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
     "allowJs": true,
     "checkJs": false,
     "noUnusedLocals": true,
@@ -20,10 +18,12 @@
     "noImplicitReturns": true,
     "preserveConstEnums": true,
     "noImplicitThis": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "removeComments": false,
     "lib": [
       "esnext",
+      "dom"
     ],
     "types": [
       "node"

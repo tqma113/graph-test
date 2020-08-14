@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "A graph language.",
   "main": "index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "directories": {
     "example": "example"
   },
@@ -15,10 +17,6 @@
   "bugs": {
     "url": "https://github.com/tqma113/graph-render/issues"
   },
-  "files": [
-    "index.js",
-    "dist"
-  ],
   "buildOptions": {
     "name": "language",
     "formats": [

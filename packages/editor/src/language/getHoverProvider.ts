@@ -84,6 +84,8 @@ const getHoverProvider = (): monaco.languages.HoverProvider => {
               range,
               contents
             }
+          } else {
+            return null
           }
         }
       } else {

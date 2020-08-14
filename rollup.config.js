@@ -8,7 +8,7 @@ const input = getInput(path.resolve(packageDir, 'src/index'))
 const output = path.resolve(packageDir, 'dist/index.js')
 
 const tsPlugin = ts({
-  check: process.env.NODE_ENV === 'production' && !hasTSChecked,
+  check: process.env.NODE_ENV === 'production',
   tsconfig: path.resolve(packageDir, 'tsconfig.json'),
   cacheRoot: path.resolve(__dirname, '../../node_modules/.rts2_cache'),
 })

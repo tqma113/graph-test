@@ -1,5 +1,5 @@
-const fs = require('fs')
 const execa = require('execa')
+const targets = require('./target')
 
 async function build(target) {
   await execa(
@@ -13,16 +13,6 @@ async function build(target) {
 }
 
 async function run() {
-  const targets = fs.readdirSync('packages').filter(f => {
-    if (!fs.statSync(`packages/${f}`).isDirectory()) {
-      return false
-    }
-    const pkg = require(`../packages/${f}/package.json`)
-    if (pkg.private && !pkg.buildOptions) {
-      return false
-    }
-    return true
-  })
   for (const target of targets) {
     await build(target)
   }
