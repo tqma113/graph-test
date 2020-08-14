@@ -731,7 +731,6 @@ export const createParser = (input: string): Parser => {
   const recovery = () => {
     while (true) {
       nextToken()
-      console.trace(token)
       if ((token.kind === TokenKind.Operator && token.word === '}') || token.kind === TokenKind.EOP) {
         break
       }
