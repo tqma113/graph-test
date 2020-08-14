@@ -3,7 +3,7 @@ import type { Range } from '../index'
 
 export enum FragmentKind {
   Program = 'Program',
-  InferenceDeclaration = 'InferenceDeclaration',
+  InferenceDefinition = 'InferenceDefinition',
   ImportStatement = 'ImportStatement',
   ModuleItems = 'ModuleItems',
   Module = 'Module',
@@ -44,22 +44,22 @@ export const createProgram = (
 }
 
 export type ModuleStatement
-  = InferenceDeclaration | ImportStatement | ExportStatement | StartStatement
+  = InferenceDefinition | ImportStatement | ExportStatement | StartStatement
 
-export type InferenceDeclaration = {
-  kind: FragmentKind.InferenceDeclaration,
+export type InferenceDefinition = {
+  kind: FragmentKind.InferenceDefinition,
   identifier: Identifier,
   block: Block,
   range: Range
 }
 
-export const createInferenceDeclaration = (
+export const createInferenceDefinition = (
   identifier: Identifier,
   block: Block,
   range: Range
-): InferenceDeclaration => {
+): InferenceDefinition => {
   return {
-    kind: FragmentKind.InferenceDeclaration,
+    kind: FragmentKind.InferenceDefinition,
     identifier,
     block,
     range
@@ -106,19 +106,19 @@ export const createModuleItems = (
 export type Module = {
   kind: FragmentKind.Module,
   identifier: Identifier,
-  declaration: InferenceDeclaration | null,
+  definition: InferenceDefinition | null,
   range: Range
 }
 
 export const createModule = (
   identifier: Identifier,
-  declaration: InferenceDeclaration | null,
+  definition: InferenceDefinition | null,
   range: Range
 ): Module => {
   return {
     kind: FragmentKind.Module,
     identifier,
-    declaration,
+    definition,
     range
   }
 }

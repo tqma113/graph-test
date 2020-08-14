@@ -60,11 +60,11 @@ GraphParserListener.prototype.enterStatementList = function(ctx) {};
 GraphParserListener.prototype.exitStatementList = function(ctx) {};
 
 
-// Enter a parse tree produced by GraphParser#inferenceDeclaration.
-GraphParserListener.prototype.enterInferenceDeclaration = function(ctx) {};
+// Enter a parse tree produced by GraphParser#inferenceDefinition.
+GraphParserListener.prototype.enterInferenceDefinition = function(ctx) {};
 
-// Exit a parse tree produced by GraphParser#inferenceDeclaration.
-GraphParserListener.prototype.exitInferenceDeclaration = function(ctx) {};
+// Exit a parse tree produced by GraphParser#inferenceDefinition.
+GraphParserListener.prototype.exitInferenceDefinition = function(ctx) {};
 
 
 // Enter a parse tree produced by GraphParser#block.

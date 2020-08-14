@@ -1,5 +1,3 @@
-import { createParser, checkSemantic } from 'graph-language'
-
 const registerDiagnosticsAdapter = () => {
   
 }

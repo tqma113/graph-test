@@ -4,7 +4,7 @@ import {
 } from '../parser/ast'
 import type {
   Program,
-  InferenceDeclaration,
+  InferenceDefinition,
   ImportStatement,
   StartStatement,
   ExportStatement,
@@ -26,14 +26,21 @@ import type {
   Identifier
 } from '../lexer/index'
 
+export * from './SemanticError'
+
 export type Inference = {
   identifier: Identifier,
-  declaration: InferenceDeclaration | ImportStatement
+  definition: InferenceDefinition | ImportStatement
 }
 
-export const checkSemantic = (program: Program): SemanticError[] => {
+export type CheckSemanticResult = {
+  semanticErrors: SemanticError[],
+  table: Map<string, Inference>
+}
+
+export const checkSemantic = (program: Program): CheckSemanticResult => {
   let inferenceTable = new Map<string, Inference>()
-  let errors: SemanticError[] = []
+  let semanticErrors: SemanticError[] = []
 
   const record = () => {
     program.moduleStatemens.forEach((moduleStatement) => {
@@ -42,8 +49,8 @@ export const checkSemantic = (program: Program): SemanticError[] => {
           recordImport(moduleStatement)
           break
         }
-        case FragmentKind.InferenceDeclaration: {
-          recordDeclaration(moduleStatement)
+        case FragmentKind.InferenceDefinition: {
+          recordDefinition(moduleStatement)
           break
         }
         case FragmentKind.StartStatement: {
@@ -58,23 +65,23 @@ export const checkSemantic = (program: Program): SemanticError[] => {
     importStatement.moduleItems.identifiers.forEach((identifier) => {
       addInference({
         identifier,
-        declaration: importStatement
+        definition: importStatement
       })
     })
   }
 
-  const recordDeclaration = (inferenceDeclaration: InferenceDeclaration) => {
+  const recordDefinition = (inferenceDefinition: InferenceDefinition) => {
     addInference({
-      identifier: inferenceDeclaration.identifier,
-      declaration: inferenceDeclaration
+      identifier: inferenceDefinition.identifier,
+      definition: inferenceDefinition
     })
   }
 
   const recordStart = (startStatement: StartStatement) => {
-    if (startStatement.module.declaration) {
+    if (startStatement.module.definition) {
       addInference({
         identifier: startStatement.module.identifier,
-        declaration: startStatement.module.declaration
+        definition: startStatement.module.definition
       })
     }
   }
@@ -82,7 +89,7 @@ export const checkSemantic = (program: Program): SemanticError[] => {
   const addInference = (inference: Inference) => {
     const name = getContent(inference.identifier.word)
     if (inferenceTable.has(name)) {
-      reportError(`Module ${name} has been declared twice`, inference.declaration)
+      reportError(`Module ${name} has been declared twice`, inference.definition)
     } else {
       inferenceTable.set(name, inference)
     }
@@ -106,15 +113,15 @@ export const checkSemantic = (program: Program): SemanticError[] => {
         checkStartStatement(moduleStatement)
         break
       }
-      case FragmentKind.InferenceDeclaration: {
-        checkInferenceDeclaration(moduleStatement)
+      case FragmentKind.InferenceDefinition: {
+        checkInferenceDefinition(moduleStatement)
         break
       }
     }
   }
 
-  const checkInferenceDeclaration = (inferenceDeclaration: InferenceDeclaration) => {
-    checkBlock(inferenceDeclaration.block)
+  const checkInferenceDefinition = (inferenceDefinition: InferenceDefinition) => {
+    checkBlock(inferenceDefinition.block)
   }
 
   const checkImportStatement = (importStatement: ImportStatement) => {
@@ -130,8 +137,8 @@ export const checkSemantic = (program: Program): SemanticError[] => {
     if (!inferenceTable.has(name)) {
       reportError(`Module ${name} has not been declared`, module)
     }
-    if (module.declaration) {
-      checkInferenceDeclaration(module.declaration)
+    if (module.definition) {
+      checkInferenceDefinition(module.definition)
     }
   }
 
@@ -206,13 +213,20 @@ export const checkSemantic = (program: Program): SemanticError[] => {
   }
 
   const reportError = (message: string, fragment: Fragment) => {
-    errors.push(new SemanticError(message, fragment))
+    semanticErrors.push(new SemanticError(message, fragment))
   }
 
   record()
   checkProgram(program)
 
-  return errors
+  return {
+    get semanticErrors() {
+      return semanticErrors
+    },
+    get table() {
+      return inferenceTable
+    }
+  }
 }
 
 const getContent = (word: string): string => {

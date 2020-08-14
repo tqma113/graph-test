@@ -68,7 +68,7 @@ identifier
 path
 statement
 statementList
-inferenceDeclaration
+inferenceDefinition
 block
 importStatement
 moduleItems

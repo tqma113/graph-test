@@ -32,8 +32,8 @@ GraphParserVisitor.prototype.visitModuleStatement = function(ctx) {
   const childContext = ctx.children[0]
   let moduleStatement = null
   switch (childContext.parser.ruleNames[childContext.ruleIndex]) {
-    case 'inferenceDeclaration':
-      moduleStatement = this.visitInferenceDeclaration(childContext)
+    case 'inferenceDefinition':
+      moduleStatement = this.visitInferenceDefinition(childContext)
       break
     case 'importStatement':
       moduleStatement = this.visitImportStatement(childContext)
@@ -130,10 +130,10 @@ GraphParserVisitor.prototype.visitStatementList = function(ctx) {
 };
 
 
-// Visit a parse tree produced by GraphParser#inferenceDeclaration.
-GraphParserVisitor.prototype.visitInferenceDeclaration = function(ctx) {
+// Visit a parse tree produced by GraphParser#inferenceDefinition.
+GraphParserVisitor.prototype.visitInferenceDefinition = function(ctx) {
   return {
-    type: 'inferenceDeclaration',
+    type: 'inferenceDefinition',
 
     identifier: this.visitIdentifier(ctx.children[0]),
     block: this.visitBlock(ctx.children[2]),
@@ -208,8 +208,8 @@ GraphParserVisitor.prototype.visitModule = function(ctx) {
     case 'identifier':
       module = this.visitIdentifier(childContext)
       break
-    case 'inferenceDeclaration':
-      module = this.visitInferenceDeclaration(childContext)
+    case 'inferenceDefinition':
+      module = this.visitInferenceDefinition(childContext)
       break
     default:
   }

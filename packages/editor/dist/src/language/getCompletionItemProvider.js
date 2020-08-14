@@ -144,6 +144,10 @@ var getKeyowrdSuggestions = function (range) {
         }
     ];
 };
+var getIdentifierSuggestions = function (range) {
+    var suggestions = [];
+    return suggestions;
+};
 var getCompletionItemProvider = function () {
     return {
         provideCompletionItems: function (model, position, context, token) {
@@ -154,7 +158,7 @@ var getCompletionItemProvider = function () {
                 startColumn: word.startColumn,
                 endColumn: word.endColumn
             };
-            var suggestions = __spreadArrays(getKeyowrdSuggestions(range));
+            var suggestions = __spreadArrays(getKeyowrdSuggestions(range), getIdentifierSuggestions(range));
             return {
                 suggestions: suggestions
             };

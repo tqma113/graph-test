@@ -1,6 +1,8 @@
 import { TokenKind, OperatorEnum, KeywordEnum } from './constants';
 import { LexicalError } from './LexicalError';
 import type { Range } from '../index';
+export * from './constants';
+export * from './LexicalError';
 export declare type Keyword = {
     kind: TokenKind.Keyword;
     word: KeywordEnum;

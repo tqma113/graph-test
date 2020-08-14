@@ -2,7 +2,7 @@ import type { Identifier, Path, Action } from '../lexer';
 import type { Range } from '../index';
 export declare enum FragmentKind {
     Program = "Program",
-    InferenceDeclaration = "InferenceDeclaration",
+    InferenceDefinition = "InferenceDefinition",
     ImportStatement = "ImportStatement",
     ModuleItems = "ModuleItems",
     Module = "Module",
@@ -24,14 +24,14 @@ export declare type Program = {
     range: Range;
 };
 export declare const createProgram: (moduleStatemens: ModuleStatement[], range: Range) => Program;
-export declare type ModuleStatement = InferenceDeclaration | ImportStatement | ExportStatement | StartStatement;
-export declare type InferenceDeclaration = {
-    kind: FragmentKind.InferenceDeclaration;
+export declare type ModuleStatement = InferenceDefinition | ImportStatement | ExportStatement | StartStatement;
+export declare type InferenceDefinition = {
+    kind: FragmentKind.InferenceDefinition;
     identifier: Identifier;
     block: Block;
     range: Range;
 };
-export declare const createInferenceDeclaration: (identifier: Identifier, block: Block, range: Range) => InferenceDeclaration;
+export declare const createInferenceDefinition: (identifier: Identifier, block: Block, range: Range) => InferenceDefinition;
 export declare type ImportStatement = {
     kind: FragmentKind.ImportStatement;
     moduleItems: ModuleItems;
@@ -48,10 +48,10 @@ export declare const createModuleItems: (identifiers: Identifier[], range: Range
 export declare type Module = {
     kind: FragmentKind.Module;
     identifier: Identifier;
-    declaration: InferenceDeclaration | null;
+    definition: InferenceDefinition | null;
     range: Range;
 };
-export declare const createModule: (identifier: Identifier, declaration: InferenceDeclaration | null, range: Range) => Module;
+export declare const createModule: (identifier: Identifier, definition: InferenceDefinition | null, range: Range) => Module;
 export declare type ExportStatement = {
     kind: FragmentKind.ExportStatement;
     module: Module;

@@ -1,6 +1,8 @@
 import { SymbolChar, TokenKind, OperatorEnum } from './constants';
 import { LexicalError } from './LexicalError';
 import { isLetter, isValidContentChar, isNewLineChar, isWhitespace, isKeyword } from './util';
+export * from './constants';
+export * from './LexicalError';
 export var createLexer = function (input) {
     var offset = 0;
     var forward = 0;

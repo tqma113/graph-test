@@ -1,56 +1,96 @@
 
-declare type Action = {
+export declare type Action = {
     kind: TokenKind.Action;
     word: string;
     range: Range_2;
 };
 
-declare type Block = {
+export declare type Block = {
     kind: FragmentKind.Block;
     list: Statement[];
     range: Range_2;
 };
 
-declare type CaseClause = {
+export declare type BlockType = 'global' | 'local';
+
+export declare type CaseClause = {
     kind: FragmentKind.CaseClause;
     expression: Action;
     block: Block;
     range: Range_2;
 };
 
-export declare const checkSemantic: (program: Program) => SemanticError[];
+export declare const checkSemantic: (program: Program) => CheckSemanticResult;
+
+export declare type CheckSemanticResult = {
+    semanticErrors: SemanticError[];
+    table: Map<string, Inference>;
+};
 
 declare type Comment_2 = {
     kind: TokenKind.Comment;
     word: string;
     range: Range_2;
 };
+export { Comment_2 as Comment }
+
+export declare const createBlock: (list: Statement[], range: Range_2) => Block;
+
+export declare const createCaseClause: (expression: Action, block: Block, range: Range_2) => CaseClause;
+
+export declare const createDefaultClause: (block: Block, range: Range_2) => DefaultClause;
+
+export declare const createExportStatement: (module: Module, range: Range_2) => ExportStatement;
+
+export declare const createGotoStatement: (identifier: Identifier, range: Range_2) => GotoStatement;
+
+export declare const createIfStatement: (expression: Action, ifBlock: Block, elseBlock: Block | null, range: Range_2) => IfStatement;
+
+export declare const createImportStatement: (moduleItems: ModuleItems, path: Path, range: Range_2) => ImportStatement;
+
+export declare const createInferenceDefinition: (identifier: Identifier, block: Block, range: Range_2) => InferenceDefinition;
+
+export declare const createLexer: (input: string) => Lexer;
+
+export declare const createModule: (identifier: Identifier, definition: InferenceDefinition | null, range: Range_2) => Module;
+
+export declare const createModuleItems: (identifiers: Identifier[], range: Range_2) => ModuleItems;
 
 export declare const createParser: (input: string) => Parser;
 
-declare type DefaultClause = {
+export declare const createProgram: (moduleStatemens: ModuleStatement[], range: Range_2) => Program;
+
+export declare const createStartStatement: (module: Module, range: Range_2) => StartStatement;
+
+export declare const createStepStatement: (expression: Action, range: Range_2) => StepStatement;
+
+export declare const createSwitchBlock: (caseClauses: CaseClause[], defaultClause: DefaultClause | null, range: Range_2) => SwitchBlock;
+
+export declare const createSwitchStatement: (expression: Action, switchBlock: SwitchBlock, range: Range_2) => SwitchStatement;
+
+export declare type DefaultClause = {
     kind: FragmentKind.DefaultClause;
     block: Block;
     range: Range_2;
 };
 
-declare type EOP = {
+export declare type EOP = {
     kind: TokenKind.EOP;
     word: null;
     range: Range_2;
 };
 
-declare type ExportStatement = {
+export declare type ExportStatement = {
     kind: FragmentKind.ExportStatement;
     module: Module;
     range: Range_2;
 };
 
-declare type Fragment = Program | Statement | ModuleStatement | ModuleItems | Module | Block | SwitchBlock | CaseClause | DefaultClause;
+export declare type Fragment = Program | Statement | ModuleStatement | ModuleItems | Module | Block | SwitchBlock | CaseClause | DefaultClause;
 
-declare enum FragmentKind {
+export declare enum FragmentKind {
     Program = "Program",
-    InferenceDeclaration = "InferenceDeclaration",
+    InferenceDefinition = "InferenceDefinition",
     ImportStatement = "ImportStatement",
     ModuleItems = "ModuleItems",
     Module = "Module",
@@ -66,19 +106,19 @@ declare enum FragmentKind {
     GotoStatement = "GotoStatement"
 }
 
-declare type GotoStatement = {
+export declare type GotoStatement = {
     kind: FragmentKind.GotoStatement;
     identifier: Identifier;
     range: Range_2;
 };
 
-declare type Identifier = {
+export declare type Identifier = {
     kind: TokenKind.Identifier;
     word: string;
     range: Range_2;
 };
 
-declare type IfStatement = {
+export declare type IfStatement = {
     kind: FragmentKind.IfStatement;
     expression: Action;
     ifBlock: Block;
@@ -86,27 +126,32 @@ declare type IfStatement = {
     range: Range_2;
 };
 
-declare type ImportStatement = {
+export declare type ImportStatement = {
     kind: FragmentKind.ImportStatement;
     moduleItems: ModuleItems;
     path: Path;
     range: Range_2;
 };
 
-declare type InferenceDeclaration = {
-    kind: FragmentKind.InferenceDeclaration;
+export declare type Inference = {
+    identifier: Identifier;
+    definition: InferenceDefinition | ImportStatement;
+};
+
+export declare type InferenceDefinition = {
+    kind: FragmentKind.InferenceDefinition;
     identifier: Identifier;
     block: Block;
     range: Range_2;
 };
 
-declare type Keyword = {
+export declare type Keyword = {
     kind: TokenKind.Keyword;
     word: KeywordEnum;
     range: Range_2;
 };
 
-declare enum KeywordEnum {
+export declare enum KeywordEnum {
     Start = "start",
     Goto = "goto",
     If = "if",
@@ -119,34 +164,41 @@ declare enum KeywordEnum {
     Export = "export"
 }
 
-declare class LexicalError extends Error {
+export declare type Lexer = {
+    tokens: Token[];
+    errors: LexicalError[];
+    nextToken: () => Token | LexicalError;
+    run: () => void;
+};
+
+export declare class LexicalError extends Error {
     kind: "error";
     position: Position_2;
     constructor(message: string, position: Position_2);
 }
 
-declare type Module = {
+export declare type Module = {
     kind: FragmentKind.Module;
     identifier: Identifier;
-    declaration: InferenceDeclaration | null;
+    definition: InferenceDefinition | null;
     range: Range_2;
 };
 
-declare type ModuleItems = {
+export declare type ModuleItems = {
     kind: FragmentKind.ModuleItems;
     identifiers: Identifier[];
     range: Range_2;
 };
 
-declare type ModuleStatement = InferenceDeclaration | ImportStatement | ExportStatement | StartStatement;
+export declare type ModuleStatement = InferenceDefinition | ImportStatement | ExportStatement | StartStatement;
 
-declare type Operator = {
+export declare type Operator = {
     kind: TokenKind.Operator;
     word: OperatorEnum;
     range: Range_2;
 };
 
-declare enum OperatorEnum {
+export declare enum OperatorEnum {
     OpenBrace = "{",
     CloseBrace = "}",
     Assign = "=",
@@ -154,7 +206,7 @@ declare enum OperatorEnum {
     Comma = ","
 }
 
-declare type Parser = {
+export declare type Parser = {
     program: Program | null;
     tokens: Token[];
     lexcialErrors: LexicalError[];
@@ -162,7 +214,7 @@ declare type Parser = {
     parse: () => void;
 };
 
-declare type Path = {
+export declare type Path = {
     kind: TokenKind.Path;
     word: string;
     range: Range_2;
@@ -185,7 +237,7 @@ declare type Position_2 = {
 };
 export { Position_2 as Position }
 
-declare type Program = {
+export declare type Program = {
     kind: FragmentKind.Program;
     moduleStatemens: ModuleStatement[];
     range: Range_2;
@@ -203,50 +255,65 @@ declare type Range_2 = {
 };
 export { Range_2 as Range }
 
-declare class SemanticError extends Error {
+export declare class SemanticError extends Error {
     kind: "error";
     fragment: Fragment;
     range: Range_2;
     constructor(message: string, fragment: Fragment);
 }
 
-declare type StartStatement = {
+export declare type StartStatement = {
     kind: FragmentKind.StartStatement;
     module: Module;
     range: Range_2;
 };
 
-declare type Statement = StepStatement | IfStatement | SwitchStatement | GotoStatement;
+export declare type Statement = StepStatement | IfStatement | SwitchStatement | GotoStatement;
 
-declare type StepStatement = {
+export declare type StepStatement = {
     kind: FragmentKind.StepStatement;
     expression: Action;
     range: Range_2;
 };
 
-declare type SwitchBlock = {
+export declare type SwitchBlock = {
     kind: FragmentKind.SwitchBlock;
     caseClauses: CaseClause[];
     defaultClause: DefaultClause | null;
     range: Range_2;
 };
 
-declare type SwitchStatement = {
+export declare type SwitchStatement = {
     kind: FragmentKind.SwitchStatement;
     expression: Action;
     switchBlock: SwitchBlock;
     range: Range_2;
 };
 
+export declare enum SymbolChar {
+    OpenBrace = "{",
+    CloseBrace = "}",
+    OpenBracket = "[",
+    CloseBracket = "]",
+    OpenAngleBracket = "<",
+    CloseAngleBracket = ">",
+    Assign = "=",
+    Result = "->",
+    Comma = ",",
+    Quote = "\"",
+    Well = "#"
+}
+
 declare class SyntaxError_2 extends Error {
     kind: "error";
     token: Token;
     constructor(message: string, token: Token);
 }
+export { SyntaxError_2 as SyntaxError }
 
-declare type Token = Keyword | Operator | Identifier | Action | Path | Comment_2 | EOP;
+export declare type Token = Keyword | Operator | Identifier | Action | Path | Comment_2 | EOP;
 
-declare enum TokenKind {
+export declare enum TokenKind {
     Comment = "comment",
     Operator = "operator",
     Keyword = "keyword",

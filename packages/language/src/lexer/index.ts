@@ -9,6 +9,9 @@ import {
 } from './util'
 import type { Range, Position } from '../index'
 
+export * from './constants'
+export * from './LexicalError'
+
 export type Keyword = {
   kind: TokenKind.Keyword,
   word: KeywordEnum,

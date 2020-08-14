@@ -1,7 +1,7 @@
 export var FragmentKind;
 (function (FragmentKind) {
     FragmentKind["Program"] = "Program";
-    FragmentKind["InferenceDeclaration"] = "InferenceDeclaration";
+    FragmentKind["InferenceDefinition"] = "InferenceDefinition";
     FragmentKind["ImportStatement"] = "ImportStatement";
     FragmentKind["ModuleItems"] = "ModuleItems";
     FragmentKind["Module"] = "Module";
@@ -23,9 +23,9 @@ export var createProgram = function (moduleStatemens, range) {
         range: range
     };
 };
-export var createInferenceDeclaration = function (identifier, block, range) {
+export var createInferenceDefinition = function (identifier, block, range) {
     return {
-        kind: FragmentKind.InferenceDeclaration,
+        kind: FragmentKind.InferenceDefinition,
         identifier: identifier,
         block: block,
         range: range
@@ -46,11 +46,11 @@ export var createModuleItems = function (identifiers, range) {
         range: range
     };
 };
-export var createModule = function (identifier, declaration, range) {
+export var createModule = function (identifier, definition, range) {
     return {
         kind: FragmentKind.Module,
         identifier: identifier,
-        declaration: declaration,
+        definition: definition,
         range: range
     };
 };

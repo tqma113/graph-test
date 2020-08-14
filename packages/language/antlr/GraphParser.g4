@@ -11,7 +11,7 @@ program
     ;
 
 moduleStatement
-    : inferenceDeclaration
+    : inferenceDefinition
     | importStatement
     | exportStatement
     | startStatement
@@ -41,7 +41,7 @@ statementList
     ;
 
 
-inferenceDeclaration
+inferenceDefinition
     : identifier '=' block
     ;
 
@@ -60,7 +60,7 @@ moduleItems
 
 module
     : identifier
-    | inferenceDeclaration
+    | inferenceDefinition
     ;
 
 exportStatement

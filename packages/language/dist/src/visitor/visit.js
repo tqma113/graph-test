@@ -6,7 +6,7 @@ export var visit = function (program) {
     };
     var visitModuleStatement = function (moduleStatement) {
     };
-    var visitInferenceDeclaration = function (inferenceDeclaration) {
+    var visitInferenceDefinition = function (inferenceDefinition) {
     };
     var visitImportStatement = function (importStatement) {
     };

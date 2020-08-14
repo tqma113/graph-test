@@ -1,8 +1,9 @@
 import { SemanticError } from './SemanticError';
 import { FragmentKind } from '../parser/ast';
+export * from './SemanticError';
 export var checkSemantic = function (program) {
     var inferenceTable = new Map();
-    var errors = [];
+    var semanticErrors = [];
     var record = function () {
         program.moduleStatemens.forEach(function (moduleStatement) {
             switch (moduleStatement.kind) {
@@ -10,8 +11,8 @@ export var checkSemantic = function (program) {
                     recordImport(moduleStatement);
                     break;
                 }
-                case FragmentKind.InferenceDeclaration: {
-                    recordDeclaration(moduleStatement);
+                case FragmentKind.InferenceDefinition: {
+                    recordDefinition(moduleStatement);
                     break;
                 }
                 case FragmentKind.StartStatement: {
@@ -25,28 +26,28 @@ export var checkSemantic = function (program) {
         importStatement.moduleItems.identifiers.forEach(function (identifier) {
             addInference({
                 identifier: identifier,
-                declaration: importStatement
+                definition: importStatement
             });
         });
     };
-    var recordDeclaration = function (inferenceDeclaration) {
+    var recordDefinition = function (inferenceDefinition) {
         addInference({
-            identifier: inferenceDeclaration.identifier,
-            declaration: inferenceDeclaration
+            identifier: inferenceDefinition.identifier,
+            definition: inferenceDefinition
         });
     };
     var recordStart = function (startStatement) {
-        if (startStatement.module.declaration) {
+        if (startStatement.module.definition) {
             addInference({
                 identifier: startStatement.module.identifier,
-                declaration: startStatement.module.declaration
+                definition: startStatement.module.definition
             });
         }
     };
     var addInference = function (inference) {
         var name = getContent(inference.identifier.word);
         if (inferenceTable.has(name)) {
-            reportError("Module " + name + " has been declared twice", inference.declaration);
+            reportError("Module " + name + " has been declared twice", inference.definition);
         }
         else {
             inferenceTable.set(name, inference);
@@ -69,14 +70,14 @@ export var checkSemantic = function (program) {
                 checkStartStatement(moduleStatement);
                 break;
             }
-            case FragmentKind.InferenceDeclaration: {
-                checkInferenceDeclaration(moduleStatement);
+            case FragmentKind.InferenceDefinition: {
+                checkInferenceDefinition(moduleStatement);
                 break;
             }
         }
     };
-    var checkInferenceDeclaration = function (inferenceDeclaration) {
-        checkBlock(inferenceDeclaration.block);
+    var checkInferenceDefinition = function (inferenceDefinition) {
+        checkBlock(inferenceDefinition.block);
     };
     var checkImportStatement = function (importStatement) {
         checkModuleItems(importStatement.moduleItems);
@@ -88,8 +89,8 @@ export var checkSemantic = function (program) {
         if (!inferenceTable.has(name)) {
             reportError("Module " + name + " has not been declared", module);
         }
-        if (module.declaration) {
-            checkInferenceDeclaration(module.declaration);
+        if (module.definition) {
+            checkInferenceDefinition(module.definition);
         }
     };
     var checkExportStatement = function (exportStatement) {
@@ -151,11 +152,18 @@ export var checkSemantic = function (program) {
         }
     };
     var reportError = function (message, fragment) {
-        errors.push(new SemanticError(message, fragment));
+        semanticErrors.push(new SemanticError(message, fragment));
     };
     record();
     checkProgram(program);
-    return errors;
+    return {
+        get semanticErrors() {
+            return semanticErrors;
+        },
+        get table() {
+            return inferenceTable;
+        }
+    };
 };
 var getContent = function (word) {
     return word.slice(1, word.length - 1);

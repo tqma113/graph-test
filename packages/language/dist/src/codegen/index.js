@@ -1,3 +1,4 @@
-var codegen = function (ast, output) {
+// @ts-ignore
+var codegen = function (ast) {
 };
 export default codegen;

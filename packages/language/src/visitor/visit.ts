@@ -6,7 +6,7 @@
 
 import type {
   Program,
-  InferenceDeclaration,
+  InferenceDefinition,
   ImportStatement,
   StartStatement,
   ExportStatement,
@@ -34,7 +34,7 @@ export const visit = (program: Program) => {
 
   }
 
-  const visitInferenceDeclaration = (inferenceDeclaration: InferenceDeclaration) => {
+  const visitInferenceDefinition = (inferenceDefinition: InferenceDefinition) => {
 
   }
 

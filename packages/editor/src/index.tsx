@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import registerLanguage from './language'
+import server from './language/server'
 import createEditor from './createEditor'
 import { initTheme } from './theme'
 import { FontSizeSelect } from './component'
@@ -38,6 +39,10 @@ function MonacoEditor({
       destoryMonaco()
     }
   }, [options])
+
+  useLayoutEffect(() => {
+    server.didChange(value)
+  }, [value])
 
 
   const initMonaco = () => {

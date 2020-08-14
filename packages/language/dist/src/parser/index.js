@@ -1,7 +1,9 @@
 import { createLexer } from '../lexer';
 import { TokenKind, KeywordEnum, OperatorEnum } from '../lexer/constants';
 import { SyntaxError } from './SyntaxError';
-import { createProgram, createInferenceDeclaration, createImportStatement, createExportStatement, createStartStatement, createStepStatement, createIfStatement, createSwitchStatement, createGotoStatement, createBlock, createSwitchBlock, createCaseClause, createDefaultClause, createModuleItems, createModule } from './ast';
+import { createProgram, createInferenceDefinition, createImportStatement, createExportStatement, createStartStatement, createStepStatement, createIfStatement, createSwitchStatement, createGotoStatement, createBlock, createSwitchBlock, createCaseClause, createDefaultClause, createModuleItems, createModule } from './ast';
+export * from './ast';
+export * from './SyntaxError';
 export var createParser = function (input) {
     var lexer = createLexer(input);
     var token = null;
@@ -84,7 +86,7 @@ export var createParser = function (input) {
     };
     /**
      * moduleStatement
-     *  : inferenceDeclaration
+     *  : inferenceDefinition
      *  | importStatement
      *  | exportStatement
      *  | startStatement
@@ -107,18 +109,18 @@ export var createParser = function (input) {
         }
         else {
             if (token.kind === TokenKind.Identifier) {
-                return matchInferenceDeclaration();
+                return matchInferenceDefinition();
             }
         }
         reportError("'" + KeywordEnum.Start + "', '" + KeywordEnum.Export + "', '" + KeywordEnum.Import + "', Identifier: <somethings>", token);
         return null;
     };
     /**
-     * inferenceDeclaration
+     * inferenceDefinition
      *  : identifier '=' block
      *  ;
      */
-    var matchInferenceDeclaration = function () {
+    var matchInferenceDefinition = function () {
         if (requireIdentifier()) {
             var identifier = token;
             if (requireOperator(OperatorEnum.Assign)) {
@@ -127,7 +129,7 @@ export var createParser = function (input) {
                     return null;
                 }
                 else {
-                    return createInferenceDeclaration(identifier, block, {
+                    return createInferenceDefinition(identifier, block, {
                         start: identifier.range.start,
                         end: block.range.end
                     });
@@ -315,7 +317,7 @@ export var createParser = function (input) {
     /**
      * module
      * : identifier
-     * | inferenceDeclaration
+     * | inferenceDefinition
      * ;
      */
     var matchModule = function () {
@@ -324,9 +326,9 @@ export var createParser = function (input) {
             var identifier = nt;
             var nt2 = predict(1);
             if (nt2.kind === TokenKind.Operator && nt2.word === OperatorEnum.Assign) {
-                var declaration = matchInferenceDeclaration();
-                if (declaration) {
-                    return createModule(identifier, declaration, declaration.range);
+                var definition = matchInferenceDefinition();
+                if (definition) {
+                    return createModule(identifier, definition, definition.range);
                 }
                 else {
                     return createModule(identifier, null, identifier.range);
@@ -617,7 +619,6 @@ export var createParser = function (input) {
     var recovery = function () {
         while (true) {
             nextToken();
-            console.trace(token);
             if ((token.kind === TokenKind.Operator && token.word === '}') || token.kind === TokenKind.EOP) {
                 break;
             }

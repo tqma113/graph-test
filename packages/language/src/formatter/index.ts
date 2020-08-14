@@ -5,7 +5,7 @@
 import type {
   Program,
   ModuleStatement,
-  InferenceDeclaration,
+  InferenceDefinition,
   ImportStatement,
   ExportStatement,
   StartStatement,

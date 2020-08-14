@@ -1,8 +1,13 @@
 import { SemanticError } from './SemanticError';
-import type { Program, InferenceDeclaration, ImportStatement } from '../parser/ast';
+import type { Program, InferenceDefinition, ImportStatement } from '../parser/ast';
 import type { Identifier } from '../lexer/index';
+export * from './SemanticError';
 export declare type Inference = {
     identifier: Identifier;
-    declaration: InferenceDeclaration | ImportStatement;
+    definition: InferenceDefinition | ImportStatement;
 };
-export declare const checkSemantic: (program: Program) => SemanticError[];
+export declare type CheckSemanticResult = {
+    semanticErrors: SemanticError[];
+    table: Map<string, Inference>;
+};
+export declare const checkSemantic: (program: Program) => CheckSemanticResult;

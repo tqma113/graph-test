@@ -406,7 +406,7 @@ var SyntaxError = /** @class */ (function (_super) {
 var FragmentKind;
 (function (FragmentKind) {
     FragmentKind["Program"] = "Program";
-    FragmentKind["InferenceDeclaration"] = "InferenceDeclaration";
+    FragmentKind["InferenceDefinition"] = "InferenceDefinition";
     FragmentKind["ImportStatement"] = "ImportStatement";
     FragmentKind["ModuleItems"] = "ModuleItems";
     FragmentKind["Module"] = "Module";
@@ -428,9 +428,9 @@ var createProgram = function (moduleStatemens, range) {
         range: range
     };
 };
-var createInferenceDeclaration = function (identifier, block, range) {
+var createInferenceDefinition = function (identifier, block, range) {
     return {
-        kind: FragmentKind.InferenceDeclaration,
+        kind: FragmentKind.InferenceDefinition,
         identifier: identifier,
         block: block,
         range: range
@@ -451,11 +451,11 @@ var createModuleItems = function (identifiers, range) {
         range: range
     };
 };
-var createModule = function (identifier, declaration, range) {
+var createModule = function (identifier, definition, range) {
     return {
         kind: FragmentKind.Module,
         identifier: identifier,
-        declaration: declaration,
+        definition: definition,
         range: range
     };
 };
@@ -612,7 +612,7 @@ var createParser = function (input) {
     };
     /**
      * moduleStatement
-     *  : inferenceDeclaration
+     *  : inferenceDefinition
      *  | importStatement
      *  | exportStatement
      *  | startStatement
@@ -635,18 +635,18 @@ var createParser = function (input) {
         }
         else {
             if (token.kind === TokenKind.Identifier) {
-                return matchInferenceDeclaration();
+                return matchInferenceDefinition();
             }
         }
         reportError("'" + KeywordEnum.Start + "', '" + KeywordEnum.Export + "', '" + KeywordEnum.Import + "', Identifier: <somethings>", token);
         return null;
     };
     /**
-     * inferenceDeclaration
+     * inferenceDefinition
      *  : identifier '=' block
      *  ;
      */
-    var matchInferenceDeclaration = function () {
+    var matchInferenceDefinition = function () {
         if (requireIdentifier()) {
             var identifier = token;
             if (requireOperator(OperatorEnum.Assign)) {
@@ -655,7 +655,7 @@ var createParser = function (input) {
                     return null;
                 }
                 else {
-                    return createInferenceDeclaration(identifier, block, {
+                    return createInferenceDefinition(identifier, block, {
                         start: identifier.range.start,
                         end: block.range.end
                     });
@@ -843,7 +843,7 @@ var createParser = function (input) {
     /**
      * module
      * : identifier
-     * | inferenceDeclaration
+     * | inferenceDefinition
      * ;
      */
     var matchModule = function () {
@@ -852,9 +852,9 @@ var createParser = function (input) {
             var identifier = nt;
             var nt2 = predict(1);
             if (nt2.kind === TokenKind.Operator && nt2.word === OperatorEnum.Assign) {
-                var declaration = matchInferenceDeclaration();
-                if (declaration) {
-                    return createModule(identifier, declaration, declaration.range);
+                var definition = matchInferenceDefinition();
+                if (definition) {
+                    return createModule(identifier, definition, definition.range);
                 }
                 else {
                     return createModule(identifier, null, identifier.range);
@@ -1145,7 +1145,6 @@ var createParser = function (input) {
     var recovery = function () {
         while (true) {
             nextToken();
-            console.trace(token);
             if ((token.kind === TokenKind.Operator && token.word === '}') || token.kind === TokenKind.EOP) {
                 break;
             }
@@ -1185,7 +1184,7 @@ var SemanticError = /** @class */ (function (_super) {
 
 var checkSemantic = function (program) {
     var inferenceTable = new Map();
-    var errors = [];
+    var semanticErrors = [];
     var record = function () {
         program.moduleStatemens.forEach(function (moduleStatement) {
             switch (moduleStatement.kind) {
@@ -1193,8 +1192,8 @@ var checkSemantic = function (program) {
                     recordImport(moduleStatement);
                     break;
                 }
-                case FragmentKind.InferenceDeclaration: {
-                    recordDeclaration(moduleStatement);
+                case FragmentKind.InferenceDefinition: {
+                    recordDefinition(moduleStatement);
                     break;
                 }
                 case FragmentKind.StartStatement: {
@@ -1208,28 +1207,28 @@ var checkSemantic = function (program) {
         importStatement.moduleItems.identifiers.forEach(function (identifier) {
             addInference({
                 identifier: identifier,
-                declaration: importStatement
+                definition: importStatement
             });
         });
     };
-    var recordDeclaration = function (inferenceDeclaration) {
+    var recordDefinition = function (inferenceDefinition) {
         addInference({
-            identifier: inferenceDeclaration.identifier,
-            declaration: inferenceDeclaration
+            identifier: inferenceDefinition.identifier,
+            definition: inferenceDefinition
         });
     };
     var recordStart = function (startStatement) {
-        if (startStatement.module.declaration) {
+        if (startStatement.module.definition) {
             addInference({
                 identifier: startStatement.module.identifier,
-                declaration: startStatement.module.declaration
+                definition: startStatement.module.definition
             });
         }
     };
     var addInference = function (inference) {
         var name = getContent(inference.identifier.word);
         if (inferenceTable.has(name)) {
-            reportError("Module " + name + " has been declared twice", inference.declaration);
+            reportError("Module " + name + " has been declared twice", inference.definition);
         }
         else {
             inferenceTable.set(name, inference);
@@ -1252,14 +1251,14 @@ var checkSemantic = function (program) {
                 checkStartStatement(moduleStatement);
                 break;
             }
-            case FragmentKind.InferenceDeclaration: {
-                checkInferenceDeclaration(moduleStatement);
+            case FragmentKind.InferenceDefinition: {
+                checkInferenceDefinition(moduleStatement);
                 break;
             }
         }
     };
-    var checkInferenceDeclaration = function (inferenceDeclaration) {
-        checkBlock(inferenceDeclaration.block);
+    var checkInferenceDefinition = function (inferenceDefinition) {
+        checkBlock(inferenceDefinition.block);
     };
     var checkImportStatement = function (importStatement) {
         checkModuleItems(importStatement.moduleItems);
@@ -1271,8 +1270,8 @@ var checkSemantic = function (program) {
         if (!inferenceTable.has(name)) {
             reportError("Module " + name + " has not been declared", module);
         }
-        if (module.declaration) {
-            checkInferenceDeclaration(module.declaration);
+        if (module.definition) {
+            checkInferenceDefinition(module.definition);
         }
     };
     var checkExportStatement = function (exportStatement) {
@@ -1331,14 +1330,21 @@ var checkSemantic = function (program) {
         }
     };
     var reportError = function (message, fragment) {
-        errors.push(new SemanticError(message, fragment));
+        semanticErrors.push(new SemanticError(message, fragment));
     };
     record();
     checkProgram(program);
-    return errors;
+    return {
+        get semanticErrors() {
+            return semanticErrors;
+        },
+        get table() {
+            return inferenceTable;
+        }
+    };
 };
 var getContent = function (word) {
     return word.slice(1, word.length - 1);
 };
 
-export { checkSemantic, createParser };
+export { FragmentKind, KeywordEnum, LexicalError, OperatorEnum, SemanticError, SymbolChar, SyntaxError, TokenKind, checkSemantic, createBlock, createCaseClause, createDefaultClause, createExportStatement, createGotoStatement, createIfStatement, createImportStatement, createInferenceDefinition, createLexer, createModule, createModuleItems, createParser, createProgram, createStartStatement, createStepStatement, createSwitchBlock, createSwitchStatement };

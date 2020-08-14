@@ -4,7 +4,7 @@ import { TokenKind, KeywordEnum, OperatorEnum } from '../lexer/constants'
 import { SyntaxError } from './SyntaxError'
 import {
   createProgram,
-  createInferenceDeclaration,
+  createInferenceDefinition,
   createImportStatement,
   createExportStatement,
   createStartStatement,
@@ -22,7 +22,7 @@ import {
 import type {
   Program,
   ModuleStatement,
-  InferenceDeclaration,
+  InferenceDefinition,
   ImportStatement,
   ExportStatement,
   StartStatement,
@@ -38,6 +38,9 @@ import type {
   ModuleItems,
   Module,
 } from './ast'
+
+export * from './ast'
+export * from './SyntaxError'
 
 export type BlockType = 'global' | 'local'
 
@@ -141,7 +144,7 @@ export const createParser = (input: string): Parser => {
 
   /**
    * moduleStatement
-   *  : inferenceDeclaration
+   *  : inferenceDefinition
    *  | importStatement
    *  | exportStatement
    *  | startStatement
@@ -163,7 +166,7 @@ export const createParser = (input: string): Parser => {
       }
     } else {
       if (token.kind === TokenKind.Identifier) {
-        return matchInferenceDeclaration()
+        return matchInferenceDefinition()
       }
     }
     reportError(`'${KeywordEnum.Start}', '${KeywordEnum.Export}', '${KeywordEnum.Import}', Identifier: <somethings>`, token)
@@ -171,11 +174,11 @@ export const createParser = (input: string): Parser => {
   }
 
   /**
-   * inferenceDeclaration
+   * inferenceDefinition
    *  : identifier '=' block
    *  ;
    */
-  const matchInferenceDeclaration = (): InferenceDeclaration | null => {
+  const matchInferenceDefinition = (): InferenceDefinition | null => {
     if (requireIdentifier()) {
       const identifier = token as Identifier
       if (requireOperator(OperatorEnum.Assign)) {
@@ -183,7 +186,7 @@ export const createParser = (input: string): Parser => {
         if (block === null) {
           return null
         } else {
-          return createInferenceDeclaration(
+          return createInferenceDefinition(
             identifier,
             block,
             {
@@ -387,7 +390,7 @@ export const createParser = (input: string): Parser => {
   /**
    * module
    * : identifier
-   * | inferenceDeclaration
+   * | inferenceDefinition
    * ;
    */
   const matchModule = (): Module | null => {
@@ -396,12 +399,12 @@ export const createParser = (input: string): Parser => {
       const identifier = nt
       const nt2 = predict(1)
       if (nt2.kind === TokenKind.Operator && nt2.word === OperatorEnum.Assign) {
-        const declaration = matchInferenceDeclaration()
-        if (declaration) {
+        const definition = matchInferenceDefinition()
+        if (definition) {
           return createModule(
             identifier,
-            declaration,
-            declaration.range
+            definition,
+            definition.range
           )
         } else {
           return createModule(

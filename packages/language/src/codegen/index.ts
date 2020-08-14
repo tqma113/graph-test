@@ -1,6 +1,7 @@
 import { Program } from '../parser/ast'
 
-const codegen = (ast: Program, output: string) => {
+// @ts-ignore
+const codegen = (ast: Program): string => {
 
 }
 

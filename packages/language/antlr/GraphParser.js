@@ -134,7 +134,7 @@ var symbolicNames = [null, "HashBangLine", "SingleLineComment", "LineTerminator"
 ];
 
 var ruleNames = ["program", "moduleStatement", "moduleStatements", "identifier",
-  "path", "statement", "statementList", "inferenceDeclaration",
+  "path", "statement", "statementList", "inferenceDefinition",
   "block", "importStatement", "moduleItems", "module",
   "exportStatement", "stepStatement", "ifStatement", "expression",
   "switchStatement", "switchBlock", "caseClauses", "caseClause",
@@ -196,7 +196,7 @@ GraphParser.RULE_identifier = 3;
 GraphParser.RULE_path = 4;
 GraphParser.RULE_statement = 5;
 GraphParser.RULE_statementList = 6;
-GraphParser.RULE_inferenceDeclaration = 7;
+GraphParser.RULE_inferenceDefinition = 7;
 GraphParser.RULE_block = 8;
 GraphParser.RULE_importStatement = 9;
 GraphParser.RULE_moduleItems = 10;
@@ -323,8 +323,8 @@ function ModuleStatementContext(parser, parent, invokingState) {
 ModuleStatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 ModuleStatementContext.prototype.constructor = ModuleStatementContext;
 
-ModuleStatementContext.prototype.inferenceDeclaration = function() {
-  return this.getTypedRuleContext(InferenceDeclarationContext, 0);
+ModuleStatementContext.prototype.inferenceDefinition = function() {
+  return this.getTypedRuleContext(InferenceDefinitionContext, 0);
 };
 
 ModuleStatementContext.prototype.importStatement = function() {
@@ -375,7 +375,7 @@ GraphParser.prototype.moduleStatement = function() {
       case GraphParser.Identifier:
         this.enterOuterAlt(localctx, 1);
         this.state = 54;
-        this.inferenceDeclaration();
+        this.inferenceDefinition();
         break;
       case GraphParser.Import:
         this.enterOuterAlt(localctx, 2);
@@ -817,7 +817,7 @@ GraphParser.prototype.statementList = function() {
 };
 
 
-function InferenceDeclarationContext(parser, parent, invokingState) {
+function InferenceDefinitionContext(parser, parent, invokingState) {
   if (parent === undefined) {
     parent = null;
   }
@@ -826,40 +826,40 @@ function InferenceDeclarationContext(parser, parent, invokingState) {
   }
   antlr4.ParserRuleContext.call(this, parent, invokingState);
   this.parser = parser;
-  this.ruleIndex = GraphParser.RULE_inferenceDeclaration;
+  this.ruleIndex = GraphParser.RULE_inferenceDefinition;
   return this;
 }
 
-InferenceDeclarationContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
-InferenceDeclarationContext.prototype.constructor = InferenceDeclarationContext;
+InferenceDefinitionContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
+InferenceDefinitionContext.prototype.constructor = InferenceDefinitionContext;
 
-InferenceDeclarationContext.prototype.identifier = function() {
+InferenceDefinitionContext.prototype.identifier = function() {
   return this.getTypedRuleContext(IdentifierContext, 0);
 };
 
-InferenceDeclarationContext.prototype.Assign = function() {
+InferenceDefinitionContext.prototype.Assign = function() {
   return this.getToken(GraphParser.Assign, 0);
 };
 
-InferenceDeclarationContext.prototype.block = function() {
+InferenceDefinitionContext.prototype.block = function() {
   return this.getTypedRuleContext(BlockContext, 0);
 };
 
-InferenceDeclarationContext.prototype.enterRule = function(listener) {
+InferenceDefinitionContext.prototype.enterRule = function(listener) {
   if (listener instanceof GraphParserListener) {
-    listener.enterInferenceDeclaration(this);
+    listener.enterInferenceDefinition(this);
   }
 };
 
-InferenceDeclarationContext.prototype.exitRule = function(listener) {
+InferenceDefinitionContext.prototype.exitRule = function(listener) {
   if (listener instanceof GraphParserListener) {
-    listener.exitInferenceDeclaration(this);
+    listener.exitInferenceDefinition(this);
   }
 };
 
-InferenceDeclarationContext.prototype.accept = function(visitor) {
+InferenceDefinitionContext.prototype.accept = function(visitor) {
   if (visitor instanceof GraphParserVisitor) {
-    return visitor.visitInferenceDeclaration(this);
+    return visitor.visitInferenceDefinition(this);
   } else {
     return visitor.visitChildren(this);
   }
@@ -868,12 +868,12 @@ InferenceDeclarationContext.prototype.accept = function(visitor) {
 
 
 
-GraphParser.InferenceDeclarationContext = InferenceDeclarationContext;
+GraphParser.InferenceDefinitionContext = InferenceDefinitionContext;
 
-GraphParser.prototype.inferenceDeclaration = function() {
+GraphParser.prototype.inferenceDefinition = function() {
 
-  var localctx = new InferenceDeclarationContext(this, this._ctx, this.state);
-  this.enterRule(localctx, 14, GraphParser.RULE_inferenceDeclaration);
+  var localctx = new InferenceDefinitionContext(this, this._ctx, this.state);
+  this.enterRule(localctx, 14, GraphParser.RULE_inferenceDefinition);
   try {
     this.enterOuterAlt(localctx, 1);
     this.state = 80;
@@ -1219,8 +1219,8 @@ ModuleContext.prototype.identifier = function() {
   return this.getTypedRuleContext(IdentifierContext, 0);
 };
 
-ModuleContext.prototype.inferenceDeclaration = function() {
-  return this.getTypedRuleContext(InferenceDeclarationContext, 0);
+ModuleContext.prototype.inferenceDefinition = function() {
+  return this.getTypedRuleContext(InferenceDefinitionContext, 0);
 };
 
 ModuleContext.prototype.enterRule = function(listener) {
@@ -1266,7 +1266,7 @@ GraphParser.prototype.module = function() {
       case 2:
         this.enterOuterAlt(localctx, 2);
         this.state = 113;
-        this.inferenceDeclaration();
+        this.inferenceDefinition();
         break;
 
     }
