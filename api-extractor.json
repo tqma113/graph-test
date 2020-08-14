@@ -7,6 +7,15 @@
     "reportFolder": "<projectFolder>/temp/"
   },
 
+  "compiler": {
+    "overrideTsconfig": {
+      "$schema": "http://json.schemastore.org/tsconfig",
+      "compilerOptions": {
+        "emitDeclarationOnly": true
+      }
+    }
+  },
+
   "docModel": {
     "enabled": true
   },

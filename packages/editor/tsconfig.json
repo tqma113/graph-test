@@ -2,7 +2,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",
-    "emitDeclarationOnly": true,
     "declaration": true,
     "sourceMap": false,
     "target": "es5",
