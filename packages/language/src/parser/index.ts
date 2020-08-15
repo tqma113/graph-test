@@ -1,5 +1,7 @@
 /**
  * 递归下降分析法(recursive-descent parsing)
+ * 
+ * 预测分析法(prdictive parsing)
  */
 
 import { createLexer, Token, Identifier, Action, Path } from '../lexer'
