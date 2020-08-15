@@ -126,8 +126,8 @@ export const createParser = (input: string): Parser => {
     let moduleStatemens: ModuleStatement[] = []
 
     while (true) {
-      const token = predict()
-      if (token.kind !== TokenKind.EOP) {
+      const lookahead = predict()
+      if (lookahead.kind !== TokenKind.EOP) {
         const moduleStatement = matchModuleStatement()
         if (moduleStatement === null) {
           recovery()
@@ -163,9 +163,9 @@ export const createParser = (input: string): Parser => {
    * FOLLOW(moduleStatement) = { FIRST(moduleStatement), EOF }
    */
   const matchModuleStatement = (): ModuleStatement | null => {
-    const token = predict()
-    if (token.kind === TokenKind.Keyword) {
-      switch (token.word) {
+    const lookahead = predict()
+    if (lookahead.kind === TokenKind.Keyword) {
+      switch (lookahead.word) {
         case KeywordEnum.Import: {
           return matchImportStatement()
         }
@@ -177,11 +177,11 @@ export const createParser = (input: string): Parser => {
         }
       }
     } else {
-      if (token.kind === TokenKind.Identifier) {
+      if (lookahead.kind === TokenKind.Identifier) {
         return matchInferenceDefinition()
       }
     }
-    reportError(`'${KeywordEnum.Start}', '${KeywordEnum.Export}', '${KeywordEnum.Import}', Identifier: <somethings>`, token)
+    reportError(`'${KeywordEnum.Start}', '${KeywordEnum.Export}', '${KeywordEnum.Import}', Identifier: <somethings>`, lookahead)
     return null
   }
 
@@ -233,14 +233,14 @@ export const createParser = (input: string): Parser => {
       const start = token.range.start
       let list: Statement[] = []
       while (true) {
-        const token = predict()
-        if (token.kind === TokenKind.Operator && token.word === OperatorEnum.CloseBrace) {
+        const lookahead = predict()
+        if (lookahead.kind === TokenKind.Operator && lookahead.word === OperatorEnum.CloseBrace) {
           nextToken()
           return createBlock(
             list,
             {
               start,
-              end: token.range.end
+              end: lookahead.range.end
             }
           )
         }
@@ -427,11 +427,11 @@ export const createParser = (input: string): Parser => {
    * FOLLOW(module) = { FOLLOW(startStatement), FOLLOW(exportStatement) }
    */
   const matchModule = (): Module | null => {
-    const nt = predict()
-    if (nt.kind === TokenKind.Identifier) {
-      const identifier = nt
-      const nt2 = predict(1)
-      if (nt2.kind === TokenKind.Operator && nt2.word === OperatorEnum.Assign) {
+    const lookahead = predict()
+    if (lookahead.kind === TokenKind.Identifier) {
+      const identifier = lookahead
+      const lookahead2 = predict(1)
+      if (lookahead2.kind === TokenKind.Operator && lookahead2.word === OperatorEnum.Assign) {
         const definition = matchInferenceDefinition()
         if (definition) {
           return createModule(
@@ -471,9 +471,9 @@ export const createParser = (input: string): Parser => {
    * FOLLOW(statement) = { FIRST(statement), CloseBrace }
    */
   const matchStatement = (): Statement | null => {
-    const token = predict()
-    if (token.kind === TokenKind.Keyword) {
-      switch (token.word) {
+    const lookahead = predict()
+    if (lookahead.kind === TokenKind.Keyword) {
+      switch (lookahead.word) {
         case KeywordEnum.If: {
           return matchIfStatement()
         }
@@ -485,11 +485,11 @@ export const createParser = (input: string): Parser => {
         }
       }
     } else {
-      if (token.kind === TokenKind.Action) {
+      if (lookahead.kind === TokenKind.Action) {
         return matchStepStatement()
       }
     }
-    reportError(`'${KeywordEnum.If}', '${KeywordEnum.Switch}', '${KeywordEnum.Goto}', Action: [somethings]`, token)
+    reportError(`'${KeywordEnum.If}', '${KeywordEnum.Switch}', '${KeywordEnum.Goto}', Action: [somethings]`, lookahead)
     return null
   }
 
@@ -526,8 +526,8 @@ export const createParser = (input: string): Parser => {
         if (requireOperator(OperatorEnum.Result)) {
           let ifBlock = matchBlock()
           if (ifBlock) {
-            const nt = predict()
-            if (nt.kind === TokenKind.Keyword && nt.word === KeywordEnum.Else) {
+            const lookahead = predict()
+            if (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Else) {
               nextToken()
               const elseBlock = matchBlock()
               if (elseBlock) {
