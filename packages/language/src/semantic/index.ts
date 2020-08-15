@@ -38,7 +38,7 @@ export type CheckSemanticResult = {
   table: Map<string, Inference>
 }
 
-export const checkSemantic = (program: Program): CheckSemanticResult => {
+export const analysis = (program: Program): CheckSemanticResult => {
   let inferenceTable = new Map<string, Inference>()
   let semanticErrors: SemanticError[] = []
 
