@@ -8,12 +8,12 @@
     "build": "node scripts/build.js",
     "dts": "node scripts/dts.js",
     "rm": "node scripts/remove.js",
+    "prebuild": "npm run rm",
+    "postbuild": "npm run dts",
     "build:antlr": "node scripts/build.antlr.js",
     "antlr": "antlr4 -Dlanguage=JavaScript ./src/language/antlr/GraphLexer.g4&antlr4 -Dlanguage=JavaScript ./src/language/antlr/GraphParser.g4",
-    "fast:debug": "node inspect -r ts-node/register ./packages/language/src/example/sample.ts",
-    "preinstall": "node ./scripts/checkYarn.js",
-    "prebuild": "npm run rm",
-    "postbuild": "npm run dts"
+    "language:debug": "node inspect -r ts-node/register ./packages/language/src/example/sample.ts",
+    "preinstall": "node ./scripts/checkYarn.js"
   },
   "directories": {
     "doc": "docs"
