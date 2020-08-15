@@ -118,6 +118,9 @@ export const createParser = (input: string): Parser => {
    * program
    *  : moduleStatement* EOP
    *  ;
+   * 
+   * FIRST(program) = { EOP, FIRST(moduleStatement) }
+   * FOLLOW(program) = { e }
    */
   const matchProgram = (): Program | null => {
     let moduleStatemens: ModuleStatement[] = []
@@ -155,6 +158,9 @@ export const createParser = (input: string): Parser => {
    *  | exportStatement
    *  | startStatement
    *  ;
+   * 
+   * FIRST(moduleStatement) = { Import, Export, Start, Identifier }
+   * FOLLOW(moduleStatement) = { FIRST(moduleStatement), EOF }
    */
   const matchModuleStatement = (): ModuleStatement | null => {
     const token = predict()
@@ -183,6 +189,9 @@ export const createParser = (input: string): Parser => {
    * inferenceDefinition
    *  : identifier '=' block
    *  ;
+   * 
+   * FIRST(inferenceDefinition) = { identifier }
+   * FOLLOW(inferenceDefinition) = { FOLLOW(moduleStatement), FOLLOW(module) }
    */
   const matchInferenceDefinition = (): InferenceDefinition | null => {
     if (requireIdentifier()) {
@@ -215,6 +224,9 @@ export const createParser = (input: string): Parser => {
    * block
    *  : '{' statement*'}'
    *  ;
+   * 
+   * FIRST(block) = { OpenBrace }
+   * FOLLOW(block) = { FOLLOW(inferenceDefinition), Else, FOLLOW(ifStatement), FOLLOW(caseClause), FOLLOW(defaultClause) }
    */
   const matchBlock = (): Block | null => {
     if (requireOperator(OperatorEnum.OpenBrace)) {
@@ -251,6 +263,9 @@ export const createParser = (input: string): Parser => {
    * importStatement
    *  : Import moduleItems From path
    *  ;
+   * 
+   * FIRST(importStatement) = { Import }
+   * FOLLOW(importStatement) = { FOLLOW(moduleStatement) }
    */
   const matchImportStatement = (): ImportStatement | null => {
     if (requireKeyword(KeywordEnum.Import)) {
@@ -289,6 +304,9 @@ export const createParser = (input: string): Parser => {
    * moduleItems
    *  : '{' (identifier ',')* (identifier ','?)? '}'
    *  ;
+   * 
+   * FIRST(moduleItems) = { OpenBrace }
+   * FOLLOW(moduleItems) = { From }
    */
   const matchModuleItems = (): ModuleItems | null => {
     let identifiers: Identifier[] = []
@@ -345,6 +363,9 @@ export const createParser = (input: string): Parser => {
    * exportStatement
    *  : Export module
    *  ;
+   * 
+   * FIRST(exportStatement) = { Export }
+   * FOLLOW(exportStatement) = { FOLLOW(moduleStatement) }
    */
   const matchExportStatement = (): ExportStatement | null => {
     if (requireKeyword(KeywordEnum.Export)) {
@@ -371,6 +392,9 @@ export const createParser = (input: string): Parser => {
    * startStatement
    *  : Start module
    *  ;
+   * 
+   * FIRST(startStatement) = { Start }
+   * FOLLOW(startStatement) = { FOLLOW(moduleStatement) }
    */
   const matchStartStatement = (): StartStatement | null => {
     if (requireKeyword(KeywordEnum.Start)) {
@@ -398,6 +422,9 @@ export const createParser = (input: string): Parser => {
    * : identifier
    * | inferenceDefinition
    * ;
+   * 
+   * FIRST(module) = { Identifier }
+   * FOLLOW(module) = { FOLLOW(startStatement), FOLLOW(exportStatement) }
    */
   const matchModule = (): Module | null => {
     const nt = predict()
@@ -439,6 +466,9 @@ export const createParser = (input: string): Parser => {
    *  | switchStatement
    *  | gotoStatement
    *  ;
+   * 
+   * FIRST(statement) = { If, Switch, Goto, Action }
+   * FOLLOW(statement) = { FIRST(statement), CloseBrace }
    */
   const matchStatement = (): Statement | null => {
     const token = predict()
@@ -467,6 +497,9 @@ export const createParser = (input: string): Parser => {
    * stepStatement
    *  : Action
    *  ;
+   * 
+   * FIRST(stepStatement) = { Action }
+   * FOLLOW(stepStatement) = { FOLLOW(statement) }
    */
   const matchStepStatement = (): StepStatement => {
     nextToken()
@@ -481,6 +514,9 @@ export const createParser = (input: string): Parser => {
    * ifStatement
    *  : If expression '->' block (Else block)?
    *  ;
+   * 
+   * FRIST(ifStatement) = { If }
+   * FOLLOW(ifStatement) = { FOLLOW(statement) }
    */
   const matchIfStatement = (): IfStatement | null => {
     if (requireKeyword(KeywordEnum.If)) {
@@ -547,6 +583,9 @@ export const createParser = (input: string): Parser => {
    * switchStatement
    *  : Switch expression switchBlock
    *  ;
+   * 
+   * FRIST(switchStatement) = { Switch }
+   * FOLLOW(switchStatement) = { FOLLOW(statement) }
    */
   const matchSwitchStatement = (): SwitchStatement | null => {
     if (requireKeyword(KeywordEnum.Switch)) {
@@ -580,6 +619,9 @@ export const createParser = (input: string): Parser => {
    * switchBlock
    *  : '{' caseClause* (defaultClause caseClause*)? '}'
    *  ;
+   * 
+   * FIRST(switchBlock) = { OpenBrace }
+   * FOLLOW(switchBlock) = { FOLLOW(switchStatement) }
    */
   const matchSwitchBlock = (): SwitchBlock | null => {
     if (requireOperator(OperatorEnum.OpenBrace)) {
@@ -622,6 +664,9 @@ export const createParser = (input: string): Parser => {
    * caseClause
    *  : Case expression '->' block?
    *  ;
+   * 
+   * FIRST(caseClause) = { Case }
+   * FOLLOW(caseClause) = { FIRST(caseClause), FIRST(defaultClause), CloseBrace }
    */
   const matchCaseClause = (): CaseClause | null => {
     const start = token.range.start
@@ -655,6 +700,9 @@ export const createParser = (input: string): Parser => {
    * defaultClause
    *  : Default '->' block?
    *  ;
+   * 
+   * FIRST(defaultClause) = { Default }
+   * FOLLOW(defaultClause) = { FIRST(caseClause), FIRST(defaultClause), CloseBrace }
    */
   const matchDefaultClause = (): DefaultClause | null => {
     const start = token.range.start
@@ -681,6 +729,9 @@ export const createParser = (input: string): Parser => {
    * gotoStatement
    *  : Goto identifier
    *  ;
+   * 
+   * FRIST(gotoStatement) = { Goto }
+   * FOLLOW(gotoStatement) = { FOLLOW(statement) }
    */
   const matchGotoStatement = (): GotoStatement | null => {
     if (requireKeyword(KeywordEnum.Goto)) {
