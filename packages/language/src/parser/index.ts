@@ -1,3 +1,7 @@
+/**
+ * 递归下降分析法(recursive-descent parsing)
+ */
+
 import { createLexer, Token, Identifier, Action, Path } from '../lexer'
 import { LexicalError } from '../lexer/LexicalError'
 import { TokenKind, KeywordEnum, OperatorEnum } from '../lexer/constants'
