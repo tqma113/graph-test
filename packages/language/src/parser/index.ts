@@ -777,7 +777,7 @@ export const createParser = (input: string): Parser => {
       `Expect { ${expect} }, accept '${token.word}'`,
       token
     ))
-    console.log(errors[errors.length - 1])
+    // console.trace(errors[errors.length - 1])
   }
 
   const recovery = () => {

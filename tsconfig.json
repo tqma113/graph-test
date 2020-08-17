@@ -5,7 +5,7 @@
     "declaration": true,
     "sourceMap": false,
     "target": "esnext",
-    "module": "esnext",
+    "module": "commonjs",
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",

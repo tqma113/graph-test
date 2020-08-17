@@ -1,17 +1,17 @@
 export type Tree = {
   kind: NodeKind.Tree
   blocks: Block[]
-  start: string
+  starts: string[]
 }
 
 export const createTree = (
   blocks: Block[],
-  start: string
+  starts: string[]
 ): Tree => {
   return {
     kind: NodeKind.Tree,
     blocks,
-    start
+    starts
   }
 }
 
@@ -36,17 +36,14 @@ export type Node = ActionNode | GotoNode | SwitchTree | IfTree
 
 export type ActionNode = {
   kind: NodeKind.ActionNode
-  floorId: number,
   expression: string
 }
 
 export const createActionNode = (
-  floorId: number,
   expression: string
 ): ActionNode => {
   return {
     kind: NodeKind.ActionNode,
-    floorId,
     expression
   }
 }
@@ -69,16 +66,19 @@ export type SwitchTree = {
   kind: NodeKind.SwitchTree
   condition: string
   children: CaseNode[]
+  defaultChild: DefaultNode | null
 }
 
 export const createSwitchTree = (
   condition: string,
-  children: CaseNode[]
+  children: CaseNode[],
+  defaultChild: DefaultNode | null
 ): SwitchTree => {
   return {
     kind: NodeKind.SwitchTree,
     condition,
-    children
+    children,
+    defaultChild
   }
 }
 
@@ -95,6 +95,20 @@ export const createCaseNode = (
   return {
     kind: NodeKind.CaseNode,
     expectation,
+    children
+  }
+}
+
+export type DefaultNode = {
+  kind: NodeKind.DefaultNode
+  children: Node[]
+}
+
+export const createDefaultNode = (
+  children: Node[]
+): DefaultNode => {
+  return {
+    kind: NodeKind.DefaultNode,
     children
   }
 }
@@ -126,5 +140,6 @@ export enum NodeKind {
   GotoNode = 'GotoNode',
   SwitchTree = 'SwitchTree',
   CaseNode = 'CaseNode',
+  DefaultNode = 'DefaultNode',
   IfTree = 'IfTree'
 }
