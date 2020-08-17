@@ -59,7 +59,8 @@ export type Token = Keyword | Operator | Identifier | Action | Path | Comment | 
 export type Lexer = {
   tokens: Token[]
   errors: LexicalError[]
-  nextToken: () => Token | LexicalError
+  getPosition: () => Position
+  next: () => Token
   run: () => void
 }
 
@@ -82,6 +83,25 @@ export const createLexer = (input: string): Lexer => {
         tokens.push(result)
       }
     }
+    return tokens[tokens.length - 1]
+  }
+
+  const next = (): Token => {
+    if (isEoP() && tokens.length > 0) {
+      return tokens[tokens.length - 1]
+    }
+
+    let result = nextToken()
+    while (true) {
+      if (result.kind === 'error') {
+        errors.push(result)
+      } else {
+        tokens.push(result)
+        break
+      }
+      result = nextToken()
+    }
+    return result
   }
 
   const nextToken = (): Token | LexicalError => {
@@ -114,7 +134,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const consumeWhitespace = (): Token | null => {
+  const consumeWhitespace = (): EOP | null => {
     while (true) {
       const char = getCurrentChar()
       if (isEoP()) {
@@ -138,7 +158,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const matchComment = (): Token | LexicalError => {
+  const matchComment = (): Comment | LexicalError => {
     while (!isEoP() && !isNewLineChar(nextChar()));
 
     const word = getCurrentWord()
@@ -153,7 +173,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const matchIdentifier = (): Token | LexicalError => {
+  const matchIdentifier = (): Identifier | LexicalError => {
     let char: string
     while (true) {
       char = nextChar()
@@ -180,7 +200,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const matchAction = (): Token | LexicalError => {
+  const matchAction = (): Action | LexicalError => {
     let char: string
     while (true) {
       char = nextChar()
@@ -206,7 +226,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const matchPath = (): Token | LexicalError => {
+  const matchPath = (): Path | LexicalError => {
     let char: string
     while (true) {
       char = nextChar()
@@ -232,7 +252,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
   
-  const matchKeyword = (): Token | LexicalError => {
+  const matchKeyword = (): Keyword | LexicalError => {
     let char: string
     while (true) {
       char = nextChar()
@@ -257,7 +277,7 @@ export const createLexer = (input: string): Lexer => {
     }
   }
 
-  const matchOperator = (): Token | LexicalError => {
+  const matchOperator = (): Operator | LexicalError => {
     const char = getCurrentChar()
     switch (char) {
       case OperatorEnum.OpenBrace: {
@@ -391,8 +411,9 @@ export const createLexer = (input: string): Lexer => {
     get errors() {
       return errors
     },
-
-    nextToken,
+    
+    getPosition,
+    next,
     run
   }
 }

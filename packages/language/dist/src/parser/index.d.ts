@@ -1,3 +1,8 @@
+/**
+ * 递归下降分析法(recursive-descent parsing)
+ *
+ * 预测分析法(prdictive parsing)
+ */
 import { Token } from '../lexer';
 import { LexicalError } from '../lexer/LexicalError';
 import { SyntaxError } from './SyntaxError';

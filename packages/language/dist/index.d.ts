@@ -5,6 +5,8 @@ export declare type Action = {
     range: Range_2;
 };
 
+export declare const analysis: (program: Program) => CheckSemanticResult;
+
 export declare type Block = {
     kind: FragmentKind.Block;
     list: Statement[];
@@ -19,8 +21,6 @@ export declare type CaseClause = {
     block: Block;
     range: Range_2;
 };
-
-export declare const checkSemantic: (program: Program) => CheckSemanticResult;
 
 export declare type CheckSemanticResult = {
     semanticErrors: SemanticError[];
@@ -167,7 +167,8 @@ export declare enum KeywordEnum {
 export declare type Lexer = {
     tokens: Token[];
     errors: LexicalError[];
-    nextToken: () => Token | LexicalError;
+    getPosition: () => Position_2;
+    next: () => Token;
     run: () => void;
 };
 

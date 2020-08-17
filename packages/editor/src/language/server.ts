@@ -3,7 +3,7 @@
  * https://microsoft.github.io/language-server-protocol/
  */
 
-import { createParser, checkSemantic } from 'graph-language'
+import { createParser, analysis } from 'graph-language'
 import type { Inference, LexicalError, SyntaxError, SemanticError } from 'graph-language'
 
 const createServer = (input: string = '') => {
@@ -22,8 +22,9 @@ const createServer = (input: string = '') => {
     const parser = createParser(input)
     parser.parse()
     lexicalErrors = parser.lexcialErrors
+    syntaxErrors = parser.syntaxErrors
     if (parser.program) {
-      const { semanticErrors: _semanticErrors, table } = checkSemantic(parser.program)
+      const { semanticErrors: _semanticErrors, table } = analysis(parser.program)
       semanticErrors = _semanticErrors
       definations = table
     } else {
@@ -51,7 +52,7 @@ const createServer = (input: string = '') => {
     },
     get semanticErrors() {
       return semanticErrors
-    }
+    },
   }
 }
 

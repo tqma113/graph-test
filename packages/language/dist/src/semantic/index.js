@@ -1,7 +1,7 @@
 import { SemanticError } from './SemanticError';
 import { FragmentKind } from '../parser/ast';
 export * from './SemanticError';
-export var checkSemantic = function (program) {
+export var analysis = function (program) {
     var inferenceTable = new Map();
     var semanticErrors = [];
     var record = function () {

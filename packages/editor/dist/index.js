@@ -1,5 +1,6 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { languages, Range, editor, KeyMod, KeyCode } from 'monaco-editor/esm/vs/editor/editor.api';
+import { editor, MarkerSeverity, languages, Range, KeyMod, KeyCode } from 'monaco-editor/esm/vs/editor/editor.api';
+import { createParser, analysis } from 'graph-language';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -34,6 +35,129 @@ function __spreadArrays() {
             r[k] = a[j];
     return r;
 }
+
+/**
+ * language server
+ * https://microsoft.github.io/language-server-protocol/
+ */
+var createServer = function (input) {
+    if (input === void 0) { input = ''; }
+    var definations = new Map();
+    var lexicalErrors = [];
+    var syntaxErrors = [];
+    var semanticErrors = [];
+    var didChange = function (_input) {
+        input = _input;
+        analyze();
+    };
+    var analyze = function () {
+        var parser = createParser(input);
+        parser.parse();
+        lexicalErrors = parser.lexcialErrors;
+        syntaxErrors = parser.syntaxErrors;
+        if (parser.program) {
+            var _a = analysis(parser.program), _semanticErrors = _a.semanticErrors, table = _a.table;
+            semanticErrors = _semanticErrors;
+            definations = table;
+        }
+        else {
+            semanticErrors = [];
+            definations = new Map();
+        }
+    };
+    analyze();
+    return {
+        didChange: didChange,
+        get input() {
+            return input;
+        },
+        get definations() {
+            return definations;
+        },
+        get lexicalErrors() {
+            return lexicalErrors;
+        },
+        get syntaxErrors() {
+            return syntaxErrors;
+        },
+        get semanticErrors() {
+            return semanticErrors;
+        },
+    };
+};
+var languageServer = createServer();
+
+var registerDiagnosticsAdapter = function () {
+    var doValidate = function (model) {
+        var markers = [];
+        languageServer.lexicalErrors.forEach(function (error) {
+            markers.push({
+                severity: MarkerSeverity.Error,
+                message: error.message,
+                startLineNumber: error.position.line,
+                startColumn: error.position.column,
+                endLineNumber: error.position.line,
+                endColumn: error.position.column
+            });
+        });
+        languageServer.syntaxErrors.forEach(function (error) {
+            markers.push({
+                severity: MarkerSeverity.Error,
+                message: error.message,
+                startLineNumber: error.token.range.start.line,
+                startColumn: error.token.range.start.column,
+                endLineNumber: error.token.range.end.line,
+                endColumn: error.token.range.end.column
+            });
+        });
+        languageServer.semanticErrors.forEach(function (error) {
+            markers.push({
+                severity: MarkerSeverity.Error,
+                message: error.message,
+                startLineNumber: error.fragment.range.start.line,
+                startColumn: error.fragment.range.start.column,
+                endLineNumber: error.fragment.range.end.line,
+                endColumn: error.fragment.range.end.column
+            });
+        });
+        editor.setModelMarkers(model, MODE_ID, markers);
+    };
+    var disposables = [];
+    var listener = Object.create(null);
+    var onModelAdd = function (model) {
+        var handle;
+        var changeSubscription = model.onDidChangeContent(function () {
+            clearTimeout(handle);
+            handle = setTimeout(function () { return doValidate(model); }, 500);
+        });
+        listener[model.uri.toString()] = {
+            dispose: function () {
+                changeSubscription.dispose();
+                clearTimeout(handle);
+            }
+        };
+        doValidate(model);
+    };
+    var onModelRemoved = function (model) {
+        editor.setModelMarkers(model, MODE_ID, []);
+        var key = model.uri.toString();
+        if (listener[key]) {
+            listener[key].dispose();
+            delete listener[key];
+        }
+    };
+    disposables.push(editor.onDidCreateModel(onModelAdd));
+    disposables.push(editor.onWillDisposeModel(onModelRemoved));
+    disposables.push({
+        dispose: function () {
+            for (var _i = 0, _a = editor.getModels(); _i < _a.length; _i++) {
+                var model = _a[_i];
+                onModelRemoved(model);
+            }
+        }
+    });
+    editor.getModels().forEach(onModelAdd);
+};
 
 var getDocumentHighlightProvider = function () {
     return {
@@ -184,6 +308,15 @@ var getKeyowrdSuggestions = function (range) {
 };
 var getIdentifierSuggestions = function (range) {
     var suggestions = [];
+    languageServer.definations.forEach(function (defination) {
+        suggestions.push({
+            label: defination.identifier.word,
+            kind: languages.CompletionItemKind.Function,
+            insertText: "<" + defination.identifier.word + ">",
+            detail: "Inference " + defination.identifier.word,
+            range: range
+        });
+    });
     return suggestions;
 };
 var getCompletionItemProvider = function () {
@@ -196,7 +329,7 @@ var getCompletionItemProvider = function () {
                 startColumn: word.startColumn,
                 endColumn: word.endColumn
             };
-            var suggestions = __spreadArrays(getKeyowrdSuggestions(range), getIdentifierSuggestions());
+            var suggestions = __spreadArrays(getKeyowrdSuggestions(range), getIdentifierSuggestions(range));
             return {
                 suggestions: suggestions
             };
@@ -295,16 +428,23 @@ var WordType;
 var getDefinitionProvider = function () {
     return {
         provideDefinition: function (model, position, token) {
-            // TODO
-            var resource = model.uri;
-            var offset = model.getOffsetAt(position);
+            var uri = model.uri;
             var word = model.getWordAtPosition(position);
-            if (word && isReference(word.word)) ;
-            console.log({
-                resource: resource,
-                offset: offset,
-                word: word
-            });
+            if (word && isReference(word.word)) {
+                var name_1 = word.word.slice(1, word.word.length - 1);
+                var defination = languageServer.definations.get(name_1);
+                if (defination) {
+                    return {
+                        uri: uri,
+                        range: {
+                            startLineNumber: defination.definition.range.start.line,
+                            startColumn: defination.definition.range.start.column,
+                            endLineNumber: defination.definition.range.end.line,
+                            endColumn: defination.definition.range.end.column
+                        }
+                    };
+                }
+            }
             return null;
         }
     };
@@ -313,7 +453,28 @@ var getDefinitionProvider = function () {
 var getReferenceProvider = function () {
     return {
         provideReferences: function (model, position, context, token) {
-            // TODO
+            var uri = model.uri;
+            var word = model.getWordAtPosition(position);
+            console.log({
+                word: word,
+                uri: uri,
+                isReference: isReference((word === null || word === void 0 ? void 0 : word.word) || '')
+            });
+            if (word && isReference(word.word)) {
+                var name_1 = word.word.slice(1, word.word.length - 1);
+                var defination = languageServer.definations.get(name_1);
+                if (defination) {
+                    return [{
+                            uri: uri,
+                            range: {
+                                startLineNumber: defination.definition.range.start.line,
+                                startColumn: defination.definition.range.start.column,
+                                endLineNumber: defination.definition.range.end.line,
+                                endColumn: defination.definition.range.end.column
+                            }
+                        }];
+                }
+            }
             return null;
         }
     };
@@ -422,9 +583,9 @@ var getTokenProvider = function () {
                 [/\bexport\b/, 'keyword'],
                 [/{/, 'bracket.open'],
                 [/}/, 'bracket.open'],
-                [/\[([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\]/, 'action'],
-                [/<([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)>/, 'identifier'],
-                [/\"([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\"/, 'path'],
+                [/\[([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]*)\]/, 'action'],
+                [/<([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]*)>/, 'identifier'],
+                [/\"([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]*)\"/, 'path'],
                 [/#.*/, 'comment'],
             ]
         }
@@ -442,6 +603,7 @@ var registerLanguage = (function () {
     languages.registerDocumentHighlightProvider(MODE_ID, getDocumentHighlightProvider());
     languages.registerReferenceProvider(MODE_ID, getReferenceProvider());
     languages.registerDefinitionProvider(MODE_ID, getDefinitionProvider());
+    registerDiagnosticsAdapter();
 });
 
 var GRAPH_THEME = 'graph-dark';
@@ -531,6 +693,9 @@ function MonacoEditor(_a) {
             destoryMonaco();
         };
     }, [options]);
+    useLayoutEffect(function () {
+        languageServer.didChange(value);
+    }, [value]);
     var initMonaco = function () {
         registerLanguage();
         initTheme();

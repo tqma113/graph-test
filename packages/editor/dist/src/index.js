@@ -11,6 +11,7 @@ var __assign = (this && this.__assign) || function () {
 };
 import React, { useLayoutEffect, useRef, useState } from "react";
 import registerLanguage from './language';
+import server from './language/server';
 import createEditor from './createEditor';
 import { initTheme } from './theme';
 import { FontSizeSelect } from './component';
@@ -34,6 +35,9 @@ function MonacoEditor(_a) {
             destoryMonaco();
         };
     }, [options]);
+    useLayoutEffect(function () {
+        server.didChange(value);
+    }, [value]);
     var initMonaco = function () {
         registerLanguage();
         initTheme();

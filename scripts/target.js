@@ -9,4 +9,4 @@ module.exports = fs.readdirSync('packages').filter(f => {
     return false
   }
   return true
-})
+}).reverse()

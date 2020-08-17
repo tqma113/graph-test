@@ -6,6 +6,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import server from './server';
 var getKeyowrdSuggestions = function (range) {
     return [
         {
@@ -146,6 +147,15 @@ var getKeyowrdSuggestions = function (range) {
 };
 var getIdentifierSuggestions = function (range) {
     var suggestions = [];
+    server.definations.forEach(function (defination) {
+        suggestions.push({
+            label: defination.identifier.word,
+            kind: monaco.languages.CompletionItemKind.Function,
+            insertText: "<" + defination.identifier.word + ">",
+            detail: "Inference " + defination.identifier.word,
+            range: range
+        });
+    });
     return suggestions;
 };
 var getCompletionItemProvider = function () {

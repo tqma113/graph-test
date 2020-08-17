@@ -1,6 +1,6 @@
 import { TokenKind, OperatorEnum, KeywordEnum } from './constants';
 import { LexicalError } from './LexicalError';
-import type { Range } from '../index';
+import type { Range, Position } from '../index';
 export * from './constants';
 export * from './LexicalError';
 export declare type Keyword = {
@@ -42,7 +42,8 @@ export declare type Token = Keyword | Operator | Identifier | Action | Path | Co
 export declare type Lexer = {
     tokens: Token[];
     errors: LexicalError[];
-    nextToken: () => Token | LexicalError;
+    getPosition: () => Position;
+    next: () => Token;
     run: () => void;
 };
 export declare const createLexer: (input: string) => Lexer;

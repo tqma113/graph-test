@@ -20,6 +20,25 @@ export var createLexer = function (input) {
                 tokens.push(result);
             }
         }
+        return tokens[tokens.length - 1];
+    };
+    var next = function () {
+        if (isEoP() && tokens.length > 0) {
+            return tokens[tokens.length - 1];
+        }
+        var result = nextToken();
+        while (true) {
+            if (result.kind === 'error') {
+                errors.push(result);
+            }
+            else {
+                tokens.push(result);
+                break;
+            }
+            result = nextToken();
+        }
+        console.log(result);
+        return result;
     };
     var nextToken = function () {
         var result = consumeWhitespace();
@@ -282,7 +301,8 @@ export var createLexer = function (input) {
         get errors() {
             return errors;
         },
-        nextToken: nextToken,
+        getPosition: getPosition,
+        next: next,
         run: run
     };
 };

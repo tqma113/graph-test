@@ -2,8 +2,7 @@
  * language server
  * https://microsoft.github.io/language-server-protocol/
  */
-// @ts-nocheck
-import { createParser, checkSemantic } from 'graph-language';
+import { createParser, analysis } from 'graph-language';
 var createServer = function (input) {
     if (input === void 0) { input = ''; }
     var definations = new Map();
@@ -18,9 +17,10 @@ var createServer = function (input) {
         var parser = createParser(input);
         parser.parse();
         lexicalErrors = parser.lexcialErrors;
+        syntaxErrors = parser.syntaxErrors;
         if (parser.program) {
-            var _a = checkSemantic(parser.program), errors = _a.errors, table = _a.table;
-            semanticErrors = errors;
+            var _a = analysis(parser.program), _semanticErrors = _a.semanticErrors, table = _a.table;
+            semanticErrors = _semanticErrors;
             definations = table;
         }
         else {
@@ -45,7 +45,7 @@ var createServer = function (input) {
         },
         get semanticErrors() {
             return semanticErrors;
-        }
+        },
     };
 };
 var languageServer = createServer();

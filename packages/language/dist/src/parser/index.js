@@ -1,3 +1,8 @@
+/**
+ * 递归下降分析法(recursive-descent parsing)
+ *
+ * 预测分析法(prdictive parsing)
+ */
 import { createLexer } from '../lexer';
 import { TokenKind, KeywordEnum, OperatorEnum } from '../lexer/constants';
 import { SyntaxError } from './SyntaxError';
@@ -10,7 +15,6 @@ export var createParser = function (input) {
     var cache = [];
     var program = null;
     var errors = [];
-    var blockStack = ['global'];
     var parse = function () {
         if (program) {
             return;
@@ -19,14 +23,8 @@ export var createParser = function (input) {
     };
     var getNextToken = function () {
         while (true) {
-            var tok = lexer.nextToken();
-            if (tok.kind !== 'error' && tok.kind !== TokenKind.Comment) {
-                if (tok.word === '{') {
-                    blockStack.push('local');
-                }
-                if (tok.word === '}') {
-                    blockStack.pop();
-                }
+            var tok = lexer.next();
+            if (tok.kind !== TokenKind.Comment) {
                 return tok;
             }
         }
@@ -58,12 +56,15 @@ export var createParser = function (input) {
      * program
      *  : moduleStatement* EOP
      *  ;
+     *
+     * FIRST(program) = { EOP, FIRST(moduleStatement) }
+     * FOLLOW(program) = { e }
      */
     var matchProgram = function () {
         var moduleStatemens = [];
         while (true) {
-            var token_2 = predict();
-            if (token_2.kind !== TokenKind.EOP) {
+            var lookahead = predict();
+            if (lookahead.kind !== TokenKind.EOP) {
                 var moduleStatement = matchModuleStatement();
                 if (moduleStatement === null) {
                     recovery();
@@ -81,7 +82,7 @@ export var createParser = function (input) {
                 line: 1,
                 column: 1
             },
-            end: token.range.end
+            end: lexer.getPosition()
         });
     };
     /**
@@ -91,11 +92,14 @@ export var createParser = function (input) {
      *  | exportStatement
      *  | startStatement
      *  ;
+     *
+     * FIRST(moduleStatement) = { Import, Export, Start, Identifier }
+     * FOLLOW(moduleStatement) = { FIRST(moduleStatement), EOF }
      */
     var matchModuleStatement = function () {
-        var token = predict();
-        if (token.kind === TokenKind.Keyword) {
-            switch (token.word) {
+        var lookahead = predict();
+        if (lookahead.kind === TokenKind.Keyword) {
+            switch (lookahead.word) {
                 case KeywordEnum.Import: {
                     return matchImportStatement();
                 }
@@ -108,17 +112,20 @@ export var createParser = function (input) {
             }
         }
         else {
-            if (token.kind === TokenKind.Identifier) {
+            if (lookahead.kind === TokenKind.Identifier) {
                 return matchInferenceDefinition();
             }
         }
-        reportError("'" + KeywordEnum.Start + "', '" + KeywordEnum.Export + "', '" + KeywordEnum.Import + "', Identifier: <somethings>", token);
+        reportError("'" + KeywordEnum.Start + "', '" + KeywordEnum.Export + "', '" + KeywordEnum.Import + "', Identifier: <somethings>", lookahead);
         return null;
     };
     /**
      * inferenceDefinition
      *  : identifier '=' block
      *  ;
+     *
+     * FIRST(inferenceDefinition) = { identifier }
+     * FOLLOW(inferenceDefinition) = { FOLLOW(moduleStatement), FOLLOW(module) }
      */
     var matchInferenceDefinition = function () {
         if (requireIdentifier()) {
@@ -149,18 +156,21 @@ export var createParser = function (input) {
      * block
      *  : '{' statement*'}'
      *  ;
+     *
+     * FIRST(block) = { OpenBrace }
+     * FOLLOW(block) = { FOLLOW(inferenceDefinition), Else, FOLLOW(ifStatement), FOLLOW(caseClause), FOLLOW(defaultClause) }
      */
     var matchBlock = function () {
         if (requireOperator(OperatorEnum.OpenBrace)) {
             var start = token.range.start;
             var list = [];
             while (true) {
-                var token_3 = predict();
-                if (token_3.kind === TokenKind.Operator && token_3.word === OperatorEnum.CloseBrace) {
+                var lookahead = predict();
+                if (lookahead.kind === TokenKind.Operator && lookahead.word === OperatorEnum.CloseBrace) {
                     nextToken();
                     return createBlock(list, {
                         start: start,
-                        end: token_3.range.end
+                        end: lookahead.range.end
                     });
                 }
                 var statement = matchStatement();
@@ -181,6 +191,9 @@ export var createParser = function (input) {
      * importStatement
      *  : Import moduleItems From path
      *  ;
+     *
+     * FIRST(importStatement) = { Import }
+     * FOLLOW(importStatement) = { FOLLOW(moduleStatement) }
      */
     var matchImportStatement = function () {
         if (requireKeyword(KeywordEnum.Import)) {
@@ -218,6 +231,9 @@ export var createParser = function (input) {
      * moduleItems
      *  : '{' (identifier ',')* (identifier ','?)? '}'
      *  ;
+     *
+     * FIRST(moduleItems) = { OpenBrace }
+     * FOLLOW(moduleItems) = { From }
      */
     var matchModuleItems = function () {
         var identifiers = [];
@@ -270,6 +286,9 @@ export var createParser = function (input) {
      * exportStatement
      *  : Export module
      *  ;
+     *
+     * FIRST(exportStatement) = { Export }
+     * FOLLOW(exportStatement) = { FOLLOW(moduleStatement) }
      */
     var matchExportStatement = function () {
         if (requireKeyword(KeywordEnum.Export)) {
@@ -294,6 +313,9 @@ export var createParser = function (input) {
      * startStatement
      *  : Start module
      *  ;
+     *
+     * FIRST(startStatement) = { Start }
+     * FOLLOW(startStatement) = { FOLLOW(moduleStatement) }
      */
     var matchStartStatement = function () {
         if (requireKeyword(KeywordEnum.Start)) {
@@ -319,13 +341,16 @@ export var createParser = function (input) {
      * : identifier
      * | inferenceDefinition
      * ;
+     *
+     * FIRST(module) = { Identifier }
+     * FOLLOW(module) = { FOLLOW(startStatement), FOLLOW(exportStatement) }
      */
     var matchModule = function () {
-        var nt = predict();
-        if (nt.kind === TokenKind.Identifier) {
-            var identifier = nt;
-            var nt2 = predict(1);
-            if (nt2.kind === TokenKind.Operator && nt2.word === OperatorEnum.Assign) {
+        var lookahead = predict();
+        if (lookahead.kind === TokenKind.Identifier) {
+            var identifier = lookahead;
+            var lookahead2 = predict(1);
+            if (lookahead2.kind === TokenKind.Operator && lookahead2.word === OperatorEnum.Assign) {
                 var definition = matchInferenceDefinition();
                 if (definition) {
                     return createModule(identifier, definition, definition.range);
@@ -350,11 +375,14 @@ export var createParser = function (input) {
      *  | switchStatement
      *  | gotoStatement
      *  ;
+     *
+     * FIRST(statement) = { If, Switch, Goto, Action }
+     * FOLLOW(statement) = { FIRST(statement), CloseBrace }
      */
     var matchStatement = function () {
-        var token = predict();
-        if (token.kind === TokenKind.Keyword) {
-            switch (token.word) {
+        var lookahead = predict();
+        if (lookahead.kind === TokenKind.Keyword) {
+            switch (lookahead.word) {
                 case KeywordEnum.If: {
                     return matchIfStatement();
                 }
@@ -367,17 +395,20 @@ export var createParser = function (input) {
             }
         }
         else {
-            if (token.kind === TokenKind.Action) {
+            if (lookahead.kind === TokenKind.Action) {
                 return matchStepStatement();
             }
         }
-        reportError("'" + KeywordEnum.If + "', '" + KeywordEnum.Switch + "', '" + KeywordEnum.Goto + "', Action: [somethings]", token);
+        reportError("'" + KeywordEnum.If + "', '" + KeywordEnum.Switch + "', '" + KeywordEnum.Goto + "', Action: [somethings]", lookahead);
         return null;
     };
     /**
      * stepStatement
      *  : Action
      *  ;
+     *
+     * FIRST(stepStatement) = { Action }
+     * FOLLOW(stepStatement) = { FOLLOW(statement) }
      */
     var matchStepStatement = function () {
         nextToken();
@@ -388,6 +419,9 @@ export var createParser = function (input) {
      * ifStatement
      *  : If expression '->' block (Else block)?
      *  ;
+     *
+     * FRIST(ifStatement) = { If }
+     * FOLLOW(ifStatement) = { FOLLOW(statement) }
      */
     var matchIfStatement = function () {
         if (requireKeyword(KeywordEnum.If)) {
@@ -397,8 +431,8 @@ export var createParser = function (input) {
                 if (requireOperator(OperatorEnum.Result)) {
                     var ifBlock = matchBlock();
                     if (ifBlock) {
-                        var nt = predict();
-                        if (nt.kind === TokenKind.Keyword && nt.word === KeywordEnum.Else) {
+                        var lookahead = predict();
+                        if (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Else) {
                             nextToken();
                             var elseBlock = matchBlock();
                             if (elseBlock) {
@@ -444,6 +478,9 @@ export var createParser = function (input) {
      * switchStatement
      *  : Switch expression switchBlock
      *  ;
+     *
+     * FRIST(switchStatement) = { Switch }
+     * FOLLOW(switchStatement) = { FOLLOW(statement) }
      */
     var matchSwitchStatement = function () {
         if (requireKeyword(KeywordEnum.Switch)) {
@@ -475,6 +512,9 @@ export var createParser = function (input) {
      * switchBlock
      *  : '{' caseClause* (defaultClause caseClause*)? '}'
      *  ;
+     *
+     * FIRST(switchBlock) = { OpenBrace }
+     * FOLLOW(switchBlock) = { FOLLOW(switchStatement) }
      */
     var matchSwitchBlock = function () {
         if (requireOperator(OperatorEnum.OpenBrace)) {
@@ -516,6 +556,9 @@ export var createParser = function (input) {
      * caseClause
      *  : Case expression '->' block?
      *  ;
+     *
+     * FIRST(caseClause) = { Case }
+     * FOLLOW(caseClause) = { FIRST(caseClause), FIRST(defaultClause), CloseBrace }
      */
     var matchCaseClause = function () {
         var start = token.range.start;
@@ -547,6 +590,9 @@ export var createParser = function (input) {
      * defaultClause
      *  : Default '->' block?
      *  ;
+     *
+     * FIRST(defaultClause) = { Default }
+     * FOLLOW(defaultClause) = { FIRST(caseClause), FIRST(defaultClause), CloseBrace }
      */
     var matchDefaultClause = function () {
         var start = token.range.start;
@@ -571,6 +617,9 @@ export var createParser = function (input) {
      * gotoStatement
      *  : Goto identifier
      *  ;
+     *
+     * FRIST(gotoStatement) = { Goto }
+     * FOLLOW(gotoStatement) = { FOLLOW(statement) }
      */
     var matchGotoStatement = function () {
         if (requireKeyword(KeywordEnum.Goto)) {

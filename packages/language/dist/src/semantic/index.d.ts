@@ -10,4 +10,4 @@ export declare type CheckSemanticResult = {
     semanticErrors: SemanticError[];
     table: Map<string, Inference>;
 };
-export declare const checkSemantic: (program: Program) => CheckSemanticResult;
+export declare const analysis: (program: Program) => CheckSemanticResult;

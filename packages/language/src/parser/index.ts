@@ -66,7 +66,6 @@ export const createParser = (input: string): Parser => {
 
   let program: Program | null = null
   let errors: SyntaxError[] = []
-  let blockStack: BlockType[] = ['global']
 
   const parse = () => {
     if (program) {
@@ -78,15 +77,8 @@ export const createParser = (input: string): Parser => {
 
   const getNextToken = (): Token => {
     while (true) {
-      let tok = lexer.nextToken()
-      if (tok.kind !== 'error' && tok.kind !== TokenKind.Comment) {
-        if (tok.word === '{') {
-          blockStack.push('local')
-        }
-        if (tok.word === '}') {
-          blockStack.pop()
-        }
-
+      const tok = lexer.next()
+      if (tok.kind !== TokenKind.Comment) {
         return tok
       }
     }
@@ -146,7 +138,7 @@ export const createParser = (input: string): Parser => {
           line: 1,
           column: 1
         },
-        end: token.range.end
+        end: lexer.getPosition()
       }
     )
   }
