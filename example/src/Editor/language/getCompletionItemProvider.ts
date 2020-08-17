@@ -1,5 +1,4 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import server from './server'
 
 const getKeyowrdSuggestions = (range: monaco.IRange): monaco.languages.CompletionItem[] => {
   return [
@@ -140,22 +139,6 @@ const getKeyowrdSuggestions = (range: monaco.IRange): monaco.languages.Completio
   ]
 }
 
-const getIdentifierSuggestions = (range: monaco.IRange): monaco.languages.CompletionItem[] => {
-  let suggestions: monaco.languages.CompletionItem[] = []
-
-  server.definations.forEach(defination => {
-    suggestions.push({
-      label: defination.identifier.word,
-      kind: monaco.languages.CompletionItemKind.Function,
-      insertText: `<${defination.identifier.word}>`,
-      detail: `Inference ${defination.identifier.word}`,
-      range
-    })
-  })
-
-  return suggestions
-}
-
 const getCompletionItemProvider = (): monaco.languages.CompletionItemProvider => {
   return {
     provideCompletionItems(model, position, context, token) {
@@ -169,8 +152,7 @@ const getCompletionItemProvider = (): monaco.languages.CompletionItemProvider =>
 
       var suggestions =[
         // TODO:
-        ...getKeyowrdSuggestions(range),
-        ...getIdentifierSuggestions(range)
+        ...getKeyowrdSuggestions(range)
       ]
 
       return {
