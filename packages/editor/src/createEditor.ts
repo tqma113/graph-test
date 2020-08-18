@@ -1,6 +1,7 @@
 import * as monaco from "monaco-editor";
 import { MODE_ID } from './language'
 import { GRAPH_THEME } from './theme'
+import server from './language/server'
 
 export default (container: HTMLElement, value: string, options?: monaco.editor.IStandaloneEditorConstructionOptions) => {
   const model = monaco.editor.createModel(value, MODE_ID)
@@ -48,10 +49,8 @@ export default (container: HTMLElement, value: string, options?: monaco.editor.I
 
   model.onDidChangeContent((e) => {
     const lines = model.getLinesContent()
-    // @ts-ignore
     const content = lines.join('\n')
-
-    // TODO: Validation
+    server.didChange(content)
   })
 
 

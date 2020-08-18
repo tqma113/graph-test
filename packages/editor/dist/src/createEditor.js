@@ -12,6 +12,7 @@ var __assign = (this && this.__assign) || function () {
 import * as monaco from "monaco-editor";
 import { MODE_ID } from './language';
 import { GRAPH_THEME } from './theme';
+import server from './language/server';
 export default (function (container, value, options) {
     var model = monaco.editor.createModel(value, MODE_ID);
     var editor = monaco.editor.create(container, __assign(__assign({}, options), { value: value, language: MODE_ID, theme: GRAPH_THEME, model: model }));
@@ -40,9 +41,8 @@ export default (function (container, value, options) {
     });
     model.onDidChangeContent(function (e) {
         var lines = model.getLinesContent();
-        // @ts-ignore
         var content = lines.join('\n');
-        // TODO: Validation
+        server.didChange(content);
     });
     return editor;
 });

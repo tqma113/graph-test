@@ -656,9 +656,8 @@ var createEditor = (function (container, value, options) {
     });
     model.onDidChangeContent(function (e) {
         var lines = model.getLinesContent();
-        // @ts-ignore
         var content = lines.join('\n');
-        // TODO: Validation
+        languageServer.didChange(content);
     });
     return editor$1;
 });
@@ -693,9 +692,6 @@ function MonacoEditor(_a) {
             destoryMonaco();
         };
     }, [options]);
-    useLayoutEffect(function () {
-        languageServer.didChange(value);
-    }, [value]);
     var initMonaco = function () {
         registerLanguage();
         initTheme();
