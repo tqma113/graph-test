@@ -95,15 +95,14 @@ export const createLexer = (input: string): Lexer => {
 
   const next = (): Token => {
     if (isEoP() && tokens.length > 0) {
-      if (tokens[tokens.length - 1].kind === TokenKind.EOP) {
-        return tokens[tokens.length - 1]
-      } else {
-        return {
+      if (tokens[tokens.length - 1].kind !== TokenKind.EOP) {
+        tokens.push({
           kind: TokenKind.EOP,
           word: null,
           range: getRange()
-        }
+        })
       }
+      return tokens[tokens.length - 1]
     }
 
     let result = nextToken()

@@ -237,6 +237,11 @@ export const createParser = (input: string): Parser => {
           )
         }
 
+        if (lookahead.kind === TokenKind.EOP) {
+          reportError(OperatorEnum.CloseBrace, lookahead)
+          return null
+        }
+
         const statement = matchStatement()
         if (statement === null) {
           recoveryFromBlock()
