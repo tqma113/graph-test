@@ -663,7 +663,7 @@ export var createParser = function (input) {
     };
     var reportError = function (expect, token) {
         errors.push(new SyntaxError("Expect { " + expect + " }, accept '" + token.word + "'", token));
-        console.log(errors[errors.length - 1]);
+        // console.trace(errors[errors.length - 1])
     };
     var recovery = function () {
         while (true) {

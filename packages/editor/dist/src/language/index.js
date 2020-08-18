@@ -1,4 +1,4 @@
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import * as monaco from "monaco-editor";
 import registerDiagnosticsAdapter from './registerDiagnosticsAdapter';
 import getDocumentHighlightProvider from './getDocumentHighlightProvider';
 import getCompletionItemProvider from './getCompletionItemProvider';

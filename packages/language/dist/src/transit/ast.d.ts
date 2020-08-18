@@ -1,9 +1,9 @@
 export declare type Tree = {
     kind: NodeKind.Tree;
     blocks: Block[];
-    start: string;
+    starts: string[];
 };
-export declare const createTree: (blocks: Block[], start: string) => Tree;
+export declare const createTree: (blocks: Block[], starts: string[]) => Tree;
 export declare type Block = {
     kind: NodeKind.Block;
     name: string;
@@ -13,10 +13,9 @@ export declare const createBlock: (name: string, children: Node[]) => Block;
 export declare type Node = ActionNode | GotoNode | SwitchTree | IfTree;
 export declare type ActionNode = {
     kind: NodeKind.ActionNode;
-    floorId: number;
     expression: string;
 };
-export declare const createActionNode: (floorId: number, expression: string) => ActionNode;
+export declare const createActionNode: (expression: string) => ActionNode;
 export declare type GotoNode = {
     kind: NodeKind.GotoNode;
     name: string;
@@ -26,14 +25,20 @@ export declare type SwitchTree = {
     kind: NodeKind.SwitchTree;
     condition: string;
     children: CaseNode[];
+    defaultChild: DefaultNode | null;
 };
-export declare const createSwitchTree: (condition: string, children: CaseNode[]) => SwitchTree;
+export declare const createSwitchTree: (condition: string, children: CaseNode[], defaultChild: DefaultNode | null) => SwitchTree;
 export declare type CaseNode = {
     kind: NodeKind.CaseNode;
     expectation: string;
     children: Node[];
 };
 export declare const createCaseNode: (expectation: string, children: Node[]) => CaseNode;
+export declare type DefaultNode = {
+    kind: NodeKind.DefaultNode;
+    children: Node[];
+};
+export declare const createDefaultNode: (children: Node[]) => DefaultNode;
 export declare type IfTree = {
     kind: NodeKind.IfTree;
     condition: string;
@@ -48,5 +53,6 @@ export declare enum NodeKind {
     GotoNode = "GotoNode",
     SwitchTree = "SwitchTree",
     CaseNode = "CaseNode",
+    DefaultNode = "DefaultNode",
     IfTree = "IfTree"
 }

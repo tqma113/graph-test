@@ -1,4 +1,3 @@
-import type { Program } from '../parser/ast';
-import type { Tree } from './ast';
-declare const convert: (ast: Program) => Tree;
-export default convert;
+import { Program } from '../parser/ast';
+import { Tree } from './ast';
+export declare const convert: (program: Program) => Tree;

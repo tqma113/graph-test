@@ -24,7 +24,16 @@ export var createLexer = function (input) {
     };
     var next = function () {
         if (isEoP() && tokens.length > 0) {
-            return tokens[tokens.length - 1];
+            if (tokens[tokens.length - 1].kind === TokenKind.EOP) {
+                return tokens[tokens.length - 1];
+            }
+            else {
+                return {
+                    kind: TokenKind.EOP,
+                    word: null,
+                    range: getRange()
+                };
+            }
         }
         var result = nextToken();
         while (true) {
@@ -37,7 +46,6 @@ export var createLexer = function (input) {
             }
             result = nextToken();
         }
-        console.log(result);
         return result;
     };
     var nextToken = function () {

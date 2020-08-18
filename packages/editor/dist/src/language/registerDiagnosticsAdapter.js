@@ -1,4 +1,4 @@
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import * as monaco from "monaco-editor";
 import { MODE_ID } from './index';
 import server from './server';
 var registerDiagnosticsAdapter = function () {

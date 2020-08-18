@@ -126,7 +126,16 @@ var createLexer = function (input) {
     };
     var next = function () {
         if (isEoP() && tokens.length > 0) {
-            return tokens[tokens.length - 1];
+            if (tokens[tokens.length - 1].kind === TokenKind.EOP) {
+                return tokens[tokens.length - 1];
+            }
+            else {
+                return {
+                    kind: TokenKind.EOP,
+                    word: null,
+                    range: getRange()
+                };
+            }
         }
         var result = nextToken();
         while (true) {
@@ -139,7 +148,6 @@ var createLexer = function (input) {
             }
             result = nextToken();
         }
-        console.log(result);
         return result;
     };
     var nextToken = function () {
@@ -1214,7 +1222,7 @@ var createParser = function (input) {
     };
     var reportError = function (expect, token) {
         errors.push(new SyntaxError("Expect { " + expect + " }, accept '" + token.word + "'", token));
-        console.log(errors[errors.length - 1]);
+        // console.trace(errors[errors.length - 1])
     };
     var recovery = function () {
         while (true) {

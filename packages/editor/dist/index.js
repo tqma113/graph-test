@@ -1,5 +1,5 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { editor, MarkerSeverity, languages, Range, KeyMod, KeyCode } from 'monaco-editor/esm/vs/editor/editor.api';
+import { editor, MarkerSeverity, languages, Range, KeyMod, KeyCode } from 'monaco-editor';
 import { createParser, analysis } from 'graph-language';
 
 /*! *****************************************************************************

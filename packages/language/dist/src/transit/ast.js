@@ -1,8 +1,8 @@
-export var createTree = function (blocks, start) {
+export var createTree = function (blocks, starts) {
     return {
         kind: NodeKind.Tree,
         blocks: blocks,
-        start: start
+        starts: starts
     };
 };
 export var createBlock = function (name, children) {
@@ -12,10 +12,9 @@ export var createBlock = function (name, children) {
         children: children
     };
 };
-export var createActionNode = function (floorId, expression) {
+export var createActionNode = function (expression) {
     return {
         kind: NodeKind.ActionNode,
-        floorId: floorId,
         expression: expression
     };
 };
@@ -25,17 +24,24 @@ export var createGotoNode = function (name) {
         name: name
     };
 };
-export var createSwitchTree = function (condition, children) {
+export var createSwitchTree = function (condition, children, defaultChild) {
     return {
         kind: NodeKind.SwitchTree,
         condition: condition,
-        children: children
+        children: children,
+        defaultChild: defaultChild
     };
 };
 export var createCaseNode = function (expectation, children) {
     return {
         kind: NodeKind.CaseNode,
         expectation: expectation,
+        children: children
+    };
+};
+export var createDefaultNode = function (children) {
+    return {
+        kind: NodeKind.DefaultNode,
         children: children
     };
 };
@@ -55,5 +61,6 @@ export var NodeKind;
     NodeKind["GotoNode"] = "GotoNode";
     NodeKind["SwitchTree"] = "SwitchTree";
     NodeKind["CaseNode"] = "CaseNode";
+    NodeKind["DefaultNode"] = "DefaultNode";
     NodeKind["IfTree"] = "IfTree";
 })(NodeKind || (NodeKind = {}));
