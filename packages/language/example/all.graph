@@ -1,4 +1,4 @@
-import { <测试>, <测试> } from "state"
+import { <测试>, <测试> } from "测试"
 
 export <从首页进入旅游频道>
 

@@ -10,6 +10,7 @@
     "dts": "node scripts/dts.js",
     "rm": "node scripts/remove.js",
     "prebuild": "npm run rm",
+    "test": "jest",
     "build:antlr": "node scripts/build.antlr.js",
     "antlr": "antlr4 -Dlanguage=JavaScript ./src/language/antlr/GraphLexer.g4&antlr4 -Dlanguage=JavaScript ./src/language/antlr/GraphParser.g4",
     "language:debug": "node inspect -r ts-node/register ./packages/language/src/example/sample.ts",
@@ -44,14 +45,17 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.9.4",
+    "@types/jest": "^26.0.10",
     "@types/react": "^16.9.44",
     "chalk": "^4.1.0",
     "execa": "^4.0.3",
+    "jest": "^26.4.0",
     "react": "^16.13.1",
     "rollup": "^2.23.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript2": "^0.27.2",
+    "ts-jest": "^26.2.0",
     "ts-node": "^8.10.2"
   }
 }

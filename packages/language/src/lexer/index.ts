@@ -58,7 +58,7 @@ export type Token = Keyword | Operator | Identifier | Action | Path | Comment | 
 
 export type Lexer = {
   tokens: Token[]
-  errors: LexicalError[]
+  lexicalErrors: LexicalError[]
   getPosition: () => Position
   next: () => Token
   run: () => void
@@ -72,16 +72,23 @@ export const createLexer = (input: string): Lexer => {
 
 
   let tokens: Token[] = []
-  let errors: LexicalError[] = []
+  let lexicalErrors: LexicalError[] = []
 
   const run = () => {
     while (!isEoP()) {
       const result = nextToken()
       if (result.kind === 'error') {
-        errors.push(result)
+        lexicalErrors.push(result)
       } else {
         tokens.push(result)
       }
+    }
+    if (tokens.length === 0 || tokens[tokens.length - 1].kind !== TokenKind.EOP) {
+      tokens.push({
+        kind: TokenKind.EOP,
+        word: null,
+        range: getRange()
+      })
     }
     return tokens[tokens.length - 1]
   }
@@ -102,7 +109,7 @@ export const createLexer = (input: string): Lexer => {
     let result = nextToken()
     while (true) {
       if (result.kind === 'error') {
-        errors.push(result)
+        lexicalErrors.push(result)
       } else {
         tokens.push(result)
         break
@@ -416,8 +423,8 @@ export const createLexer = (input: string): Lexer => {
     get tokens() {
       return tokens
     },
-    get errors() {
-      return errors
+    get lexicalErrors() {
+      return lexicalErrors
     },
     
     getPosition,

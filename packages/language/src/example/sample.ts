@@ -8,6 +8,7 @@ const input = fs.readFileSync(path.resolve(__dirname, '../../example/sample.grap
 const parser = createParser(input)
 parser.parse()
 console.log(parser)
+console.log(JSON.stringify(parser.tokens))
 if (parser.program) {
   console.log(analysis(parser.program))
   const tree = convert(parser.program)

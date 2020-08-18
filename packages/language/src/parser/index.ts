@@ -122,7 +122,7 @@ export const createParser = (input: string): Parser => {
       if (lookahead.kind !== TokenKind.EOP) {
         const moduleStatement = matchModuleStatement()
         if (moduleStatement === null) {
-          recovery()
+          recoveryFromProgram()
         } else {
           moduleStatemens.push(moduleStatement)
         }
@@ -239,7 +239,7 @@ export const createParser = (input: string): Parser => {
 
         const statement = matchStatement()
         if (statement === null) {
-          recovery()
+          recoveryFromBlock()
         } else {
           list.push(statement)
         }
@@ -319,7 +319,7 @@ export const createParser = (input: string): Parser => {
                 }
               )
             } else {
-              recovery()
+              recoveryFromBlock()
               return createModuleItems(
                 identifiers,
                 {
@@ -439,6 +439,7 @@ export const createParser = (input: string): Parser => {
           )
         }
       } else {
+        nextToken()
         return createModule(
           identifier,
           null,
@@ -446,7 +447,7 @@ export const createParser = (input: string): Parser => {
         )
       }
     } else {
-      reportError('Identifier: <somethings>', token)
+      reportError('Identifier: <somethings>', lookahead)
       return null
     }
   }
@@ -777,14 +778,41 @@ export const createParser = (input: string): Parser => {
       `Expect { ${expect} }, accept '${token.word}'`,
       token
     ))
-    // console.trace(errors[errors.length - 1])
   }
 
-  const recovery = () => {
+  const recoveryFromBlock = () => {
     while (true) {
-      nextToken()
-      if ((token.kind === TokenKind.Operator && token.word === '}') || token.kind === TokenKind.EOP) {
+      const lookahead = predict()
+      if (
+        (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.If)
+        || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Switch)
+        || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Goto)
+        || (lookahead.kind === TokenKind.Action)
+        || lookahead.kind === TokenKind.EOP
+      ) {
         break
+      } else {
+        nextToken()
+        if (lookahead.kind === TokenKind.Operator && lookahead.word === OperatorEnum.CloseBrace) {
+          break
+        }
+      }
+    }
+  }
+
+  const recoveryFromProgram = () => {
+    while (true) {
+      const lookahead = predict()
+      if (
+        (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Start)
+        || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Import)
+        || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Export)
+        || (lookahead.kind === TokenKind.Identifier)
+        || lookahead.kind === TokenKind.EOP
+      ) {
+        break
+      } else {
+        nextToken()
       }
     }
   }
@@ -797,7 +825,7 @@ export const createParser = (input: string): Parser => {
       return lexer.tokens
     },
     get lexcialErrors() {
-      return lexer.errors
+      return lexer.lexicalErrors
     },
     get syntaxErrors() {
       return errors
