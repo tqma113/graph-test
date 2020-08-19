@@ -20,11 +20,11 @@ import {
 } from '../parser/ast'
 import {
   Tree,
-  Block as TreeBlock,
+  TreeBlock,
   Node,
   IfTree,
   NodeKind,
-  createBlock,
+  createTreeBlock,
   createActionNode,
   createIfTree,
   createSwitchTree,
@@ -65,7 +65,7 @@ export const convert = (program: Program): Tree => {
   const convertInferenceDefinition = (inferenceDefinition: InferenceDefinition) => {
     const name = getContent(inferenceDefinition.identifier.word)
     const children = convertBlock(inferenceDefinition.block)
-    blocks.push(createBlock(name, children))
+    blocks.push(createTreeBlock(name, children))
   }
 
   const convertImportStatement = (importStatement: ImportStatement) => {

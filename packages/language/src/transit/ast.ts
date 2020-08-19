@@ -1,11 +1,11 @@
 export type Tree = {
   kind: NodeKind.Tree
-  blocks: Block[]
+  blocks: TreeBlock[]
   starts: string[]
 }
 
 export const createTree = (
-  blocks: Block[],
+  blocks: TreeBlock[],
   starts: string[]
 ): Tree => {
   return {
@@ -15,16 +15,16 @@ export const createTree = (
   }
 }
 
-export type Block = {
+export type TreeBlock = {
   kind: NodeKind.Block
   name: string
   children: Node[]
 }
 
-export const createBlock = (
+export const createTreeBlock = (
   name: string,
   children: Node[]
-): Block => {
+): TreeBlock => {
   return {
     kind: NodeKind.Block,
     name,
