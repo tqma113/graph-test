@@ -792,8 +792,7 @@ export const createParser = (input: string): Parser => {
         (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.If)
         || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Switch)
         || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Goto)
-        || (lookahead.kind === TokenKind.Action)
-        || lookahead.kind === TokenKind.EOP
+        || (lookahead.kind === TokenKind.EOP)
       ) {
         break
       } else {
@@ -813,11 +812,14 @@ export const createParser = (input: string): Parser => {
         || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Import)
         || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Export)
         || (lookahead.kind === TokenKind.Identifier)
-        || lookahead.kind === TokenKind.EOP
+        || (lookahead.kind === TokenKind.EOP)
       ) {
         break
       } else {
         nextToken()
+        if (lookahead.kind === TokenKind.Operator && lookahead.word === OperatorEnum.CloseBrace) {
+          break
+        }
       }
     }
   }

@@ -12,7 +12,6 @@ describe('graph', () => {
       expect(result.semanticErrors.length).toBe(0)
     }
 
-    expect('test').not.toThrowError()
     expect(parser.lexcialErrors.length).toBe(0)
     expect(parser.syntaxErrors.length).toBe(0)
   })

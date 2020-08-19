@@ -623,9 +623,7 @@ describe("parser", () => {
 
       expect(parser.lexcialErrors.length).toBe(0);
       expect(parser.syntaxErrors.length).toBe(1);
-
-      const syntaxError = parser.syntaxErrors[0]
-      expect(syntaxError.message).toBe('Expect { = }, accept \'{\'')
+      expect(parser.syntaxErrors[0].message).toBe('Expect { = }, accept \'{\'')
     })
 
     it('InferenceDefinition case 2', () => {
@@ -637,9 +635,7 @@ describe("parser", () => {
 
       expect(parser.lexcialErrors.length).toBe(0);
       expect(parser.syntaxErrors.length).toBe(1);
-
-      const syntaxError = parser.syntaxErrors[0]
-      expect(syntaxError.message).toBe('Expect { { }, accept \'}\'')
+      expect(parser.syntaxErrors[0].message).toBe('Expect { { }, accept \'}\'')
     })
 
     it('InferenceDefinition case 3', () => {
@@ -651,9 +647,7 @@ describe("parser", () => {
 
       expect(parser.lexcialErrors.length).toBe(0);
       expect(parser.syntaxErrors.length).toBe(1);
-
-      const syntaxError = parser.syntaxErrors[0]
-      expect(syntaxError.message).toBe('Expect { } }, accept \'null\'')
+      expect(parser.syntaxErrors[0].message).toBe('Expect { } }, accept \'null\'')
     })
 
     it('ImportStatement case 1', () => {
@@ -663,9 +657,7 @@ describe("parser", () => {
 
       expect(parser.lexcialErrors.length).toBe(0);
       expect(parser.syntaxErrors.length).toBe(1);
-
-      const syntaxError = parser.syntaxErrors[0]
-      expect(syntaxError.message).toBe('Expect { Identifier: <somethings> }, accept \'}\'')
+      expect(parser.syntaxErrors[0].message).toBe('Expect { Identifier: <somethings> }, accept \'}\'')
     })
 
     it('ImportStatement case 2', () => {
@@ -675,9 +667,98 @@ describe("parser", () => {
 
       expect(parser.lexcialErrors.length).toBe(0);
       expect(parser.syntaxErrors.length).toBe(1);
+      expect(parser.syntaxErrors[0].message).toBe('Expect { from }, accept \'"测试"\'')
+    })
 
-      const syntaxError = parser.syntaxErrors[0]
-      expect(syntaxError.message).toBe('Expect { from }, accept \'"测试"\'')
+    it('ImportStatement case 3', () => {
+      const input = `import from "测试"`;
+      const parser = createParser(input);
+      parser.parse();
+
+      expect(parser.lexcialErrors.length).toBe(0);
+      expect(parser.syntaxErrors.length).toBe(1);
+      expect(parser.syntaxErrors[0].message).toBe('Expect { { }, accept \'from\'')
+    })
+
+    it('ExportStatement case 1', () => {
+      const input = `export <从首页进入旅游频道> =`;
+      const parser = createParser(input);
+      parser.parse();
+
+      expect(parser.lexcialErrors.length).toBe(0);
+      expect(parser.syntaxErrors.length).toBe(1);
+      expect(parser.syntaxErrors[0].message).toBe('Expect { { }, accept \'null\'')
+    })
+
+    it('ExportStatement case 2', () => {
+      const input = `export`;
+      const parser = createParser(input);
+      parser.parse();
+
+      expect(parser.lexcialErrors.length).toBe(0);
+      expect(parser.syntaxErrors.length).toBe(1);
+      expect(parser.syntaxErrors[0].message).toBe('Expect { Identifier: <somethings> }, accept \'null\'')
+    })
+
+    it('StartStatement case 1', () => {
+      const input = `start`;
+      const parser = createParser(input);
+      parser.parse();
+
+      expect(parser.lexcialErrors.length).toBe(0);
+      expect(parser.syntaxErrors.length).toBe(1);
+      expect(parser.syntaxErrors[0].message).toBe('Expect { Identifier: <somethings> }, accept \'null\'')
+    })
+
+    it('StartStatement case 2', () => {
+      const input = `start <从首页进入旅游频道> =`;
+      const parser = createParser(input);
+      parser.parse();
+
+      expect(parser.lexcialErrors.length).toBe(0);
+      expect(parser.syntaxErrors.length).toBe(1);
+      expect(parser.syntaxErrors[0].message).toBe('Expect { { }, accept \'null\'')
+    })
+
+    it('IfStatement case 1', () => {
+      const input = `start <选择上海站> = {
+        if [不是上海站] {
+          [点击顶部城市选择栏]
+          [选择上海出发地]
+        }
+      }`;
+      const parser = createParser(input);
+      parser.parse();
+
+      expect(parser.lexcialErrors.length).toBe(0);
+      expect(parser.syntaxErrors.length).toBe(1);
+      expect(parser.syntaxErrors[0].message).toBe('Expect { -> }, accept \'{\'')
+    })
+
+    it('IfStatement case 2', () => {
+      const input = `start <选择上海站> = {
+        if [不是上海站] ->
+      }`;
+      const parser = createParser(input);
+      parser.parse();
+
+      expect(parser.lexcialErrors.length).toBe(0);
+      expect(parser.syntaxErrors.length).toBe(2);
+      expect(parser.syntaxErrors[0].message).toBe('Expect { { }, accept \'}\'')
+      expect(parser.syntaxErrors[1].message).toBe('Expect { } }, accept \'null\'')
+    })
+
+    it('GotoStatement case 1', () => {
+      const input = `start <选择上海站> = {
+        goto
+      }`;
+      const parser = createParser(input);
+      parser.parse();
+
+      expect(parser.lexcialErrors.length).toBe(0);
+      expect(parser.syntaxErrors.length).toBe(2);
+      expect(parser.syntaxErrors[0].message).toBe('Expect { Identifier: <somethings> }, accept \'}\'')
+      expect(parser.syntaxErrors[1].message).toBe('Expect { } }, accept \'null\'')
     })
   })
 });
