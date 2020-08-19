@@ -11,5 +11,6 @@ A graph render.
 5. `yarn`
 6. `yarn start`
 
-
 look at localhost:3000
+
+[Language Specification](./docs/Specification.md)
