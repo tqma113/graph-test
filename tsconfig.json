@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "dist",
-    "declaration": true,
     "sourceMap": false,
     "target": "es2019",
     "module": "commonjs",

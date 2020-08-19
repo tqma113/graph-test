@@ -1,6 +1,6 @@
 const path = require('path')
-const commonjs = require('rollup-plugin-commonjs');
-const nodeResolve = require('rollup-plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
+const nodeResolve = require('@rollup/plugin-node-resolve');
 
 const dir = path.resolve(__dirname, '../../packages/language/antlr')
 const input = path.resolve(dir, 'index.js')

@@ -9,36 +9,41 @@ export var createLexer = function (input) {
     var line = 1;
     var column = 1;
     var tokens = [];
-    var errors = [];
+    var lexicalErrors = [];
     var run = function () {
         while (!isEoP()) {
             var result = nextToken();
             if (result.kind === 'error') {
-                errors.push(result);
+                lexicalErrors.push(result);
             }
             else {
                 tokens.push(result);
             }
         }
+        if (tokens.length === 0 || tokens[tokens.length - 1].kind !== TokenKind.EOP) {
+            tokens.push({
+                kind: TokenKind.EOP,
+                word: null,
+                range: getRange()
+            });
+        }
         return tokens[tokens.length - 1];
     };
     var next = function () {
         if (isEoP() && tokens.length > 0) {
-            if (tokens[tokens.length - 1].kind === TokenKind.EOP) {
-                return tokens[tokens.length - 1];
-            }
-            else {
-                return {
+            if (tokens[tokens.length - 1].kind !== TokenKind.EOP) {
+                tokens.push({
                     kind: TokenKind.EOP,
                     word: null,
                     range: getRange()
-                };
+                });
             }
+            return tokens[tokens.length - 1];
         }
         var result = nextToken();
         while (true) {
             if (result.kind === 'error') {
-                errors.push(result);
+                lexicalErrors.push(result);
             }
             else {
                 tokens.push(result);
@@ -306,8 +311,8 @@ export var createLexer = function (input) {
         get tokens() {
             return tokens;
         },
-        get errors() {
-            return errors;
+        get lexicalErrors() {
+            return lexicalErrors;
         },
         getPosition: getPosition,
         next: next,

@@ -67,7 +67,7 @@ export var createParser = function (input) {
             if (lookahead.kind !== TokenKind.EOP) {
                 var moduleStatement = matchModuleStatement();
                 if (moduleStatement === null) {
-                    recovery();
+                    recoveryFromProgram();
                 }
                 else {
                     moduleStatemens.push(moduleStatement);
@@ -173,9 +173,13 @@ export var createParser = function (input) {
                         end: lookahead.range.end
                     });
                 }
+                if (lookahead.kind === TokenKind.EOP) {
+                    reportError(OperatorEnum.CloseBrace, lookahead);
+                    return null;
+                }
                 var statement = matchStatement();
                 if (statement === null) {
-                    recovery();
+                    recoveryFromBlock();
                 }
                 else {
                     list.push(statement);
@@ -253,7 +257,7 @@ export var createParser = function (input) {
                             });
                         }
                         else {
-                            recovery();
+                            recoveryFromBlock();
                             return createModuleItems(identifiers, {
                                 start: start,
                                 end: token.range.end
@@ -360,11 +364,12 @@ export var createParser = function (input) {
                 }
             }
             else {
+                nextToken();
                 return createModule(identifier, null, identifier.range);
             }
         }
         else {
-            reportError('Identifier: <somethings>', token);
+            reportError('Identifier: <somethings>', lookahead);
             return null;
         }
     };
@@ -663,13 +668,37 @@ export var createParser = function (input) {
     };
     var reportError = function (expect, token) {
         errors.push(new SyntaxError("Expect { " + expect + " }, accept '" + token.word + "'", token));
-        // console.trace(errors[errors.length - 1])
     };
-    var recovery = function () {
+    var recoveryFromBlock = function () {
         while (true) {
-            nextToken();
-            if ((token.kind === TokenKind.Operator && token.word === '}') || token.kind === TokenKind.EOP) {
+            var lookahead = predict();
+            if ((lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.If)
+                || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Switch)
+                || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Goto)
+                || (lookahead.kind === TokenKind.Action)
+                || lookahead.kind === TokenKind.EOP) {
                 break;
+            }
+            else {
+                nextToken();
+                if (lookahead.kind === TokenKind.Operator && lookahead.word === OperatorEnum.CloseBrace) {
+                    break;
+                }
+            }
+        }
+    };
+    var recoveryFromProgram = function () {
+        while (true) {
+            var lookahead = predict();
+            if ((lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Start)
+                || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Import)
+                || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Export)
+                || (lookahead.kind === TokenKind.Identifier)
+                || lookahead.kind === TokenKind.EOP) {
+                break;
+            }
+            else {
+                nextToken();
             }
         }
     };
@@ -681,7 +710,7 @@ export var createParser = function (input) {
             return lexer.tokens;
         },
         get lexcialErrors() {
-            return lexer.errors;
+            return lexer.lexicalErrors;
         },
         get syntaxErrors() {
             return errors;

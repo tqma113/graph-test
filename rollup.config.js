@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
-const ts = require('rollup-plugin-typescript2')
+const { babel } = require('@rollup/plugin-babel');
+const commonjs = require('@rollup/plugin-commonjs');
+const typescript = require('@rollup/plugin-typescript')
 
 module.exports = createConfig()
 
@@ -10,18 +12,13 @@ function createConfig() {
   const input = getInput(path.resolve(packageDir, 'src/index'))
   const output = path.resolve(packageDir, 'dist/index.js')
 
-  const tsPlugin = ts({
-    check: process.env.NODE_ENV === 'production',
-    tsconfig: path.resolve(packageDir, 'tsconfig.json'),
-    cacheRoot: path.resolve(__dirname, '../../node_modules/.rts2_cache'),
-
-  })
-
   return {
     input,
     external: ['react', 'monaco-editor', 'monaco-editor/esm/vs/editor/editor.api'],
     plugins: [
-      tsPlugin
+      babel({ babelHelpers: 'bundled', presets: ['@babel/preset-react'] }),
+      typescript({ module: 'CommonJS' }),
+      commonjs({ extensions: ['.js', '.ts'] }),
     ],
     output: {
       format: 'es',

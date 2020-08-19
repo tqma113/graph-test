@@ -8,7 +8,7 @@ export type FontSizeSelectProps = {
 const fontSizes = [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 42, 48, 56]
 
 export const FontSizeSelect = ({
-  value,
+  value = 12,
   onChange
 }: FontSizeSelectProps) => {
   return (

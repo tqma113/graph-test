@@ -4,7 +4,6 @@ module.exports = {
   globals: {
     '__DEV__': false
   },
-  testRegex: 'packages/.*/__tests__/.*.(test|spec).(ts|tsx|js)$',
   collectCoverageFrom: [
     '<rootDir>/packages/**/src/**/*.ts'
   ],
@@ -30,5 +29,5 @@ module.exports = {
       statements: 95,
     },
   },
-  testMatch: null,
+  testMatch: ['<rootDir>/packages/**/__tests__/**/*.(test|spec).(ts|tsx|js)']
 }

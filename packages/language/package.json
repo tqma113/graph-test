@@ -24,8 +24,5 @@
       "cjs"
     ]
   },
-  "homepage": "https://github.com/tqma113/graph-render/packages/language#readme",
-  "dependencies": {
-    "antlr4": "^4.8.0"
-  }
+  "homepage": "https://github.com/tqma113/graph-render/packages/language#readme"
 }

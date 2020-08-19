@@ -1,48 +1,20 @@
-var SymbolChar;
-(function (SymbolChar) {
-    SymbolChar["OpenBrace"] = "{";
-    SymbolChar["CloseBrace"] = "}";
-    SymbolChar["OpenBracket"] = "[";
-    SymbolChar["CloseBracket"] = "]";
-    SymbolChar["OpenAngleBracket"] = "<";
-    SymbolChar["CloseAngleBracket"] = ">";
-    SymbolChar["Assign"] = "=";
-    SymbolChar["Result"] = "->";
-    SymbolChar["Comma"] = ",";
-    SymbolChar["Quote"] = "\"";
-    SymbolChar["Well"] = "#";
-})(SymbolChar || (SymbolChar = {}));
-var OperatorEnum;
-(function (OperatorEnum) {
-    OperatorEnum["OpenBrace"] = "{";
-    OperatorEnum["CloseBrace"] = "}";
-    OperatorEnum["Assign"] = "=";
-    OperatorEnum["Result"] = "->";
-    OperatorEnum["Comma"] = ",";
-})(OperatorEnum || (OperatorEnum = {}));
-var KeywordEnum;
-(function (KeywordEnum) {
-    KeywordEnum["Start"] = "start";
-    KeywordEnum["Goto"] = "goto";
-    KeywordEnum["If"] = "if";
-    KeywordEnum["Else"] = "else";
-    KeywordEnum["Switch"] = "switch";
-    KeywordEnum["Case"] = "case";
-    KeywordEnum["Default"] = "default";
-    KeywordEnum["Import"] = "import";
-    KeywordEnum["From"] = "from";
-    KeywordEnum["Export"] = "export";
-})(KeywordEnum || (KeywordEnum = {}));
-var TokenKind;
-(function (TokenKind) {
-    TokenKind["Comment"] = "comment";
-    TokenKind["Operator"] = "operator";
-    TokenKind["Keyword"] = "keyword";
-    TokenKind["Identifier"] = "identifier";
-    TokenKind["Action"] = "action";
-    TokenKind["Path"] = "path";
-    TokenKind["EOP"] = "eop";
-})(TokenKind || (TokenKind = {}));
+function getDefaultExportFromCjs (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
+function createCommonjsModule(fn, basedir, module) {
+	return module = {
+	  path: basedir,
+	  exports: {},
+	  require: function (path, base) {
+      return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
+    }
+	}, fn(module, module.exports), module.exports;
+}
+
+function commonjsRequire () {
+	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+}
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -58,89 +30,591 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
-/* global Reflect, Promise */
 
-var extendStatics = function(d, b) {
-    extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-    return extendStatics(d, b);
+/* global Reflect, Promise */
+var extendStatics = function (d, b) {
+  extendStatics = Object.setPrototypeOf || {
+    __proto__: []
+  } instanceof Array && function (d, b) {
+    d.__proto__ = b;
+  } || function (d, b) {
+    for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
+  };
+
+  return extendStatics(d, b);
 };
 
 function __extends(d, b) {
-    extendStatics(d, b);
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  extendStatics(d, b);
+
+  function __() {
+    this.constructor = d;
+  }
+
+  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+var __assign = function () {
+  __assign = Object.assign || function __assign(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+function __rest(s, e) {
+  var t = {};
+
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+  }
+  return t;
+}
+function __decorate(decorators, target, key, desc) {
+  var c = arguments.length,
+      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+      d;
+  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function __param(paramIndex, decorator) {
+  return function (target, key) {
+    decorator(target, key, paramIndex);
+  };
+}
+function __metadata(metadataKey, metadataValue) {
+  if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+function __awaiter(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+}
+function __generator(thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function () {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) try {
+      if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+      if (y = 0, t) op = [op[0] & 2, t.value];
+
+      switch (op[0]) {
+        case 0:
+        case 1:
+          t = op;
+          break;
+
+        case 4:
+          _.label++;
+          return {
+            value: op[1],
+            done: false
+          };
+
+        case 5:
+          _.label++;
+          y = op[1];
+          op = [0];
+          continue;
+
+        case 7:
+          op = _.ops.pop();
+
+          _.trys.pop();
+
+          continue;
+
+        default:
+          if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+            _ = 0;
+            continue;
+          }
+
+          if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+            _.label = op[1];
+            break;
+          }
+
+          if (op[0] === 6 && _.label < t[1]) {
+            _.label = t[1];
+            t = op;
+            break;
+          }
+
+          if (t && _.label < t[2]) {
+            _.label = t[2];
+
+            _.ops.push(op);
+
+            break;
+          }
+
+          if (t[2]) _.ops.pop();
+
+          _.trys.pop();
+
+          continue;
+      }
+
+      op = body.call(thisArg, _);
+    } catch (e) {
+      op = [6, e];
+      y = 0;
+    } finally {
+      f = t = 0;
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+}
+var __createBinding = Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function () {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+};
+function __exportStar(m, o) {
+  for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
+}
+function __values(o) {
+  var s = typeof Symbol === "function" && Symbol.iterator,
+      m = s && o[s],
+      i = 0;
+  if (m) return m.call(o);
+  if (o && typeof o.length === "number") return {
+    next: function () {
+      if (o && i >= o.length) o = void 0;
+      return {
+        value: o && o[i++],
+        done: !o
+      };
+    }
+  };
+  throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+function __read(o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m) return o;
+  var i = m.call(o),
+      r,
+      ar = [],
+      e;
+
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+  } catch (error) {
+    e = {
+      error: error
+    };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"])) m.call(i);
+    } finally {
+      if (e) throw e.error;
+    }
+  }
+
+  return ar;
+}
+function __spread() {
+  for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+
+  return ar;
+}
+function __spreadArrays() {
+  for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+
+  for (var r = Array(s), k = 0, i = 0; i < il; i++) for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
+
+  return r;
+}
+function __await(v) {
+  return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+function __asyncGenerator(thisArg, _arguments, generator) {
+  if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+  var g = generator.apply(thisArg, _arguments || []),
+      i,
+      q = [];
+  return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () {
+    return this;
+  }, i;
+
+  function verb(n) {
+    if (g[n]) i[n] = function (v) {
+      return new Promise(function (a, b) {
+        q.push([n, v, a, b]) > 1 || resume(n, v);
+      });
+    };
+  }
+
+  function resume(n, v) {
+    try {
+      step(g[n](v));
+    } catch (e) {
+      settle(q[0][3], e);
+    }
+  }
+
+  function step(r) {
+    r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);
+  }
+
+  function fulfill(value) {
+    resume("next", value);
+  }
+
+  function reject(value) {
+    resume("throw", value);
+  }
+
+  function settle(f, v) {
+    if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]);
+  }
+}
+function __asyncDelegator(o) {
+  var i, p;
+  return i = {}, verb("next"), verb("throw", function (e) {
+    throw e;
+  }), verb("return"), i[Symbol.iterator] = function () {
+    return this;
+  }, i;
+
+  function verb(n, f) {
+    i[n] = o[n] ? function (v) {
+      return (p = !p) ? {
+        value: __await(o[n](v)),
+        done: n === "return"
+      } : f ? f(v) : v;
+    } : f;
+  }
+}
+function __asyncValues(o) {
+  if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+  var m = o[Symbol.asyncIterator],
+      i;
+  return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () {
+    return this;
+  }, i);
+
+  function verb(n) {
+    i[n] = o[n] && function (v) {
+      return new Promise(function (resolve, reject) {
+        v = o[n](v), settle(resolve, reject, v.done, v.value);
+      });
+    };
+  }
+
+  function settle(resolve, reject, d, v) {
+    Promise.resolve(v).then(function (v) {
+      resolve({
+        value: v,
+        done: d
+      });
+    }, reject);
+  }
+}
+function __makeTemplateObject(cooked, raw) {
+  if (Object.defineProperty) {
+    Object.defineProperty(cooked, "raw", {
+      value: raw
+    });
+  } else {
+    cooked.raw = raw;
+  }
+
+  return cooked;
 }
 
-var LexicalError = /** @class */ (function (_super) {
-    __extends(LexicalError, _super);
-    function LexicalError(message, position) {
-        var _this = _super.call(this, message) || this;
-        _this.kind = 'error';
-        _this.name = 'LexicalError';
-        _this.message = message;
-        _this.position = position;
-        _this.stack = message + " at line: " + position.line + ", column: " + position.column;
-        return _this;
-    }
-    return LexicalError;
-}(Error));
+var __setModuleDefault = Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+};
 
-var keywords = Object.values(KeywordEnum);
-var isKeyword = function (word) {
+function __importStar(mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+
+  __setModuleDefault(result, mod);
+
+  return result;
+}
+function __importDefault(mod) {
+  return mod && mod.__esModule ? mod : {
+    default: mod
+  };
+}
+function __classPrivateFieldGet(receiver, privateMap) {
+  if (!privateMap.has(receiver)) {
+    throw new TypeError("attempted to get private field on non-instance");
+  }
+
+  return privateMap.get(receiver);
+}
+function __classPrivateFieldSet(receiver, privateMap, value) {
+  if (!privateMap.has(receiver)) {
+    throw new TypeError("attempted to set private field on non-instance");
+  }
+
+  privateMap.set(receiver, value);
+  return value;
+}
+
+var tslib_es6 = /*#__PURE__*/Object.freeze({
+	__proto__: null,
+	__extends: __extends,
+	get __assign () { return __assign; },
+	__rest: __rest,
+	__decorate: __decorate,
+	__param: __param,
+	__metadata: __metadata,
+	__awaiter: __awaiter,
+	__generator: __generator,
+	__createBinding: __createBinding,
+	__exportStar: __exportStar,
+	__values: __values,
+	__read: __read,
+	__spread: __spread,
+	__spreadArrays: __spreadArrays,
+	__await: __await,
+	__asyncGenerator: __asyncGenerator,
+	__asyncDelegator: __asyncDelegator,
+	__asyncValues: __asyncValues,
+	__makeTemplateObject: __makeTemplateObject,
+	__importStar: __importStar,
+	__importDefault: __importDefault,
+	__classPrivateFieldGet: __classPrivateFieldGet,
+	__classPrivateFieldSet: __classPrivateFieldSet
+});
+
+var constants = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TokenKind = exports.KeywordEnum = exports.OperatorEnum = exports.SymbolChar = void 0;
+var SymbolChar;
+(function (SymbolChar) {
+    SymbolChar["OpenBrace"] = "{";
+    SymbolChar["CloseBrace"] = "}";
+    SymbolChar["OpenBracket"] = "[";
+    SymbolChar["CloseBracket"] = "]";
+    SymbolChar["OpenAngleBracket"] = "<";
+    SymbolChar["CloseAngleBracket"] = ">";
+    SymbolChar["Assign"] = "=";
+    SymbolChar["Result"] = "->";
+    SymbolChar["Comma"] = ",";
+    SymbolChar["Quote"] = "\"";
+    SymbolChar["Well"] = "#";
+})(SymbolChar = exports.SymbolChar || (exports.SymbolChar = {}));
+var OperatorEnum;
+(function (OperatorEnum) {
+    OperatorEnum["OpenBrace"] = "{";
+    OperatorEnum["CloseBrace"] = "}";
+    OperatorEnum["Assign"] = "=";
+    OperatorEnum["Result"] = "->";
+    OperatorEnum["Comma"] = ",";
+})(OperatorEnum = exports.OperatorEnum || (exports.OperatorEnum = {}));
+var KeywordEnum;
+(function (KeywordEnum) {
+    KeywordEnum["Start"] = "start";
+    KeywordEnum["Goto"] = "goto";
+    KeywordEnum["If"] = "if";
+    KeywordEnum["Else"] = "else";
+    KeywordEnum["Switch"] = "switch";
+    KeywordEnum["Case"] = "case";
+    KeywordEnum["Default"] = "default";
+    KeywordEnum["Import"] = "import";
+    KeywordEnum["From"] = "from";
+    KeywordEnum["Export"] = "export";
+})(KeywordEnum = exports.KeywordEnum || (exports.KeywordEnum = {}));
+var TokenKind;
+(function (TokenKind) {
+    TokenKind["Comment"] = "comment";
+    TokenKind["Operator"] = "operator";
+    TokenKind["Keyword"] = "keyword";
+    TokenKind["Identifier"] = "identifier";
+    TokenKind["Action"] = "action";
+    TokenKind["Path"] = "path";
+    TokenKind["EOP"] = "eop";
+})(TokenKind = exports.TokenKind || (exports.TokenKind = {}));
+});
+
+var LexicalError_1 = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LexicalError = void 0;
+class LexicalError extends Error {
+    constructor(message, position) {
+        super(message);
+        this.kind = 'error';
+        this.name = 'LexicalError';
+        this.message = message;
+        this.position = position;
+        this.stack = `${message} at line: ${position.line}, column: ${position.column}`;
+    }
+}
+exports.LexicalError = LexicalError;
+});
+
+var util = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isLetter = exports.isDigit = exports.isNewLineChar = exports.isWhitespace = exports.isReference = exports.isPath = exports.isAction = exports.isValidContentChar = exports.isOperator = exports.isKeyword = void 0;
+
+const keywords = Object.values(constants.KeywordEnum);
+exports.isKeyword = (word) => {
     return keywords.includes(word);
 };
-var operators = Object.values(OperatorEnum);
-var isValidContentChar = function (char) {
+const operators = Object.values(constants.OperatorEnum);
+exports.isOperator = (word) => {
+    return operators.includes(word);
+};
+exports.isValidContentChar = (char) => {
     return /[^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]/g.test(char);
 };
-var isWhitespace = function (char) {
+exports.isAction = (word) => {
+    return /\[([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\]/.test(word);
+};
+exports.isPath = (word) => {
+    return /\"([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\"/g.test(word);
+};
+exports.isReference = (word) => {
+    return /<([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)>/g.test(word);
+};
+exports.isWhitespace = (char) => {
     return /\s/.test(char) && char.length === 1;
 };
-var isNewLineChar = function (char) {
+exports.isNewLineChar = (char) => {
     return /[\r\n]+/.test(char);
 };
-var isLetter = function (char) {
+exports.isDigit = (char) => {
+    return /\d/.test(char) && char.length === 1;
+};
+exports.isLetter = (char) => {
     return /[a-zA-Z]/.test(char) && char.length === 1;
 };
+});
 
-var createLexer = function (input) {
-    var offset = 0;
-    var forward = 0;
-    var line = 1;
-    var column = 1;
-    var tokens = [];
-    var errors = [];
-    var run = function () {
+var lexer = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createLexer = void 0;
+
+
+
+
+tslib_es6.__exportStar(constants, exports);
+tslib_es6.__exportStar(LexicalError_1, exports);
+exports.createLexer = (input) => {
+    let offset = 0;
+    let forward = 0;
+    let line = 1;
+    let column = 1;
+    let tokens = [];
+    let lexicalErrors = [];
+    const run = () => {
         while (!isEoP()) {
-            var result = nextToken();
+            const result = nextToken();
             if (result.kind === 'error') {
-                errors.push(result);
+                lexicalErrors.push(result);
             }
             else {
                 tokens.push(result);
             }
         }
+        if (tokens.length === 0 || tokens[tokens.length - 1].kind !== constants.TokenKind.EOP) {
+            tokens.push({
+                kind: constants.TokenKind.EOP,
+                word: null,
+                range: getRange()
+            });
+        }
         return tokens[tokens.length - 1];
     };
-    var next = function () {
+    const next = () => {
         if (isEoP() && tokens.length > 0) {
-            if (tokens[tokens.length - 1].kind === TokenKind.EOP) {
-                return tokens[tokens.length - 1];
-            }
-            else {
-                return {
-                    kind: TokenKind.EOP,
+            if (tokens[tokens.length - 1].kind !== constants.TokenKind.EOP) {
+                tokens.push({
+                    kind: constants.TokenKind.EOP,
                     word: null,
                     range: getRange()
-                };
+                });
             }
+            return tokens[tokens.length - 1];
         }
-        var result = nextToken();
+        let result = nextToken();
         while (true) {
             if (result.kind === 'error') {
-                errors.push(result);
+                lexicalErrors.push(result);
             }
             else {
                 tokens.push(result);
@@ -150,27 +624,27 @@ var createLexer = function (input) {
         }
         return result;
     };
-    var nextToken = function () {
-        var result = consumeWhitespace();
+    const nextToken = () => {
+        const result = consumeWhitespace();
         if (result) {
             return result;
         }
-        var char = getCurrentChar();
+        const char = getCurrentChar();
         switch (char) {
-            case SymbolChar.Well: {
+            case constants.SymbolChar.Well: {
                 return matchComment();
             }
-            case SymbolChar.OpenAngleBracket: {
+            case constants.SymbolChar.OpenAngleBracket: {
                 return matchIdentifier();
             }
-            case SymbolChar.OpenBracket: {
+            case constants.SymbolChar.OpenBracket: {
                 return matchAction();
             }
-            case SymbolChar.Quote: {
+            case constants.SymbolChar.Quote: {
                 return matchPath();
             }
             default: {
-                if (isLetter(char)) {
+                if (util.isLetter(char)) {
                     return matchKeyword();
                 }
                 else {
@@ -179,18 +653,18 @@ var createLexer = function (input) {
             }
         }
     };
-    var consumeWhitespace = function () {
+    const consumeWhitespace = () => {
         while (true) {
-            var char = getCurrentChar();
+            const char = getCurrentChar();
             if (isEoP()) {
                 return {
-                    kind: TokenKind.EOP,
+                    kind: constants.TokenKind.EOP,
                     word: null,
                     range: getRange()
                 };
             }
-            if (isWhitespace(char)) {
-                if (isNewLineChar(char)) {
+            if (util.isWhitespace(char)) {
+                if (util.isNewLineChar(char)) {
                     nextLine();
                 }
                 nextChar();
@@ -200,237 +674,243 @@ var createLexer = function (input) {
             return null;
         }
     };
-    var matchComment = function () {
-        while (!isEoP() && !isNewLineChar(nextChar()))
+    const matchComment = () => {
+        while (!isEoP() && !util.isNewLineChar(nextChar()))
             ;
-        var word = getCurrentWord();
-        var range = getRange();
+        const word = getCurrentWord();
+        const range = getRange();
         endWord();
         return {
-            kind: TokenKind.Comment,
-            word: word,
-            range: range
+            kind: constants.TokenKind.Comment,
+            word,
+            range
         };
     };
-    var matchIdentifier = function () {
-        var char;
+    const matchIdentifier = () => {
+        let char;
         while (true) {
             char = nextChar();
-            if (char === SymbolChar.CloseAngleBracket) {
+            if (char === constants.SymbolChar.CloseAngleBracket) {
                 nextChar();
-                var word = getCurrentWord();
-                var range = getRange();
+                const word = getCurrentWord();
+                const range = getRange();
                 endWord();
                 return {
-                    kind: TokenKind.Identifier,
-                    word: word,
-                    range: range
+                    kind: constants.TokenKind.Identifier,
+                    word,
+                    range
                 };
             }
-            if (isEoP() || !isValidContentChar(char)) {
-                var word = getCurrentWord();
-                return new LexicalError("Identifier: " + word + " has not been closed", getPosition());
+            if (isEoP() || !util.isValidContentChar(char)) {
+                const word = getCurrentWord();
+                return new LexicalError_1.LexicalError(`Identifier: ${word} has not been closed`, getPosition());
             }
         }
     };
-    var matchAction = function () {
-        var char;
+    const matchAction = () => {
+        let char;
         while (true) {
             char = nextChar();
-            if (char === SymbolChar.CloseBracket) {
+            if (char === constants.SymbolChar.CloseBracket) {
                 nextChar();
-                var word = getCurrentWord();
-                var range = getRange();
+                const word = getCurrentWord();
+                const range = getRange();
                 endWord();
                 return {
-                    kind: TokenKind.Action,
-                    word: word,
-                    range: range
+                    kind: constants.TokenKind.Action,
+                    word,
+                    range
                 };
             }
-            if (isEoP() || !isValidContentChar(char)) {
-                var word = getCurrentWord();
-                return new LexicalError("Action: " + word + " has not been closed", getPosition());
+            if (isEoP() || !util.isValidContentChar(char)) {
+                const word = getCurrentWord();
+                return new LexicalError_1.LexicalError(`Action: ${word} has not been closed`, getPosition());
             }
         }
     };
-    var matchPath = function () {
-        var char;
+    const matchPath = () => {
+        let char;
         while (true) {
             char = nextChar();
-            if (char === SymbolChar.Quote) {
+            if (char === constants.SymbolChar.Quote) {
                 nextChar();
-                var word = getCurrentWord();
-                var range = getRange();
+                const word = getCurrentWord();
+                const range = getRange();
                 endWord();
                 return {
-                    kind: TokenKind.Path,
-                    word: word,
-                    range: range
+                    kind: constants.TokenKind.Path,
+                    word,
+                    range
                 };
             }
-            if (isEoP() || !isValidContentChar(char)) {
-                var word = getCurrentWord();
-                return new LexicalError("Path: " + word + " has not been closed", getPosition());
+            if (isEoP() || !util.isValidContentChar(char)) {
+                const word = getCurrentWord();
+                return new LexicalError_1.LexicalError(`Path: ${word} has not been closed`, getPosition());
             }
         }
     };
-    var matchKeyword = function () {
-        var char;
+    const matchKeyword = () => {
+        let char;
         while (true) {
             char = nextChar();
-            if (isEoP() || !isLetter(char)) {
-                var word = getCurrentWord();
-                if (isKeyword(word)) {
-                    var range = getRange();
+            if (isEoP() || !util.isLetter(char)) {
+                const word = getCurrentWord();
+                if (util.isKeyword(word)) {
+                    const range = getRange();
                     endWord();
                     return {
-                        kind: TokenKind.Keyword,
+                        kind: constants.TokenKind.Keyword,
                         word: word,
-                        range: range
+                        range
                     };
                 }
                 else {
-                    return new LexicalError("Unknown token: " + word, getPosition());
+                    return new LexicalError_1.LexicalError(`Unknown token: ${word}`, getPosition());
                 }
             }
         }
     };
-    var matchOperator = function () {
-        var char = getCurrentChar();
+    const matchOperator = () => {
+        const char = getCurrentChar();
         switch (char) {
-            case OperatorEnum.OpenBrace: {
+            case constants.OperatorEnum.OpenBrace: {
                 nextChar();
-                var range = getRange();
+                const range = getRange();
                 endWord();
                 return {
-                    kind: TokenKind.Operator,
-                    word: OperatorEnum.OpenBrace,
-                    range: range
+                    kind: constants.TokenKind.Operator,
+                    word: constants.OperatorEnum.OpenBrace,
+                    range
                 };
             }
-            case OperatorEnum.CloseBrace: {
+            case constants.OperatorEnum.CloseBrace: {
                 nextChar();
-                var range = getRange();
+                const range = getRange();
                 endWord();
                 return {
-                    kind: TokenKind.Operator,
-                    word: OperatorEnum.CloseBrace,
-                    range: range
+                    kind: constants.TokenKind.Operator,
+                    word: constants.OperatorEnum.CloseBrace,
+                    range
                 };
             }
-            case OperatorEnum.Assign: {
+            case constants.OperatorEnum.Assign: {
                 nextChar();
-                var range = getRange();
+                const range = getRange();
                 endWord();
                 return {
-                    kind: TokenKind.Operator,
-                    word: OperatorEnum.Assign,
-                    range: range
+                    kind: constants.TokenKind.Operator,
+                    word: constants.OperatorEnum.Assign,
+                    range
                 };
             }
-            case OperatorEnum.Result[0]: {
-                var nc = nextChar();
-                if (nc === OperatorEnum.Result[1]) {
+            case constants.OperatorEnum.Result[0]: {
+                const nc = nextChar();
+                if (nc === constants.OperatorEnum.Result[1]) {
                     nextChar();
-                    var range = getRange();
+                    const range = getRange();
                     endWord();
                     return {
-                        kind: TokenKind.Operator,
-                        word: OperatorEnum.Result,
-                        range: range
+                        kind: constants.TokenKind.Operator,
+                        word: constants.OperatorEnum.Result,
+                        range
                     };
                 }
                 else {
                     nextChar();
-                    var word = getCurrentWord();
-                    return new LexicalError("Unknown token: " + word, getPosition());
+                    const word = getCurrentWord();
+                    return new LexicalError_1.LexicalError(`Unknown token: ${word}`, getPosition());
                 }
             }
-            case OperatorEnum.Comma: {
+            case constants.OperatorEnum.Comma: {
                 nextChar();
-                var range = getRange();
+                const range = getRange();
                 endWord();
                 return {
-                    kind: TokenKind.Operator,
-                    word: OperatorEnum.Comma,
-                    range: range
+                    kind: constants.TokenKind.Operator,
+                    word: constants.OperatorEnum.Comma,
+                    range
                 };
             }
             default: {
                 nextChar();
-                return new LexicalError("Unknown token: " + char, getPosition());
+                return new LexicalError_1.LexicalError(`Unknown token: ${char}`, getPosition());
             }
         }
     };
-    var nextChar = function () {
+    const nextChar = () => {
         forward++;
         column++;
         return input[forward];
     };
-    var nextLine = function () {
+    const nextLine = () => {
         line++;
         column = 1;
     };
-    var endWord = function () {
+    const endWord = () => {
         offset = forward;
         forward = offset;
     };
-    var getCurrentWord = function () {
+    const getCurrentWord = () => {
         return input.slice(offset, forward);
     };
-    var getCurrentChar = function () {
+    const getCurrentChar = () => {
         return input[forward] || '';
     };
-    var getPosition = function () {
+    const getPosition = () => {
         return {
-            line: line,
-            column: column
+            line,
+            column
         };
     };
-    var getRange = function () {
-        var length = forward - offset;
+    const getRange = () => {
+        const length = forward - offset;
         return {
             start: {
-                line: line,
+                line,
                 column: column - length - 1
             },
             end: {
-                line: line,
+                line,
                 column: column - 1
             }
         };
     };
-    var isEoP = function () {
+    const isEoP = () => {
         return forward >= input.length;
     };
     return {
         get tokens() {
             return tokens;
         },
-        get errors() {
-            return errors;
+        get lexicalErrors() {
+            return lexicalErrors;
         },
-        getPosition: getPosition,
-        next: next,
-        run: run
+        getPosition,
+        next,
+        run
     };
 };
+});
 
-var SyntaxError = /** @class */ (function (_super) {
-    __extends(SyntaxError, _super);
-    function SyntaxError(message, token) {
-        var _this = _super.call(this, message) || this;
-        _this.kind = 'error';
-        _this.name = 'SyntaxError';
-        _this.message = message;
-        _this.token = token;
-        _this.stack = message + " at line: " + token.range.start.line + ", column: " + token.range.start.column;
-        return _this;
+var _SyntaxError = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SyntaxError = void 0;
+class SyntaxError extends Error {
+    constructor(message, token) {
+        super(message);
+        this.kind = 'error';
+        this.name = 'SyntaxError';
+        this.message = message;
+        this.token = token;
+        this.stack = `${message} at line: ${token.range.start.line}, column: ${token.range.start.column}`;
     }
-    return SyntaxError;
-}(Error));
+}
+exports.SyntaxError = SyntaxError;
+});
 
+var ast = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createGotoStatement = exports.createDefaultClause = exports.createCaseClause = exports.createSwitchBlock = exports.createSwitchStatement = exports.createIfStatement = exports.createStepStatement = exports.createBlock = exports.createStartStatement = exports.createExportStatement = exports.createModule = exports.createModuleItems = exports.createImportStatement = exports.createInferenceDefinition = exports.createProgram = exports.FragmentKind = void 0;
 var FragmentKind;
 (function (FragmentKind) {
     FragmentKind["Program"] = "Program";
@@ -448,147 +928,158 @@ var FragmentKind;
     FragmentKind["CaseClause"] = "CaseClause";
     FragmentKind["DefaultClause"] = "DefaultClause";
     FragmentKind["GotoStatement"] = "GotoStatement";
-})(FragmentKind || (FragmentKind = {}));
-var createProgram = function (moduleStatemens, range) {
+})(FragmentKind = exports.FragmentKind || (exports.FragmentKind = {}));
+exports.createProgram = (moduleStatemens, range) => {
     return {
         kind: FragmentKind.Program,
-        moduleStatemens: moduleStatemens,
-        range: range
+        moduleStatemens,
+        range
     };
 };
-var createInferenceDefinition = function (identifier, block, range) {
+exports.createInferenceDefinition = (identifier, block, range) => {
     return {
         kind: FragmentKind.InferenceDefinition,
-        identifier: identifier,
-        block: block,
-        range: range
+        identifier,
+        block,
+        range
     };
 };
-var createImportStatement = function (moduleItems, path, range) {
+exports.createImportStatement = (moduleItems, path, range) => {
     return {
         kind: FragmentKind.ImportStatement,
-        moduleItems: moduleItems,
-        path: path,
-        range: range
+        moduleItems,
+        path,
+        range
     };
 };
-var createModuleItems = function (identifiers, range) {
+exports.createModuleItems = (identifiers, range) => {
     return {
         kind: FragmentKind.ModuleItems,
-        identifiers: identifiers,
-        range: range
+        identifiers,
+        range
     };
 };
-var createModule = function (identifier, definition, range) {
+exports.createModule = (identifier, definition, range) => {
     return {
         kind: FragmentKind.Module,
-        identifier: identifier,
-        definition: definition,
-        range: range
+        identifier,
+        definition,
+        range
     };
 };
-var createExportStatement = function (module, range) {
+exports.createExportStatement = (module, range) => {
     return {
         kind: FragmentKind.ExportStatement,
-        module: module,
-        range: range
+        module,
+        range
     };
 };
-var createStartStatement = function (module, range) {
+exports.createStartStatement = (module, range) => {
     return {
         kind: FragmentKind.StartStatement,
-        module: module,
-        range: range
+        module,
+        range
     };
 };
-var createBlock = function (list, range) {
+exports.createBlock = (list, range) => {
     return {
         kind: FragmentKind.Block,
-        list: list,
-        range: range
+        list,
+        range
     };
 };
-var createStepStatement = function (expression, range) {
+exports.createStepStatement = (expression, range) => {
     return {
         kind: FragmentKind.StepStatement,
-        expression: expression,
-        range: range
+        expression,
+        range
     };
 };
-var createIfStatement = function (expression, ifBlock, elseBlock, range) {
+exports.createIfStatement = (expression, ifBlock, elseBlock, range) => {
     return {
         kind: FragmentKind.IfStatement,
-        expression: expression,
-        ifBlock: ifBlock,
-        elseBlock: elseBlock,
-        range: range
+        expression,
+        ifBlock,
+        elseBlock,
+        range
     };
 };
-var createSwitchStatement = function (expression, switchBlock, range) {
+exports.createSwitchStatement = (expression, switchBlock, range) => {
     return {
         kind: FragmentKind.SwitchStatement,
-        expression: expression,
-        switchBlock: switchBlock,
-        range: range
+        expression,
+        switchBlock,
+        range
     };
 };
-var createSwitchBlock = function (caseClauses, defaultClause, range) {
+exports.createSwitchBlock = (caseClauses, defaultClause, range) => {
     return {
         kind: FragmentKind.SwitchBlock,
-        caseClauses: caseClauses,
-        defaultClause: defaultClause,
-        range: range
+        caseClauses,
+        defaultClause,
+        range
     };
 };
-var createCaseClause = function (expression, block, range) {
+exports.createCaseClause = (expression, block, range) => {
     return {
         kind: FragmentKind.CaseClause,
-        expression: expression,
-        block: block,
-        range: range
+        expression,
+        block,
+        range
     };
 };
-var createDefaultClause = function (block, range) {
+exports.createDefaultClause = (block, range) => {
     return {
         kind: FragmentKind.DefaultClause,
-        block: block,
-        range: range
+        block,
+        range
     };
 };
-var createGotoStatement = function (identifier, range) {
+exports.createGotoStatement = (identifier, range) => {
     return {
         kind: FragmentKind.GotoStatement,
-        identifier: identifier,
-        range: range
+        identifier,
+        range
     };
 };
+});
 
+var parser = createCommonjsModule(function (module, exports) {
 /**
  * 递归下降分析法(recursive-descent parsing)
  *
  * 预测分析法(prdictive parsing)
  */
-var createParser = function (input) {
-    var lexer = createLexer(input);
-    var token = null;
-    var cache = [];
-    var program = null;
-    var errors = [];
-    var parse = function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createParser = void 0;
+
+
+
+
+
+tslib_es6.__exportStar(ast, exports);
+tslib_es6.__exportStar(_SyntaxError, exports);
+exports.createParser = (input) => {
+    const lexer$1 = lexer.createLexer(input);
+    let token = null;
+    let cache = [];
+    let program = null;
+    let errors = [];
+    const parse = () => {
         if (program) {
             return;
         }
         program = matchProgram();
     };
-    var getNextToken = function () {
+    const getNextToken = () => {
         while (true) {
-            var tok = lexer.next();
-            if (tok.kind !== TokenKind.Comment) {
+            const tok = lexer$1.next();
+            if (tok.kind !== constants.TokenKind.Comment) {
                 return tok;
             }
         }
     };
-    var nextToken = function () {
+    const nextToken = () => {
         if (cache.length > 0) {
             token = cache.shift();
         }
@@ -597,18 +1088,17 @@ var createParser = function (input) {
         }
         return token;
     };
-    var predict = function (key) {
-        if (key === void 0) { key = 0; }
-        if (token && token.kind === TokenKind.EOP) {
+    const predict = (key = 0) => {
+        if (token && token.kind === constants.TokenKind.EOP) {
             return token;
         }
         if (cache.length > key) {
             return cache[key];
         }
         else {
-            var token_1 = getNextToken();
-            cache.push(token_1);
-            return token_1;
+            const token = getNextToken();
+            cache.push(token);
+            return token;
         }
     };
     /**
@@ -619,14 +1109,14 @@ var createParser = function (input) {
      * FIRST(program) = { EOP, FIRST(moduleStatement) }
      * FOLLOW(program) = { e }
      */
-    var matchProgram = function () {
-        var moduleStatemens = [];
+    const matchProgram = () => {
+        let moduleStatemens = [];
         while (true) {
-            var lookahead = predict();
-            if (lookahead.kind !== TokenKind.EOP) {
-                var moduleStatement = matchModuleStatement();
+            const lookahead = predict();
+            if (lookahead.kind !== constants.TokenKind.EOP) {
+                const moduleStatement = matchModuleStatement();
                 if (moduleStatement === null) {
-                    recovery();
+                    recoveryFromProgram();
                 }
                 else {
                     moduleStatemens.push(moduleStatement);
@@ -636,12 +1126,12 @@ var createParser = function (input) {
                 break;
             }
         }
-        return createProgram(moduleStatemens, {
+        return ast.createProgram(moduleStatemens, {
             start: {
                 line: 1,
                 column: 1
             },
-            end: lexer.getPosition()
+            end: lexer$1.getPosition()
         });
     };
     /**
@@ -655,27 +1145,27 @@ var createParser = function (input) {
      * FIRST(moduleStatement) = { Import, Export, Start, Identifier }
      * FOLLOW(moduleStatement) = { FIRST(moduleStatement), EOF }
      */
-    var matchModuleStatement = function () {
-        var lookahead = predict();
-        if (lookahead.kind === TokenKind.Keyword) {
+    const matchModuleStatement = () => {
+        const lookahead = predict();
+        if (lookahead.kind === constants.TokenKind.Keyword) {
             switch (lookahead.word) {
-                case KeywordEnum.Import: {
+                case constants.KeywordEnum.Import: {
                     return matchImportStatement();
                 }
-                case KeywordEnum.Export: {
+                case constants.KeywordEnum.Export: {
                     return matchExportStatement();
                 }
-                case KeywordEnum.Start: {
+                case constants.KeywordEnum.Start: {
                     return matchStartStatement();
                 }
             }
         }
         else {
-            if (lookahead.kind === TokenKind.Identifier) {
+            if (lookahead.kind === constants.TokenKind.Identifier) {
                 return matchInferenceDefinition();
             }
         }
-        reportError("'" + KeywordEnum.Start + "', '" + KeywordEnum.Export + "', '" + KeywordEnum.Import + "', Identifier: <somethings>", lookahead);
+        reportError(`'${constants.KeywordEnum.Start}', '${constants.KeywordEnum.Export}', '${constants.KeywordEnum.Import}', Identifier: <somethings>`, lookahead);
         return null;
     };
     /**
@@ -686,23 +1176,23 @@ var createParser = function (input) {
      * FIRST(inferenceDefinition) = { identifier }
      * FOLLOW(inferenceDefinition) = { FOLLOW(moduleStatement), FOLLOW(module) }
      */
-    var matchInferenceDefinition = function () {
+    const matchInferenceDefinition = () => {
         if (requireIdentifier()) {
-            var identifier = token;
-            if (requireOperator(OperatorEnum.Assign)) {
-                var block = matchBlock();
+            const identifier = token;
+            if (requireOperator(constants.OperatorEnum.Assign)) {
+                const block = matchBlock();
                 if (block === null) {
                     return null;
                 }
                 else {
-                    return createInferenceDefinition(identifier, block, {
+                    return ast.createInferenceDefinition(identifier, block, {
                         start: identifier.range.start,
                         end: block.range.end
                     });
                 }
             }
             else {
-                reportError(OperatorEnum.Assign, token);
+                reportError(constants.OperatorEnum.Assign, token);
                 return null;
             }
         }
@@ -719,22 +1209,26 @@ var createParser = function (input) {
      * FIRST(block) = { OpenBrace }
      * FOLLOW(block) = { FOLLOW(inferenceDefinition), Else, FOLLOW(ifStatement), FOLLOW(caseClause), FOLLOW(defaultClause) }
      */
-    var matchBlock = function () {
-        if (requireOperator(OperatorEnum.OpenBrace)) {
-            var start = token.range.start;
-            var list = [];
+    const matchBlock = () => {
+        if (requireOperator(constants.OperatorEnum.OpenBrace)) {
+            const start = token.range.start;
+            let list = [];
             while (true) {
-                var lookahead = predict();
-                if (lookahead.kind === TokenKind.Operator && lookahead.word === OperatorEnum.CloseBrace) {
+                const lookahead = predict();
+                if (lookahead.kind === constants.TokenKind.Operator && lookahead.word === constants.OperatorEnum.CloseBrace) {
                     nextToken();
-                    return createBlock(list, {
-                        start: start,
+                    return ast.createBlock(list, {
+                        start,
                         end: lookahead.range.end
                     });
                 }
-                var statement = matchStatement();
+                if (lookahead.kind === constants.TokenKind.EOP) {
+                    reportError(constants.OperatorEnum.CloseBrace, lookahead);
+                    return null;
+                }
+                const statement = matchStatement();
                 if (statement === null) {
-                    recovery();
+                    recoveryFromBlock();
                 }
                 else {
                     list.push(statement);
@@ -742,7 +1236,7 @@ var createParser = function (input) {
             }
         }
         else {
-            reportError(OperatorEnum.OpenBrace, token);
+            reportError(constants.OperatorEnum.OpenBrace, token);
             return null;
         }
     };
@@ -754,16 +1248,16 @@ var createParser = function (input) {
      * FIRST(importStatement) = { Import }
      * FOLLOW(importStatement) = { FOLLOW(moduleStatement) }
      */
-    var matchImportStatement = function () {
-        if (requireKeyword(KeywordEnum.Import)) {
-            var start = token.range.start;
-            var moduleItems = matchModuleItems();
+    const matchImportStatement = () => {
+        if (requireKeyword(constants.KeywordEnum.Import)) {
+            const start = token.range.start;
+            const moduleItems = matchModuleItems();
             if (moduleItems) {
-                if (requireKeyword(KeywordEnum.From)) {
+                if (requireKeyword(constants.KeywordEnum.From)) {
                     if (requirePath()) {
-                        var path = token;
-                        return createImportStatement(moduleItems, path, {
-                            start: start,
+                        const path = token;
+                        return ast.createImportStatement(moduleItems, path, {
+                            start,
                             end: token.range.end
                         });
                     }
@@ -773,7 +1267,7 @@ var createParser = function (input) {
                     }
                 }
                 else {
-                    reportError(KeywordEnum.From, token);
+                    reportError(constants.KeywordEnum.From, token);
                     return null;
                 }
             }
@@ -782,7 +1276,7 @@ var createParser = function (input) {
             }
         }
         else {
-            reportError(KeywordEnum.Import, token);
+            reportError(constants.KeywordEnum.Import, token);
             return null;
         }
     };
@@ -794,34 +1288,34 @@ var createParser = function (input) {
      * FIRST(moduleItems) = { OpenBrace }
      * FOLLOW(moduleItems) = { From }
      */
-    var matchModuleItems = function () {
-        var identifiers = [];
-        if (requireOperator(OperatorEnum.OpenBrace)) {
-            var start = token.range.start;
+    const matchModuleItems = () => {
+        let identifiers = [];
+        if (requireOperator(constants.OperatorEnum.OpenBrace)) {
+            const start = token.range.start;
             if (requireIdentifier()) {
                 identifiers.push(token);
                 while (true) {
-                    if (requireOperator(OperatorEnum.Comma)) {
+                    if (requireOperator(constants.OperatorEnum.Comma)) {
                         if (requireIdentifier()) {
                             identifiers.push(token);
                         }
-                        else if (token.kind === TokenKind.Operator && token.word === OperatorEnum.CloseBrace) {
-                            return createModuleItems(identifiers, {
-                                start: start,
+                        else if (token.kind === constants.TokenKind.Operator && token.word === constants.OperatorEnum.CloseBrace) {
+                            return ast.createModuleItems(identifiers, {
+                                start,
                                 end: token.range.end
                             });
                         }
                         else {
-                            recovery();
-                            return createModuleItems(identifiers, {
-                                start: start,
+                            recoveryFromBlock();
+                            return ast.createModuleItems(identifiers, {
+                                start,
                                 end: token.range.end
                             });
                         }
                     }
-                    else if (token.kind === TokenKind.Operator && token.word === OperatorEnum.CloseBrace) {
-                        return createModuleItems(identifiers, {
-                            start: start,
+                    else if (token.kind === constants.TokenKind.Operator && token.word === constants.OperatorEnum.CloseBrace) {
+                        return ast.createModuleItems(identifiers, {
+                            start,
                             end: token.range.end
                         });
                     }
@@ -837,7 +1331,7 @@ var createParser = function (input) {
             }
         }
         else {
-            reportError(OperatorEnum.OpenBrace, token);
+            reportError(constants.OperatorEnum.OpenBrace, token);
             return null;
         }
     };
@@ -849,14 +1343,14 @@ var createParser = function (input) {
      * FIRST(exportStatement) = { Export }
      * FOLLOW(exportStatement) = { FOLLOW(moduleStatement) }
      */
-    var matchExportStatement = function () {
-        if (requireKeyword(KeywordEnum.Export)) {
-            var start = token.range.start;
-            var module_1 = matchModule();
-            if (module_1) {
-                return createExportStatement(module_1, {
-                    start: start,
-                    end: module_1.range.end
+    const matchExportStatement = () => {
+        if (requireKeyword(constants.KeywordEnum.Export)) {
+            const start = token.range.start;
+            const module = matchModule();
+            if (module) {
+                return ast.createExportStatement(module, {
+                    start,
+                    end: module.range.end
                 });
             }
             else {
@@ -864,7 +1358,7 @@ var createParser = function (input) {
             }
         }
         else {
-            reportError(KeywordEnum.Export, token);
+            reportError(constants.KeywordEnum.Export, token);
             return null;
         }
     };
@@ -876,14 +1370,14 @@ var createParser = function (input) {
      * FIRST(startStatement) = { Start }
      * FOLLOW(startStatement) = { FOLLOW(moduleStatement) }
      */
-    var matchStartStatement = function () {
-        if (requireKeyword(KeywordEnum.Start)) {
-            var start = token.range.start;
-            var module_2 = matchModule();
-            if (module_2) {
-                return createStartStatement(module_2, {
-                    start: start,
-                    end: module_2.range.end
+    const matchStartStatement = () => {
+        if (requireKeyword(constants.KeywordEnum.Start)) {
+            const start = token.range.start;
+            const module = matchModule();
+            if (module) {
+                return ast.createStartStatement(module, {
+                    start,
+                    end: module.range.end
                 });
             }
             else {
@@ -891,7 +1385,7 @@ var createParser = function (input) {
             }
         }
         else {
-            reportError(KeywordEnum.Start, token);
+            reportError(constants.KeywordEnum.Start, token);
             return null;
         }
     };
@@ -904,26 +1398,27 @@ var createParser = function (input) {
      * FIRST(module) = { Identifier }
      * FOLLOW(module) = { FOLLOW(startStatement), FOLLOW(exportStatement) }
      */
-    var matchModule = function () {
-        var lookahead = predict();
-        if (lookahead.kind === TokenKind.Identifier) {
-            var identifier = lookahead;
-            var lookahead2 = predict(1);
-            if (lookahead2.kind === TokenKind.Operator && lookahead2.word === OperatorEnum.Assign) {
-                var definition = matchInferenceDefinition();
+    const matchModule = () => {
+        const lookahead = predict();
+        if (lookahead.kind === constants.TokenKind.Identifier) {
+            const identifier = lookahead;
+            const lookahead2 = predict(1);
+            if (lookahead2.kind === constants.TokenKind.Operator && lookahead2.word === constants.OperatorEnum.Assign) {
+                const definition = matchInferenceDefinition();
                 if (definition) {
-                    return createModule(identifier, definition, definition.range);
+                    return ast.createModule(identifier, definition, definition.range);
                 }
                 else {
-                    return createModule(identifier, null, identifier.range);
+                    return ast.createModule(identifier, null, identifier.range);
                 }
             }
             else {
-                return createModule(identifier, null, identifier.range);
+                nextToken();
+                return ast.createModule(identifier, null, identifier.range);
             }
         }
         else {
-            reportError('Identifier: <somethings>', token);
+            reportError('Identifier: <somethings>', lookahead);
             return null;
         }
     };
@@ -938,27 +1433,27 @@ var createParser = function (input) {
      * FIRST(statement) = { If, Switch, Goto, Action }
      * FOLLOW(statement) = { FIRST(statement), CloseBrace }
      */
-    var matchStatement = function () {
-        var lookahead = predict();
-        if (lookahead.kind === TokenKind.Keyword) {
+    const matchStatement = () => {
+        const lookahead = predict();
+        if (lookahead.kind === constants.TokenKind.Keyword) {
             switch (lookahead.word) {
-                case KeywordEnum.If: {
+                case constants.KeywordEnum.If: {
                     return matchIfStatement();
                 }
-                case KeywordEnum.Switch: {
+                case constants.KeywordEnum.Switch: {
                     return matchSwitchStatement();
                 }
-                case KeywordEnum.Goto: {
+                case constants.KeywordEnum.Goto: {
                     return matchGotoStatement();
                 }
             }
         }
         else {
-            if (lookahead.kind === TokenKind.Action) {
+            if (lookahead.kind === constants.TokenKind.Action) {
                 return matchStepStatement();
             }
         }
-        reportError("'" + KeywordEnum.If + "', '" + KeywordEnum.Switch + "', '" + KeywordEnum.Goto + "', Action: [somethings]", lookahead);
+        reportError(`'${constants.KeywordEnum.If}', '${constants.KeywordEnum.Switch}', '${constants.KeywordEnum.Goto}', Action: [somethings]`, lookahead);
         return null;
     };
     /**
@@ -969,10 +1464,10 @@ var createParser = function (input) {
      * FIRST(stepStatement) = { Action }
      * FOLLOW(stepStatement) = { FOLLOW(statement) }
      */
-    var matchStepStatement = function () {
+    const matchStepStatement = () => {
         nextToken();
-        var expression = token;
-        return createStepStatement(expression, token.range);
+        const expression = token;
+        return ast.createStepStatement(expression, token.range);
     };
     /**
      * ifStatement
@@ -982,34 +1477,34 @@ var createParser = function (input) {
      * FRIST(ifStatement) = { If }
      * FOLLOW(ifStatement) = { FOLLOW(statement) }
      */
-    var matchIfStatement = function () {
-        if (requireKeyword(KeywordEnum.If)) {
-            var start = token.range.start;
+    const matchIfStatement = () => {
+        if (requireKeyword(constants.KeywordEnum.If)) {
+            const start = token.range.start;
             if (requireAction()) {
-                var expression = token;
-                if (requireOperator(OperatorEnum.Result)) {
-                    var ifBlock = matchBlock();
+                const expression = token;
+                if (requireOperator(constants.OperatorEnum.Result)) {
+                    let ifBlock = matchBlock();
                     if (ifBlock) {
-                        var lookahead = predict();
-                        if (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Else) {
+                        const lookahead = predict();
+                        if (lookahead.kind === constants.TokenKind.Keyword && lookahead.word === constants.KeywordEnum.Else) {
                             nextToken();
-                            var elseBlock = matchBlock();
+                            const elseBlock = matchBlock();
                             if (elseBlock) {
-                                return createIfStatement(expression, ifBlock, elseBlock, {
-                                    start: start,
+                                return ast.createIfStatement(expression, ifBlock, elseBlock, {
+                                    start,
                                     end: elseBlock.range.end
                                 });
                             }
                             else {
-                                return createIfStatement(expression, ifBlock, null, {
-                                    start: start,
+                                return ast.createIfStatement(expression, ifBlock, null, {
+                                    start,
                                     end: ifBlock.range.end
                                 });
                             }
                         }
                         else {
-                            return createIfStatement(expression, ifBlock, null, {
-                                start: start,
+                            return ast.createIfStatement(expression, ifBlock, null, {
+                                start,
                                 end: ifBlock.range.end
                             });
                         }
@@ -1019,7 +1514,7 @@ var createParser = function (input) {
                     }
                 }
                 else {
-                    reportError(OperatorEnum.Result, token);
+                    reportError(constants.OperatorEnum.Result, token);
                     return null;
                 }
             }
@@ -1029,7 +1524,7 @@ var createParser = function (input) {
             }
         }
         else {
-            reportError(KeywordEnum.If, token);
+            reportError(constants.KeywordEnum.If, token);
             return null;
         }
     };
@@ -1041,15 +1536,15 @@ var createParser = function (input) {
      * FRIST(switchStatement) = { Switch }
      * FOLLOW(switchStatement) = { FOLLOW(statement) }
      */
-    var matchSwitchStatement = function () {
-        if (requireKeyword(KeywordEnum.Switch)) {
-            var start = token.range.start;
+    const matchSwitchStatement = () => {
+        if (requireKeyword(constants.KeywordEnum.Switch)) {
+            const start = token.range.start;
             if (requireAction()) {
-                var expression = token;
-                var switchBlock = matchSwitchBlock();
+                const expression = token;
+                const switchBlock = matchSwitchBlock();
                 if (switchBlock) {
-                    return createSwitchStatement(expression, switchBlock, {
-                        start: start,
+                    return ast.createSwitchStatement(expression, switchBlock, {
+                        start,
                         end: switchBlock.range.end
                     });
                 }
@@ -1063,7 +1558,7 @@ var createParser = function (input) {
             }
         }
         else {
-            reportError(KeywordEnum.Switch, token);
+            reportError(constants.KeywordEnum.Switch, token);
             return null;
         }
     };
@@ -1075,39 +1570,39 @@ var createParser = function (input) {
      * FIRST(switchBlock) = { OpenBrace }
      * FOLLOW(switchBlock) = { FOLLOW(switchStatement) }
      */
-    var matchSwitchBlock = function () {
-        if (requireOperator(OperatorEnum.OpenBrace)) {
-            var start = token.range.start;
-            var caseClauses = [];
-            var defaultClause = null;
+    const matchSwitchBlock = () => {
+        if (requireOperator(constants.OperatorEnum.OpenBrace)) {
+            const start = token.range.start;
+            let caseClauses = [];
+            let defaultClause = null;
             while (true) {
                 nextToken();
-                if (token.kind === TokenKind.Operator && token.word === OperatorEnum.CloseBrace) {
-                    return createSwitchBlock(caseClauses, defaultClause, {
-                        start: start,
+                if (token.kind === constants.TokenKind.Operator && token.word === constants.OperatorEnum.CloseBrace) {
+                    return ast.createSwitchBlock(caseClauses, defaultClause, {
+                        start,
                         end: token.range.end
                     });
                 }
-                else if (token.kind === TokenKind.Keyword && token.word === KeywordEnum.Case) {
-                    var caseClause = matchCaseClause();
+                else if (token.kind === constants.TokenKind.Keyword && token.word === constants.KeywordEnum.Case) {
+                    const caseClause = matchCaseClause();
                     if (caseClause) {
                         caseClauses.push(caseClause);
                     }
                 }
-                else if (token.kind === TokenKind.Keyword && token.word === KeywordEnum.Default) {
-                    var dc = matchDefaultClause();
+                else if (token.kind === constants.TokenKind.Keyword && token.word === constants.KeywordEnum.Default) {
+                    const dc = matchDefaultClause();
                     if (dc) {
                         defaultClause = dc;
                     }
                 }
                 else {
-                    reportError("'" + KeywordEnum.Case + "', '" + KeywordEnum.Default + "', '" + OperatorEnum.CloseBrace + "'", token);
+                    reportError(`'${constants.KeywordEnum.Case}', '${constants.KeywordEnum.Default}', '${constants.OperatorEnum.CloseBrace}'`, token);
                     return null;
                 }
             }
         }
         else {
-            reportError(OperatorEnum.OpenBrace, token);
+            reportError(constants.OperatorEnum.OpenBrace, token);
             return null;
         }
     };
@@ -1119,15 +1614,15 @@ var createParser = function (input) {
      * FIRST(caseClause) = { Case }
      * FOLLOW(caseClause) = { FIRST(caseClause), FIRST(defaultClause), CloseBrace }
      */
-    var matchCaseClause = function () {
-        var start = token.range.start;
+    const matchCaseClause = () => {
+        const start = token.range.start;
         if (requireAction()) {
-            var expression = token;
-            if (requireOperator(OperatorEnum.Result)) {
-                var block = matchBlock();
+            const expression = token;
+            if (requireOperator(constants.OperatorEnum.Result)) {
+                const block = matchBlock();
                 if (block) {
-                    return createCaseClause(expression, block, {
-                        start: start,
+                    return ast.createCaseClause(expression, block, {
+                        start,
                         end: block.range.end
                     });
                 }
@@ -1136,7 +1631,7 @@ var createParser = function (input) {
                 }
             }
             else {
-                reportError(OperatorEnum.Result, token);
+                reportError(constants.OperatorEnum.Result, token);
                 return null;
             }
         }
@@ -1153,13 +1648,13 @@ var createParser = function (input) {
      * FIRST(defaultClause) = { Default }
      * FOLLOW(defaultClause) = { FIRST(caseClause), FIRST(defaultClause), CloseBrace }
      */
-    var matchDefaultClause = function () {
-        var start = token.range.start;
-        if (requireOperator(OperatorEnum.Result)) {
-            var block = matchBlock();
+    const matchDefaultClause = () => {
+        const start = token.range.start;
+        if (requireOperator(constants.OperatorEnum.Result)) {
+            const block = matchBlock();
             if (block) {
-                return createDefaultClause(block, {
-                    start: start,
+                return ast.createDefaultClause(block, {
+                    start,
                     end: block.range.end
                 });
             }
@@ -1168,7 +1663,7 @@ var createParser = function (input) {
             }
         }
         else {
-            reportError(OperatorEnum.Result, token);
+            reportError(constants.OperatorEnum.Result, token);
             return null;
         }
     };
@@ -1180,55 +1675,79 @@ var createParser = function (input) {
      * FRIST(gotoStatement) = { Goto }
      * FOLLOW(gotoStatement) = { FOLLOW(statement) }
      */
-    var matchGotoStatement = function () {
-        if (requireKeyword(KeywordEnum.Goto)) {
-            var start = token.range.start;
+    const matchGotoStatement = () => {
+        if (requireKeyword(constants.KeywordEnum.Goto)) {
+            const start = token.range.start;
             if (requireIdentifier()) {
-                var identifier = token;
-                return createGotoStatement(identifier, {
-                    start: start,
+                const identifier = token;
+                return ast.createGotoStatement(identifier, {
+                    start,
                     end: token.range.end
                 });
             }
             else {
-                reportError("Identifier: <somethings>", token);
+                reportError(`Identifier: <somethings>`, token);
                 return null;
             }
         }
         else {
-            reportError(KeywordEnum.Goto, token);
+            reportError(constants.KeywordEnum.Goto, token);
             return null;
         }
     };
-    var requirePath = function () {
+    const requirePath = () => {
         nextToken();
-        return token.kind === TokenKind.Path;
+        return token.kind === constants.TokenKind.Path;
     };
-    var requireAction = function () {
+    const requireAction = () => {
         nextToken();
-        return token.kind === TokenKind.Action;
+        return token.kind === constants.TokenKind.Action;
     };
-    var requireIdentifier = function () {
+    const requireIdentifier = () => {
         nextToken();
-        return token.kind === TokenKind.Identifier;
+        return token.kind === constants.TokenKind.Identifier;
     };
-    var requireKeyword = function (keyword) {
+    const requireKeyword = (keyword) => {
         nextToken();
-        return token.kind === TokenKind.Keyword && token.word === keyword;
+        return token.kind === constants.TokenKind.Keyword && token.word === keyword;
     };
-    var requireOperator = function (operator) {
+    const requireOperator = (operator) => {
         nextToken();
-        return token.kind === TokenKind.Operator && token.word === operator;
+        return token.kind === constants.TokenKind.Operator && token.word === operator;
     };
-    var reportError = function (expect, token) {
-        errors.push(new SyntaxError("Expect { " + expect + " }, accept '" + token.word + "'", token));
-        // console.trace(errors[errors.length - 1])
+    const reportError = (expect, token) => {
+        errors.push(new _SyntaxError.SyntaxError(`Expect { ${expect} }, accept '${token.word}'`, token));
     };
-    var recovery = function () {
+    const recoveryFromBlock = () => {
         while (true) {
-            nextToken();
-            if ((token.kind === TokenKind.Operator && token.word === '}') || token.kind === TokenKind.EOP) {
+            const lookahead = predict();
+            if ((lookahead.kind === constants.TokenKind.Keyword && lookahead.word === constants.KeywordEnum.If)
+                || (lookahead.kind === constants.TokenKind.Keyword && lookahead.word === constants.KeywordEnum.Switch)
+                || (lookahead.kind === constants.TokenKind.Keyword && lookahead.word === constants.KeywordEnum.Goto)
+                || (lookahead.kind === constants.TokenKind.Action)
+                || lookahead.kind === constants.TokenKind.EOP) {
                 break;
+            }
+            else {
+                nextToken();
+                if (lookahead.kind === constants.TokenKind.Operator && lookahead.word === constants.OperatorEnum.CloseBrace) {
+                    break;
+                }
+            }
+        }
+    };
+    const recoveryFromProgram = () => {
+        while (true) {
+            const lookahead = predict();
+            if ((lookahead.kind === constants.TokenKind.Keyword && lookahead.word === constants.KeywordEnum.Start)
+                || (lookahead.kind === constants.TokenKind.Keyword && lookahead.word === constants.KeywordEnum.Import)
+                || (lookahead.kind === constants.TokenKind.Keyword && lookahead.word === constants.KeywordEnum.Export)
+                || (lookahead.kind === constants.TokenKind.Identifier)
+                || lookahead.kind === constants.TokenKind.EOP) {
+                break;
+            }
+            else {
+                nextToken();
             }
         }
     };
@@ -1237,69 +1756,79 @@ var createParser = function (input) {
             return program;
         },
         get tokens() {
-            return lexer.tokens;
+            return lexer$1.tokens;
         },
         get lexcialErrors() {
-            return lexer.errors;
+            return lexer$1.lexicalErrors;
         },
         get syntaxErrors() {
             return errors;
         },
-        parse: parse
+        parse
     };
 };
+});
 
-var SemanticError = /** @class */ (function (_super) {
-    __extends(SemanticError, _super);
-    function SemanticError(message, fragment) {
-        var _this = _super.call(this, message) || this;
-        _this.kind = 'error';
-        _this.name = 'SemanticError';
-        _this.message = message;
-        _this.fragment = fragment;
-        _this.range = fragment.range;
-        _this.stack = message + " at line: " + fragment.range.start.line + ", column: " + fragment.range.start.column;
-        return _this;
+var SemanticError_1 = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SemanticError = void 0;
+class SemanticError extends Error {
+    constructor(message, fragment) {
+        super(message);
+        this.kind = 'error';
+        this.name = 'SemanticError';
+        this.message = message;
+        this.fragment = fragment;
+        this.range = fragment.range;
+        this.stack = `${message} at line: ${fragment.range.start.line}, column: ${fragment.range.start.column}`;
     }
-    return SemanticError;
-}(Error));
+}
+exports.SemanticError = SemanticError;
+});
 
-var analysis = function (program) {
-    var inferenceTable = new Map();
-    var semanticErrors = [];
-    var record = function () {
-        program.moduleStatemens.forEach(function (moduleStatement) {
+var semantic = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.analysis = void 0;
+
+
+
+tslib_es6.__exportStar(SemanticError_1, exports);
+exports.analysis = (program) => {
+    let inferenceTable = new Map();
+    let semanticErrors = [];
+    const record = () => {
+        program.moduleStatemens.forEach((moduleStatement) => {
             switch (moduleStatement.kind) {
-                case FragmentKind.ImportStatement: {
+                case ast.FragmentKind.ImportStatement: {
                     recordImport(moduleStatement);
                     break;
                 }
-                case FragmentKind.InferenceDefinition: {
+                case ast.FragmentKind.InferenceDefinition: {
                     recordDefinition(moduleStatement);
                     break;
                 }
-                case FragmentKind.StartStatement: {
+                case ast.FragmentKind.StartStatement: {
                     recordStart(moduleStatement);
                     break;
                 }
             }
         });
     };
-    var recordImport = function (importStatement) {
-        importStatement.moduleItems.identifiers.forEach(function (identifier) {
+    const recordImport = (importStatement) => {
+        importStatement.moduleItems.identifiers.forEach((identifier) => {
             addInference({
-                identifier: identifier,
+                identifier,
                 definition: importStatement
             });
         });
     };
-    var recordDefinition = function (inferenceDefinition) {
+    const recordDefinition = (inferenceDefinition) => {
         addInference({
             identifier: inferenceDefinition.identifier,
             definition: inferenceDefinition
         });
     };
-    var recordStart = function (startStatement) {
+    const recordStart = (startStatement) => {
         if (startStatement.module.definition) {
             addInference({
                 identifier: startStatement.module.identifier,
@@ -1307,112 +1836,112 @@ var analysis = function (program) {
             });
         }
     };
-    var addInference = function (inference) {
-        var name = getContent(inference.identifier.word);
+    const addInference = (inference) => {
+        const name = getContent(inference.identifier.word);
         if (inferenceTable.has(name)) {
-            reportError("Module " + name + " has been declared twice", inference.definition);
+            reportError(`Module ${name} has been declared twice`, inference.definition);
         }
         else {
             inferenceTable.set(name, inference);
         }
     };
-    var checkProgram = function (program) {
+    const checkProgram = (program) => {
         program.moduleStatemens.forEach(checkModuleStatement);
     };
-    var checkModuleStatement = function (moduleStatement) {
+    const checkModuleStatement = (moduleStatement) => {
         switch (moduleStatement.kind) {
-            case FragmentKind.ImportStatement: {
+            case ast.FragmentKind.ImportStatement: {
                 checkImportStatement(moduleStatement);
                 break;
             }
-            case FragmentKind.ExportStatement: {
+            case ast.FragmentKind.ExportStatement: {
                 checkExportStatement(moduleStatement);
                 break;
             }
-            case FragmentKind.StartStatement: {
+            case ast.FragmentKind.StartStatement: {
                 checkStartStatement(moduleStatement);
                 break;
             }
-            case FragmentKind.InferenceDefinition: {
+            case ast.FragmentKind.InferenceDefinition: {
                 checkInferenceDefinition(moduleStatement);
                 break;
             }
         }
     };
-    var checkInferenceDefinition = function (inferenceDefinition) {
+    const checkInferenceDefinition = (inferenceDefinition) => {
         checkBlock(inferenceDefinition.block);
     };
-    var checkImportStatement = function (importStatement) {
+    const checkImportStatement = (importStatement) => {
         checkModuleItems(importStatement.moduleItems);
     };
-    var checkModuleItems = function (moduleItems) {
+    const checkModuleItems = (moduleItems) => {
     };
-    var checkModule = function (module) {
-        var name = getContent(module.identifier.word);
+    const checkModule = (module) => {
+        const name = getContent(module.identifier.word);
         if (!inferenceTable.has(name)) {
-            reportError("Module " + name + " has not been declared", module);
+            reportError(`Module ${name} has not been declared`, module);
         }
         if (module.definition) {
             checkInferenceDefinition(module.definition);
         }
     };
-    var checkExportStatement = function (exportStatement) {
+    const checkExportStatement = (exportStatement) => {
         checkModule(exportStatement.module);
     };
-    var checkStartStatement = function (startStatement) {
+    const checkStartStatement = (startStatement) => {
         checkModule(startStatement.module);
     };
-    var checkBlock = function (block) {
+    const checkBlock = (block) => {
         block.list.forEach(checkStatement);
     };
-    var checkStatement = function (statement) {
+    const checkStatement = (statement) => {
         switch (statement.kind) {
-            case FragmentKind.StepStatement: {
+            case ast.FragmentKind.StepStatement: {
                 break;
             }
-            case FragmentKind.IfStatement: {
+            case ast.FragmentKind.IfStatement: {
                 checkIfStatement(statement);
                 break;
             }
-            case FragmentKind.SwitchStatement: {
+            case ast.FragmentKind.SwitchStatement: {
                 checkSwitchStatement(statement);
                 break;
             }
-            case FragmentKind.GotoStatement: {
+            case ast.FragmentKind.GotoStatement: {
                 checkGotoStatement(statement);
                 break;
             }
         }
     };
-    var checkIfStatement = function (ifStatement) {
+    const checkIfStatement = (ifStatement) => {
         checkBlock(ifStatement.ifBlock);
         if (ifStatement.elseBlock) {
             checkBlock(ifStatement.elseBlock);
         }
     };
-    var checkSwitchStatement = function (switchStatement) {
+    const checkSwitchStatement = (switchStatement) => {
         checkSwitchBlock(switchStatement.switchBlock);
     };
-    var checkSwitchBlock = function (switchBlock) {
+    const checkSwitchBlock = (switchBlock) => {
         switchBlock.caseClauses.forEach(checkCaseClause);
         if (switchBlock.defaultClause) {
             checkDefaultClause(switchBlock.defaultClause);
         }
     };
-    var checkCaseClause = function (caseClause) {
+    const checkCaseClause = (caseClause) => {
         checkBlock(caseClause.block);
     };
-    var checkDefaultClause = function (defaultClause) {
+    const checkDefaultClause = (defaultClause) => {
         checkBlock(defaultClause.block);
     };
-    var checkGotoStatement = function (gotoStatement) {
-        var name = getContent(gotoStatement.identifier.word);
+    const checkGotoStatement = (gotoStatement) => {
+        const name = getContent(gotoStatement.identifier.word);
         if (!inferenceTable.has(name)) {
-            reportError("Module " + name + " has not been declared", gotoStatement);
+            reportError(`Module ${name} has not been declared`, gotoStatement);
         }
     };
-    var reportError = function (message, fragment) {
-        semanticErrors.push(new SemanticError(message, fragment));
+    const reportError = (message, fragment) => {
+        semanticErrors.push(new SemanticError_1.SemanticError(message, fragment));
     };
     record();
     checkProgram(program);
@@ -1425,8 +1954,19 @@ var analysis = function (program) {
         }
     };
 };
-var getContent = function (word) {
+const getContent = (word) => {
     return word.slice(1, word.length - 1);
 };
+});
 
-export { FragmentKind, KeywordEnum, LexicalError, OperatorEnum, SemanticError, SymbolChar, SyntaxError, TokenKind, analysis, createBlock, createCaseClause, createDefaultClause, createExportStatement, createGotoStatement, createIfStatement, createImportStatement, createInferenceDefinition, createLexer, createModule, createModuleItems, createParser, createProgram, createStartStatement, createStepStatement, createSwitchBlock, createSwitchStatement };
+var src = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+
+tslib_es6.__exportStar(lexer, exports);
+tslib_es6.__exportStar(parser, exports);
+tslib_es6.__exportStar(semantic, exports);
+});
+
+var index = /*@__PURE__*/getDefaultExportFromCjs(src);
+
+export default index;

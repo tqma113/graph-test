@@ -3,6 +3,8 @@
  * https://microsoft.github.io/language-server-protocol/
  */
 
+// @ts-nocheck
+
 import { createParser, analysis } from 'graph-language'
 import type { Inference, LexicalError, SyntaxError, SemanticError } from 'graph-language'
 

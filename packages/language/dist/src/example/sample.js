@@ -7,6 +7,7 @@ var input = fs.readFileSync(path.resolve(__dirname, '../../example/sample.graph'
 var parser = createParser(input);
 parser.parse();
 console.log(parser);
+console.log(JSON.stringify(parser.tokens));
 if (parser.program) {
     console.log(analysis(parser.program));
     var tree = convert(parser.program);

@@ -41,7 +41,7 @@ export declare type EOP = {
 export declare type Token = Keyword | Operator | Identifier | Action | Path | Comment | EOP;
 export declare type Lexer = {
     tokens: Token[];
-    errors: LexicalError[];
+    lexicalErrors: LexicalError[];
     getPosition: () => Position;
     next: () => Token;
     run: () => void;

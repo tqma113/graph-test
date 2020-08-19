@@ -166,7 +166,7 @@ export declare enum KeywordEnum {
 
 export declare type Lexer = {
     tokens: Token[];
-    errors: LexicalError[];
+    lexicalErrors: LexicalError[];
     getPosition: () => Position_2;
     next: () => Token;
     run: () => void;

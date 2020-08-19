@@ -2,6 +2,7 @@
  * language server
  * https://microsoft.github.io/language-server-protocol/
  */
+// @ts-nocheck
 import { createParser, analysis } from 'graph-language';
 var createServer = function (input) {
     if (input === void 0) { input = ''; }
