@@ -16,19 +16,23 @@ export enum FragmentKind {
   SwitchBlock = 'SwitchBlock',
   CaseClause = 'CaseClause',
   DefaultClause = 'DefaultClause',
-  GotoStatement = 'GotoStatement'
+  GotoStatement = 'GotoStatement',
 }
 
-export type Fragment = 
-  Program |
-  Statement | ModuleStatement |
-  ModuleItems | Module |
-  Block |
-  SwitchBlock | CaseClause | DefaultClause
+export type Fragment =
+  | Program
+  | Statement
+  | ModuleStatement
+  | ModuleItems
+  | Module
+  | Block
+  | SwitchBlock
+  | CaseClause
+  | DefaultClause
 
 export type Program = {
-  kind: FragmentKind.Program,
-  moduleStatemens: ModuleStatement[],
+  kind: FragmentKind.Program
+  moduleStatemens: ModuleStatement[]
   range: Range
 }
 
@@ -39,17 +43,20 @@ export const createProgram = (
   return {
     kind: FragmentKind.Program,
     moduleStatemens,
-    range
+    range,
   }
 }
 
-export type ModuleStatement
-  = InferenceDefinition | ImportStatement | ExportStatement | StartStatement
+export type ModuleStatement =
+  | InferenceDefinition
+  | ImportStatement
+  | ExportStatement
+  | StartStatement
 
 export type InferenceDefinition = {
-  kind: FragmentKind.InferenceDefinition,
-  identifier: Identifier,
-  block: Block,
+  kind: FragmentKind.InferenceDefinition
+  identifier: Identifier
+  block: Block
   range: Range
 }
 
@@ -62,14 +69,14 @@ export const createInferenceDefinition = (
     kind: FragmentKind.InferenceDefinition,
     identifier,
     block,
-    range
+    range,
   }
 }
 
 export type ImportStatement = {
-  kind: FragmentKind.ImportStatement,
-  moduleItems: ModuleItems,
-  path: Path,
+  kind: FragmentKind.ImportStatement
+  moduleItems: ModuleItems
+  path: Path
   range: Range
 }
 
@@ -82,13 +89,13 @@ export const createImportStatement = (
     kind: FragmentKind.ImportStatement,
     moduleItems,
     path,
-    range
+    range,
   }
 }
 
 export type ModuleItems = {
-  kind: FragmentKind.ModuleItems,
-  identifiers: Identifier[],
+  kind: FragmentKind.ModuleItems
+  identifiers: Identifier[]
   range: Range
 }
 
@@ -99,14 +106,14 @@ export const createModuleItems = (
   return {
     kind: FragmentKind.ModuleItems,
     identifiers,
-    range
+    range,
   }
 }
 
 export type Module = {
-  kind: FragmentKind.Module,
-  identifier: Identifier,
-  definition: InferenceDefinition | null,
+  kind: FragmentKind.Module
+  identifier: Identifier
+  definition: InferenceDefinition | null
   range: Range
 }
 
@@ -119,13 +126,13 @@ export const createModule = (
     kind: FragmentKind.Module,
     identifier,
     definition,
-    range
+    range,
   }
 }
 
 export type ExportStatement = {
-  kind: FragmentKind.ExportStatement,
-  module: Module,
+  kind: FragmentKind.ExportStatement
+  module: Module
   range: Range
 }
 
@@ -136,13 +143,13 @@ export const createExportStatement = (
   return {
     kind: FragmentKind.ExportStatement,
     module,
-    range
+    range,
   }
 }
 
 export type StartStatement = {
-  kind: FragmentKind.StartStatement,
-  module: Module,
+  kind: FragmentKind.StartStatement
+  module: Module
   range: Range
 }
 
@@ -153,33 +160,33 @@ export const createStartStatement = (
   return {
     kind: FragmentKind.StartStatement,
     module,
-    range
+    range,
   }
 }
 
 export type Block = {
-  kind: FragmentKind.Block,
-  list: Statement[],
+  kind: FragmentKind.Block
+  list: Statement[]
   range: Range
 }
 
-export const createBlock = (
-  list: Statement[],
-  range: Range
-): Block => {
+export const createBlock = (list: Statement[], range: Range): Block => {
   return {
     kind: FragmentKind.Block,
     list,
-    range
+    range,
   }
 }
 
-export type Statement
-  = StepStatement | IfStatement | SwitchStatement | GotoStatement
+export type Statement =
+  | StepStatement
+  | IfStatement
+  | SwitchStatement
+  | GotoStatement
 
 export type StepStatement = {
-  kind: FragmentKind.StepStatement,
-  expression: Action,
+  kind: FragmentKind.StepStatement
+  expression: Action
   range: Range
 }
 
@@ -190,15 +197,15 @@ export const createStepStatement = (
   return {
     kind: FragmentKind.StepStatement,
     expression,
-    range
+    range,
   }
 }
 
 export type IfStatement = {
-  kind: FragmentKind.IfStatement,
-  expression: Action,
-  ifBlock: Block,
-  elseBlock: Block | null,
+  kind: FragmentKind.IfStatement
+  expression: Action
+  ifBlock: Block
+  elseBlock: Block | null
   range: Range
 }
 
@@ -213,14 +220,14 @@ export const createIfStatement = (
     expression,
     ifBlock,
     elseBlock,
-    range
+    range,
   }
 }
 
 export type SwitchStatement = {
-  kind: FragmentKind.SwitchStatement,
-  expression: Action,
-  switchBlock: SwitchBlock,
+  kind: FragmentKind.SwitchStatement
+  expression: Action
+  switchBlock: SwitchBlock
   range: Range
 }
 
@@ -233,14 +240,14 @@ export const createSwitchStatement = (
     kind: FragmentKind.SwitchStatement,
     expression,
     switchBlock,
-    range
+    range,
   }
 }
 
 export type SwitchBlock = {
-  kind: FragmentKind.SwitchBlock,
-  caseClauses: CaseClause[],
-  defaultClause: DefaultClause | null,
+  kind: FragmentKind.SwitchBlock
+  caseClauses: CaseClause[]
+  defaultClause: DefaultClause | null
   range: Range
 }
 
@@ -253,14 +260,14 @@ export const createSwitchBlock = (
     kind: FragmentKind.SwitchBlock,
     caseClauses,
     defaultClause,
-    range
+    range,
   }
 }
 
 export type CaseClause = {
-  kind: FragmentKind.CaseClause,
-  expression: Action,
-  block: Block,
+  kind: FragmentKind.CaseClause
+  expression: Action
+  block: Block
   range: Range
 }
 
@@ -273,13 +280,13 @@ export const createCaseClause = (
     kind: FragmentKind.CaseClause,
     expression,
     block,
-    range
+    range,
   }
 }
 
 export type DefaultClause = {
-  kind: FragmentKind.DefaultClause,
-  block: Block,
+  kind: FragmentKind.DefaultClause
+  block: Block
   range: Range
 }
 
@@ -290,13 +297,13 @@ export const createDefaultClause = (
   return {
     kind: FragmentKind.DefaultClause,
     block,
-    range
+    range,
   }
 }
 
 export type GotoStatement = {
-  kind: FragmentKind.GotoStatement,
-  identifier: Identifier,
+  kind: FragmentKind.GotoStatement
+  identifier: Identifier
   range: Range
 }
 
@@ -307,6 +314,6 @@ export const createGotoStatement = (
   return {
     kind: FragmentKind.GotoStatement,
     identifier,
-    range
+    range,
   }
 }

@@ -5,7 +5,7 @@ import {
   isValidContentChar,
   isNewLineChar,
   isWhitespace,
-  isKeyword
+  isKeyword,
 } from './util'
 import type { Range, Position } from '../index'
 
@@ -13,63 +13,69 @@ export * from './constants'
 export * from './LexicalError'
 
 export type Keyword = {
-  kind: TokenKind.Keyword,
-  word: KeywordEnum,
+  kind: TokenKind.Keyword
+  word: KeywordEnum
   range: Range
 }
 
 export type Operator = {
-  kind: TokenKind.Operator,
-  word: OperatorEnum,
+  kind: TokenKind.Operator
+  word: OperatorEnum
   range: Range
 }
 
 export type Identifier = {
-  kind: TokenKind.Identifier,
-  word: string,
+  kind: TokenKind.Identifier
+  word: string
   range: Range
 }
 
 export type Action = {
-  kind: TokenKind.Action,
-  word: string,
+  kind: TokenKind.Action
+  word: string
   range: Range
 }
 
 export type Path = {
-  kind: TokenKind.Path,
-  word: string,
+  kind: TokenKind.Path
+  word: string
   range: Range
 }
 
 export type Comment = {
-  kind: TokenKind.Comment,
-  word: string,
+  kind: TokenKind.Comment
+  word: string
   range: Range
 }
 
 export type EOP = {
-  kind: TokenKind.EOP,
-  word: null,
+  kind: TokenKind.EOP
+  word: null
   range: Range
 }
 
-export type Token = Keyword | Operator | Identifier | Action | Path | Comment | EOP
+export type Token =
+  | Keyword
+  | Operator
+  | Identifier
+  | Action
+  | Path
+  | Comment
+  | EOP
 
-export type Lexer = {
+export const createLexer = (
+  input: string
+): {
   tokens: Token[]
   lexicalErrors: LexicalError[]
   getPosition: () => Position
   next: () => Token
   run: () => void
-}
-
-export const createLexer = (input: string): Lexer => {
+} => {
   let offset = 0
   let forward = 0
   let line = 1
   let column = 1
-
 
   let tokens: Token[] = []
   let lexicalErrors: LexicalError[] = []
@@ -83,11 +89,14 @@ export const createLexer = (input: string): Lexer => {
         tokens.push(result)
       }
     }
-    if (tokens.length === 0 || tokens[tokens.length - 1].kind !== TokenKind.EOP) {
+    if (
+      tokens.length === 0 ||
+      tokens[tokens.length - 1].kind !== TokenKind.EOP
+    ) {
       tokens.push({
         kind: TokenKind.EOP,
         word: null,
-        range: getRange()
+        range: getRange(),
       })
     }
     return tokens[tokens.length - 1]
@@ -99,7 +108,7 @@ export const createLexer = (input: string): Lexer => {
         tokens.push({
           kind: TokenKind.EOP,
           word: null,
-          range: getRange()
+          range: getRange(),
         })
       }
       return tokens[tokens.length - 1]
@@ -155,7 +164,7 @@ export const createLexer = (input: string): Lexer => {
         return {
           kind: TokenKind.EOP,
           word: null,
-          range: getRange()
+          range: getRange(),
         }
       }
       if (isWhitespace(char)) {
@@ -183,7 +192,7 @@ export const createLexer = (input: string): Lexer => {
     return {
       kind: TokenKind.Comment,
       word,
-      range
+      range,
     }
   }
 
@@ -201,7 +210,7 @@ export const createLexer = (input: string): Lexer => {
         return {
           kind: TokenKind.Identifier,
           word,
-          range
+          range,
         }
       }
       if (isEoP() || !isValidContentChar(char)) {
@@ -227,7 +236,7 @@ export const createLexer = (input: string): Lexer => {
         return {
           kind: TokenKind.Action,
           word,
-          range
+          range,
         }
       }
       if (isEoP() || !isValidContentChar(char)) {
@@ -253,7 +262,7 @@ export const createLexer = (input: string): Lexer => {
         return {
           kind: TokenKind.Path,
           word,
-          range
+          range,
         }
       }
       if (isEoP() || !isValidContentChar(char)) {
@@ -265,7 +274,7 @@ export const createLexer = (input: string): Lexer => {
       }
     }
   }
-  
+
   const matchKeyword = (): Keyword | LexicalError => {
     let char: string
     while (true) {
@@ -275,17 +284,14 @@ export const createLexer = (input: string): Lexer => {
         if (isKeyword(word)) {
           const range = getRange()
           endWord()
-  
+
           return {
             kind: TokenKind.Keyword,
             word: word as KeywordEnum,
-            range
+            range,
           }
         } else {
-          return new LexicalError(
-            `Unknown token: ${word}`,
-            getPosition()
-          )
+          return new LexicalError(`Unknown token: ${word}`, getPosition())
         }
       }
     }
@@ -302,7 +308,7 @@ export const createLexer = (input: string): Lexer => {
         return {
           kind: TokenKind.Operator,
           word: OperatorEnum.OpenBrace,
-          range
+          range,
         }
       }
       case OperatorEnum.CloseBrace: {
@@ -313,7 +319,7 @@ export const createLexer = (input: string): Lexer => {
         return {
           kind: TokenKind.Operator,
           word: OperatorEnum.CloseBrace,
-          range
+          range,
         }
       }
       case OperatorEnum.Assign: {
@@ -324,7 +330,7 @@ export const createLexer = (input: string): Lexer => {
         return {
           kind: TokenKind.Operator,
           word: OperatorEnum.Assign,
-          range
+          range,
         }
       }
       case OperatorEnum.Result[0]: {
@@ -337,15 +343,12 @@ export const createLexer = (input: string): Lexer => {
           return {
             kind: TokenKind.Operator,
             word: OperatorEnum.Result,
-            range
+            range,
           }
         } else {
           nextChar()
           const word = getCurrentWord()
-          return new LexicalError(
-            `Unknown token: ${word}`,
-            getPosition()
-          )
+          return new LexicalError(`Unknown token: ${word}`, getPosition())
         }
       }
       case OperatorEnum.Comma: {
@@ -356,15 +359,12 @@ export const createLexer = (input: string): Lexer => {
         return {
           kind: TokenKind.Operator,
           word: OperatorEnum.Comma,
-          range
+          range,
         }
       }
       default: {
         nextChar()
-        return new LexicalError(
-          `Unknown token: ${char}`,
-          getPosition()
-        )
+        return new LexicalError(`Unknown token: ${char}`, getPosition())
       }
     }
   }
@@ -374,7 +374,7 @@ export const createLexer = (input: string): Lexer => {
     column++
     return input[forward]
   }
-  
+
   const nextLine = () => {
     line++
     column = 1
@@ -396,7 +396,7 @@ export const createLexer = (input: string): Lexer => {
   const getPosition = (): Position => {
     return {
       line,
-      column
+      column,
     }
   }
 
@@ -405,12 +405,12 @@ export const createLexer = (input: string): Lexer => {
     return {
       start: {
         line,
-        column: column - length - 1
+        column: column - length - 1,
       },
       end: {
         line,
-        column: column - 1
-      }
+        column: column - 1,
+      },
     }
   }
 
@@ -425,9 +425,9 @@ export const createLexer = (input: string): Lexer => {
     get lexicalErrors() {
       return lexicalErrors
     },
-    
+
     getPosition,
     next,
-    run
+    run,
   }
 }

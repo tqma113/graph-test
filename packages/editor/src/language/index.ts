@@ -1,4 +1,4 @@
-import * as monaco from "monaco-editor";
+import * as monaco from 'monaco-editor'
 import registerDiagnosticsAdapter from './registerDiagnosticsAdapter'
 import getDocumentHighlightProvider from './getDocumentHighlightProvider'
 import getCompletionItemProvider from './getCompletionItemProvider'
@@ -16,12 +16,21 @@ export default () => {
 
   monaco.languages.setLanguageConfiguration(MODE_ID, getLanguageConfiguration())
   monaco.languages.setMonarchTokensProvider(MODE_ID, getTokenProvider())
-  monaco.languages.registerCompletionItemProvider(MODE_ID, getCompletionItemProvider())
-  monaco.languages.registerSignatureHelpProvider(MODE_ID, getSignatureHelpProvider())
-  monaco.languages.registerHoverProvider(MODE_ID, getHoverProvider());
-  monaco.languages.registerDocumentHighlightProvider(MODE_ID, getDocumentHighlightProvider())
+  monaco.languages.registerCompletionItemProvider(
+    MODE_ID,
+    getCompletionItemProvider()
+  )
+  monaco.languages.registerSignatureHelpProvider(
+    MODE_ID,
+    getSignatureHelpProvider()
+  )
+  monaco.languages.registerHoverProvider(MODE_ID, getHoverProvider())
+  monaco.languages.registerDocumentHighlightProvider(
+    MODE_ID,
+    getDocumentHighlightProvider()
+  )
   monaco.languages.registerReferenceProvider(MODE_ID, getReferenceProvider())
   monaco.languages.registerDefinitionProvider(MODE_ID, getDefinitionProvider())
-  
+
   registerDiagnosticsAdapter()
 }

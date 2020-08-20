@@ -11,19 +11,30 @@ export const isOperator = (word: string) => {
 }
 
 export const isValidContentChar = (char: string) => {
-  return /[^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]/g.test(char)
+  return /[^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]/g.test(
+    char
+  )
 }
 
-export const isAction = (word: string) => { // [xxx]
-  return /\[([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\]/.test(word)
+export const isAction = (word: string) => {
+  // [xxx]
+  return /\[([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\]/.test(
+    word
+  )
 }
 
-export const isPath = (word: string) => { // "xxx"
-  return /\"([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\"/g.test(word)
+export const isPath = (word: string) => {
+  // "xxx"
+  return /\"([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\"/g.test(
+    word
+  )
 }
 
-export const isReference = (word: string) => { // <xxx>
-  return /<([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)>/g.test(word)
+export const isReference = (word: string) => {
+  // <xxx>
+  return /<([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)>/g.test(
+    word
+  )
 }
 
 export const isWhitespace = (char: string) => {

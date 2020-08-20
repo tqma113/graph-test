@@ -8,7 +8,7 @@ describe('graph', () => {
     parser.parse()
     if (parser.program) {
       const result = analysis(parser.program)
-      
+
       expect(result.semanticErrors.length).toBe(0)
     }
 

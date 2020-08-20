@@ -1,11 +1,11 @@
 // import { createParser, convert } from '../src'
 
-describe("transit", () => {
+describe('transit', () => {
   describe('convert', () => {
-    it.todo("wotk")
+    it.todo('wotk')
   })
-  
+
   describe('reverse', () => {
-    it.todo("wotk")
+    it.todo('wotk')
   })
 })

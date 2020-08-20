@@ -1,10 +1,10 @@
 /**
  * 递归下降分析法(recursive-descent parsing)
- * 
+ *
  * 预测分析法(prdictive parsing)
  */
 
-import { createLexer, Token, Identifier, Action, Path } from '../lexer'
+import { createLexer } from '../lexer'
 import { LexicalError } from '../lexer/LexicalError'
 import { TokenKind, KeywordEnum, OperatorEnum } from '../lexer/constants'
 import { SyntaxError } from './SyntaxError'
@@ -23,7 +23,7 @@ import {
   createCaseClause,
   createDefaultClause,
   createModuleItems,
-  createModule
+  createModule,
 } from './ast'
 import type {
   Program,
@@ -44,24 +44,25 @@ import type {
   ModuleItems,
   Module,
 } from './ast'
+import type { Token, Identifier, Action, Path } from '../lexer'
 
 export * from './ast'
 export * from './SyntaxError'
 
 export type BlockType = 'global' | 'local'
 
-export type Parser = {
-  program: Program | null,
-  tokens: Token[],
-  lexcialErrors: LexicalError[],
-  syntaxErrors: SyntaxError[],
+export const createParser = (
+  input: string
+): {
+  program: Program | null
+  tokens: Token[]
+  lexcialErrors: LexicalError[]
+  syntaxErrors: SyntaxError[]
   parse: () => void
-}
-
-export const createParser = (input: string): Parser => {
+} => {
   const lexer = createLexer(input)
 
-  let token = null as any as Token
+  let token = (null as any) as Token
   let cache: Token[] = []
 
   let program: Program | null = null
@@ -110,7 +111,7 @@ export const createParser = (input: string): Parser => {
    * program
    *  : moduleStatement* EOP
    *  ;
-   * 
+   *
    * FIRST(program) = { EOP, FIRST(moduleStatement) }
    * FOLLOW(program) = { e }
    */
@@ -131,16 +132,13 @@ export const createParser = (input: string): Parser => {
       }
     }
 
-    return createProgram(
-      moduleStatemens,
-      {
-        start: {
-          line: 1,
-          column: 1
-        },
-        end: lexer.getPosition()
-      }
-    )
+    return createProgram(moduleStatemens, {
+      start: {
+        line: 1,
+        column: 1,
+      },
+      end: lexer.getPosition(),
+    })
   }
 
   /**
@@ -150,7 +148,7 @@ export const createParser = (input: string): Parser => {
    *  | exportStatement
    *  | startStatement
    *  ;
-   * 
+   *
    * FIRST(moduleStatement) = { Import, Export, Start, Identifier }
    * FOLLOW(moduleStatement) = { FIRST(moduleStatement), EOF }
    */
@@ -173,7 +171,10 @@ export const createParser = (input: string): Parser => {
         return matchInferenceDefinition()
       }
     }
-    reportError(`'${KeywordEnum.Start}', '${KeywordEnum.Export}', '${KeywordEnum.Import}', Identifier: <somethings>`, lookahead)
+    reportError(
+      `'${KeywordEnum.Start}', '${KeywordEnum.Export}', '${KeywordEnum.Import}', Identifier: <somethings>`,
+      lookahead
+    )
     return null
   }
 
@@ -181,7 +182,7 @@ export const createParser = (input: string): Parser => {
    * inferenceDefinition
    *  : identifier '=' block
    *  ;
-   * 
+   *
    * FIRST(inferenceDefinition) = { identifier }
    * FOLLOW(inferenceDefinition) = { FOLLOW(moduleStatement), FOLLOW(module) }
    */
@@ -193,14 +194,10 @@ export const createParser = (input: string): Parser => {
         if (block === null) {
           return null
         } else {
-          return createInferenceDefinition(
-            identifier,
-            block,
-            {
-              start: identifier.range.start,
-              end: block.range.end
-            }
-          )
+          return createInferenceDefinition(identifier, block, {
+            start: identifier.range.start,
+            end: block.range.end,
+          })
         }
       } else {
         reportError(OperatorEnum.Assign, token)
@@ -216,7 +213,7 @@ export const createParser = (input: string): Parser => {
    * block
    *  : '{' statement*'}'
    *  ;
-   * 
+   *
    * FIRST(block) = { OpenBrace }
    * FOLLOW(block) = { FOLLOW(inferenceDefinition), Else, FOLLOW(ifStatement), FOLLOW(caseClause), FOLLOW(defaultClause) }
    */
@@ -226,15 +223,15 @@ export const createParser = (input: string): Parser => {
       let list: Statement[] = []
       while (true) {
         const lookahead = predict()
-        if (lookahead.kind === TokenKind.Operator && lookahead.word === OperatorEnum.CloseBrace) {
+        if (
+          lookahead.kind === TokenKind.Operator &&
+          lookahead.word === OperatorEnum.CloseBrace
+        ) {
           nextToken()
-          return createBlock(
-            list,
-            {
-              start,
-              end: lookahead.range.end
-            }
-          )
+          return createBlock(list, {
+            start,
+            end: lookahead.range.end,
+          })
         }
 
         if (lookahead.kind === TokenKind.EOP) {
@@ -249,7 +246,6 @@ export const createParser = (input: string): Parser => {
           list.push(statement)
         }
       }
-      
     } else {
       reportError(OperatorEnum.OpenBrace, token)
       return null
@@ -260,7 +256,7 @@ export const createParser = (input: string): Parser => {
    * importStatement
    *  : Import moduleItems From path
    *  ;
-   * 
+   *
    * FIRST(importStatement) = { Import }
    * FOLLOW(importStatement) = { FOLLOW(moduleStatement) }
    */
@@ -272,14 +268,10 @@ export const createParser = (input: string): Parser => {
         if (requireKeyword(KeywordEnum.From)) {
           if (requirePath()) {
             const path = token as Path
-            return createImportStatement(
-              moduleItems,
-              path,
-              {
-                start,
-                end: token.range.end
-              }
-            )
+            return createImportStatement(moduleItems, path, {
+              start,
+              end: token.range.end,
+            })
           } else {
             reportError('Path: "somethings"', token)
             return null
@@ -301,7 +293,7 @@ export const createParser = (input: string): Parser => {
    * moduleItems
    *  : '{' (identifier ',')* (identifier ','?)? '}'
    *  ;
-   * 
+   *
    * FIRST(moduleItems) = { OpenBrace }
    * FOLLOW(moduleItems) = { From }
    */
@@ -315,32 +307,29 @@ export const createParser = (input: string): Parser => {
           if (requireOperator(OperatorEnum.Comma)) {
             if (requireIdentifier()) {
               identifiers.push(token as Identifier)
-            } else if (token.kind === TokenKind.Operator && token.word === OperatorEnum.CloseBrace) {
-              return createModuleItems(
-                identifiers,
-                {
-                  start,
-                  end: token.range.end
-                }
-              )
+            } else if (
+              token.kind === TokenKind.Operator &&
+              token.word === OperatorEnum.CloseBrace
+            ) {
+              return createModuleItems(identifiers, {
+                start,
+                end: token.range.end,
+              })
             } else {
               recoveryFromBlock()
-              return createModuleItems(
-                identifiers,
-                {
-                  start,
-                  end: token.range.end
-                }
-              )
-            }
-          } else if (token.kind === TokenKind.Operator && token.word === OperatorEnum.CloseBrace) {
-            return createModuleItems(
-              identifiers,
-              {
+              return createModuleItems(identifiers, {
                 start,
-                end: token.range.end
-              }
-            )
+                end: token.range.end,
+              })
+            }
+          } else if (
+            token.kind === TokenKind.Operator &&
+            token.word === OperatorEnum.CloseBrace
+          ) {
+            return createModuleItems(identifiers, {
+              start,
+              end: token.range.end,
+            })
           } else {
             reportError('Identifier: <somethings>', token)
             return null
@@ -360,7 +349,7 @@ export const createParser = (input: string): Parser => {
    * exportStatement
    *  : Export module
    *  ;
-   * 
+   *
    * FIRST(exportStatement) = { Export }
    * FOLLOW(exportStatement) = { FOLLOW(moduleStatement) }
    */
@@ -369,13 +358,10 @@ export const createParser = (input: string): Parser => {
       const start = token.range.start
       const module = matchModule()
       if (module) {
-        return createExportStatement(
-          module,
-          {
-            start,
-            end: module.range.end
-          }
-        )
+        return createExportStatement(module, {
+          start,
+          end: module.range.end,
+        })
       } else {
         return null
       }
@@ -389,7 +375,7 @@ export const createParser = (input: string): Parser => {
    * startStatement
    *  : Start module
    *  ;
-   * 
+   *
    * FIRST(startStatement) = { Start }
    * FOLLOW(startStatement) = { FOLLOW(moduleStatement) }
    */
@@ -398,13 +384,10 @@ export const createParser = (input: string): Parser => {
       const start = token.range.start
       const module = matchModule()
       if (module) {
-        return createStartStatement(
-          module,
-          {
-            start,
-            end: module.range.end
-          }
-        )
+        return createStartStatement(module, {
+          start,
+          end: module.range.end,
+        })
       } else {
         return null
       }
@@ -419,7 +402,7 @@ export const createParser = (input: string): Parser => {
    * : identifier
    * | inferenceDefinition
    * ;
-   * 
+   *
    * FIRST(module) = { Identifier }
    * FOLLOW(module) = { FOLLOW(startStatement), FOLLOW(exportStatement) }
    */
@@ -428,28 +411,19 @@ export const createParser = (input: string): Parser => {
     if (lookahead.kind === TokenKind.Identifier) {
       const identifier = lookahead
       const lookahead2 = predict(1)
-      if (lookahead2.kind === TokenKind.Operator && lookahead2.word === OperatorEnum.Assign) {
+      if (
+        lookahead2.kind === TokenKind.Operator &&
+        lookahead2.word === OperatorEnum.Assign
+      ) {
         const definition = matchInferenceDefinition()
         if (definition) {
-          return createModule(
-            identifier,
-            definition,
-            definition.range
-          )
+          return createModule(identifier, definition, definition.range)
         } else {
-          return createModule(
-            identifier,
-            null,
-            identifier.range
-          )
+          return createModule(identifier, null, identifier.range)
         }
       } else {
         nextToken()
-        return createModule(
-          identifier,
-          null,
-          identifier.range
-        )
+        return createModule(identifier, null, identifier.range)
       }
     } else {
       reportError('Identifier: <somethings>', lookahead)
@@ -464,7 +438,7 @@ export const createParser = (input: string): Parser => {
    *  | switchStatement
    *  | gotoStatement
    *  ;
-   * 
+   *
    * FIRST(statement) = { If, Switch, Goto, Action }
    * FOLLOW(statement) = { FIRST(statement), CloseBrace }
    */
@@ -487,7 +461,10 @@ export const createParser = (input: string): Parser => {
         return matchStepStatement()
       }
     }
-    reportError(`'${KeywordEnum.If}', '${KeywordEnum.Switch}', '${KeywordEnum.Goto}', Action: [somethings]`, lookahead)
+    reportError(
+      `'${KeywordEnum.If}', '${KeywordEnum.Switch}', '${KeywordEnum.Goto}', Action: [somethings]`,
+      lookahead
+    )
     return null
   }
 
@@ -495,24 +472,21 @@ export const createParser = (input: string): Parser => {
    * stepStatement
    *  : Action
    *  ;
-   * 
+   *
    * FIRST(stepStatement) = { Action }
    * FOLLOW(stepStatement) = { FOLLOW(statement) }
    */
   const matchStepStatement = (): StepStatement => {
     nextToken()
     const expression = token as Action
-    return createStepStatement(
-      expression,
-      token.range
-    )
+    return createStepStatement(expression, token.range)
   }
 
   /**
    * ifStatement
    *  : If expression '->' block (Else block)?
    *  ;
-   * 
+   *
    * FRIST(ifStatement) = { If }
    * FOLLOW(ifStatement) = { FOLLOW(statement) }
    */
@@ -525,40 +499,28 @@ export const createParser = (input: string): Parser => {
           let ifBlock = matchBlock()
           if (ifBlock) {
             const lookahead = predict()
-            if (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Else) {
+            if (
+              lookahead.kind === TokenKind.Keyword &&
+              lookahead.word === KeywordEnum.Else
+            ) {
               nextToken()
               const elseBlock = matchBlock()
               if (elseBlock) {
-                return createIfStatement(
-                  expression,
-                  ifBlock,
-                  elseBlock,
-                  {
-                    start,
-                    end: elseBlock.range.end
-                  }
-                )
+                return createIfStatement(expression, ifBlock, elseBlock, {
+                  start,
+                  end: elseBlock.range.end,
+                })
               } else {
-                return createIfStatement(
-                  expression,
-                  ifBlock,
-                  null,
-                  {
-                    start,
-                    end: ifBlock.range.end
-                  }
-                )
+                return createIfStatement(expression, ifBlock, null, {
+                  start,
+                  end: ifBlock.range.end,
+                })
               }
             } else {
-              return createIfStatement(
-                expression,
-                ifBlock,
-                null,
-                {
-                  start,
-                  end: ifBlock.range.end
-                }
-              )
+              return createIfStatement(expression, ifBlock, null, {
+                start,
+                end: ifBlock.range.end,
+              })
             }
           } else {
             return null
@@ -581,7 +543,7 @@ export const createParser = (input: string): Parser => {
    * switchStatement
    *  : Switch expression switchBlock
    *  ;
-   * 
+   *
    * FRIST(switchStatement) = { Switch }
    * FOLLOW(switchStatement) = { FOLLOW(statement) }
    */
@@ -592,14 +554,10 @@ export const createParser = (input: string): Parser => {
         const expression = token as Action
         const switchBlock = matchSwitchBlock()
         if (switchBlock) {
-          return createSwitchStatement(
-            expression,
-            switchBlock,
-            {
-              start,
-              end: switchBlock.range.end
-            }
-          )
+          return createSwitchStatement(expression, switchBlock, {
+            start,
+            end: switchBlock.range.end,
+          })
         } else {
           return null
         }
@@ -617,7 +575,7 @@ export const createParser = (input: string): Parser => {
    * switchBlock
    *  : '{' caseClause* (defaultClause caseClause*)? '}'
    *  ;
-   * 
+   *
    * FIRST(switchBlock) = { OpenBrace }
    * FOLLOW(switchBlock) = { FOLLOW(switchStatement) }
    */
@@ -626,29 +584,37 @@ export const createParser = (input: string): Parser => {
       const start = token.range.start
       let caseClauses: CaseClause[] = []
       let defaultClause: DefaultClause | null = null
-      while(true) {
+      while (true) {
         nextToken()
-        if (token.kind === TokenKind.Operator && token.word === OperatorEnum.CloseBrace) {
-          return createSwitchBlock(
-            caseClauses,
-            defaultClause,
-            {
-              start,
-              end: token.range.end
-            }
-          )
-        } else if (token.kind === TokenKind.Keyword && token.word === KeywordEnum.Case) {
+        if (
+          token.kind === TokenKind.Operator &&
+          token.word === OperatorEnum.CloseBrace
+        ) {
+          return createSwitchBlock(caseClauses, defaultClause, {
+            start,
+            end: token.range.end,
+          })
+        } else if (
+          token.kind === TokenKind.Keyword &&
+          token.word === KeywordEnum.Case
+        ) {
           const caseClause = matchCaseClause()
           if (caseClause) {
             caseClauses.push(caseClause)
           }
-        } else if (token.kind === TokenKind.Keyword && token.word === KeywordEnum.Default) {
+        } else if (
+          token.kind === TokenKind.Keyword &&
+          token.word === KeywordEnum.Default
+        ) {
           const dc = matchDefaultClause()
           if (dc) {
             defaultClause = dc
           }
         } else {
-          reportError(`'${KeywordEnum.Case}', '${KeywordEnum.Default}', '${OperatorEnum.CloseBrace}'`, token)
+          reportError(
+            `'${KeywordEnum.Case}', '${KeywordEnum.Default}', '${OperatorEnum.CloseBrace}'`,
+            token
+          )
           return null
         }
       }
@@ -662,7 +628,7 @@ export const createParser = (input: string): Parser => {
    * caseClause
    *  : Case expression '->' block?
    *  ;
-   * 
+   *
    * FIRST(caseClause) = { Case }
    * FOLLOW(caseClause) = { FIRST(caseClause), FIRST(defaultClause), CloseBrace }
    */
@@ -673,14 +639,10 @@ export const createParser = (input: string): Parser => {
       if (requireOperator(OperatorEnum.Result)) {
         const block = matchBlock()
         if (block) {
-          return createCaseClause(
-            expression,
-            block,
-            {
-              start,
-              end: block.range.end
-            }
-          )
+          return createCaseClause(expression, block, {
+            start,
+            end: block.range.end,
+          })
         } else {
           return null
         }
@@ -698,7 +660,7 @@ export const createParser = (input: string): Parser => {
    * defaultClause
    *  : Default '->' block?
    *  ;
-   * 
+   *
    * FIRST(defaultClause) = { Default }
    * FOLLOW(defaultClause) = { FIRST(caseClause), FIRST(defaultClause), CloseBrace }
    */
@@ -707,13 +669,10 @@ export const createParser = (input: string): Parser => {
     if (requireOperator(OperatorEnum.Result)) {
       const block = matchBlock()
       if (block) {
-        return createDefaultClause(
-          block,
-          {
-            start,
-            end: block.range.end
-          }
-        )
+        return createDefaultClause(block, {
+          start,
+          end: block.range.end,
+        })
       } else {
         return null
       }
@@ -727,7 +686,7 @@ export const createParser = (input: string): Parser => {
    * gotoStatement
    *  : Goto identifier
    *  ;
-   * 
+   *
    * FRIST(gotoStatement) = { Goto }
    * FOLLOW(gotoStatement) = { FOLLOW(statement) }
    */
@@ -736,13 +695,10 @@ export const createParser = (input: string): Parser => {
       const start = token.range.start
       if (requireIdentifier()) {
         const identifier = token as Identifier
-        return createGotoStatement(
-          identifier,
-          {
-            start,
-            end: token.range.end
-          }
-        )
+        return createGotoStatement(identifier, {
+          start,
+          end: token.range.end,
+        })
       } else {
         reportError(`Identifier: <somethings>`, token)
         return null
@@ -779,25 +735,30 @@ export const createParser = (input: string): Parser => {
   }
 
   const reportError = (expect: string, token: Token) => {
-    errors.push(new SyntaxError(
-      `Expect { ${expect} }, accept '${token.word}'`,
-      token
-    ))
+    errors.push(
+      new SyntaxError(`Expect { ${expect} }, accept '${token.word}'`, token)
+    )
   }
 
   const recoveryFromBlock = () => {
     while (true) {
       const lookahead = predict()
       if (
-        (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.If)
-        || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Switch)
-        || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Goto)
-        || (lookahead.kind === TokenKind.EOP)
+        (lookahead.kind === TokenKind.Keyword &&
+          lookahead.word === KeywordEnum.If) ||
+        (lookahead.kind === TokenKind.Keyword &&
+          lookahead.word === KeywordEnum.Switch) ||
+        (lookahead.kind === TokenKind.Keyword &&
+          lookahead.word === KeywordEnum.Goto) ||
+        lookahead.kind === TokenKind.EOP
       ) {
         break
       } else {
         nextToken()
-        if (lookahead.kind === TokenKind.Operator && lookahead.word === OperatorEnum.CloseBrace) {
+        if (
+          lookahead.kind === TokenKind.Operator &&
+          lookahead.word === OperatorEnum.CloseBrace
+        ) {
           break
         }
       }
@@ -808,16 +769,22 @@ export const createParser = (input: string): Parser => {
     while (true) {
       const lookahead = predict()
       if (
-        (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Start)
-        || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Import)
-        || (lookahead.kind === TokenKind.Keyword && lookahead.word === KeywordEnum.Export)
-        || (lookahead.kind === TokenKind.Identifier)
-        || (lookahead.kind === TokenKind.EOP)
+        (lookahead.kind === TokenKind.Keyword &&
+          lookahead.word === KeywordEnum.Start) ||
+        (lookahead.kind === TokenKind.Keyword &&
+          lookahead.word === KeywordEnum.Import) ||
+        (lookahead.kind === TokenKind.Keyword &&
+          lookahead.word === KeywordEnum.Export) ||
+        lookahead.kind === TokenKind.Identifier ||
+        lookahead.kind === TokenKind.EOP
       ) {
         break
       } else {
         nextToken()
-        if (lookahead.kind === TokenKind.Operator && lookahead.word === OperatorEnum.CloseBrace) {
+        if (
+          lookahead.kind === TokenKind.Operator &&
+          lookahead.word === OperatorEnum.CloseBrace
+        ) {
           break
         }
       }
@@ -838,6 +805,6 @@ export const createParser = (input: string): Parser => {
       return errors
     },
 
-    parse
+    parse,
   }
 }

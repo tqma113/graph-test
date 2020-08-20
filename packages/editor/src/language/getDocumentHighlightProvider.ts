@@ -1,4 +1,4 @@
-import * as monaco from "monaco-editor";
+import * as monaco from 'monaco-editor'
 
 const getDocumentHighlightProvider = (): monaco.languages.DocumentHighlightProvider => {
   return {
@@ -6,7 +6,7 @@ const getDocumentHighlightProvider = (): monaco.languages.DocumentHighlightProvi
       // TODO
 
       return null
-    }
+    },
   }
 }
 

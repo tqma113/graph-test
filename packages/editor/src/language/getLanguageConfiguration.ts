@@ -1,9 +1,9 @@
-import * as monaco from "monaco-editor";
+import * as monaco from 'monaco-editor'
 
 const getLanguageConfiguration = (): monaco.languages.LanguageConfiguration => {
   return {
     comments: {
-      lineComment: '#'
+      lineComment: '#',
     },
     brackets: [
       ['{', '}'],
@@ -14,46 +14,46 @@ const getLanguageConfiguration = (): monaco.languages.LanguageConfiguration => {
       offSide: true,
       markers: {
         start: /{/,
-        end: /}/
-      }
+        end: /}/,
+      },
     },
     autoClosingPairs: [
       {
         open: '<',
-        close: '>'
+        close: '>',
       },
       {
         open: '{',
-        close: '}'
+        close: '}',
       },
       {
         open: '[',
-        close: ']'
+        close: ']',
       },
       {
         open: '"',
-        close: '"'
-      }
+        close: '"',
+      },
     ],
     surroundingPairs: [
       {
         open: '<',
-        close: '>'
+        close: '>',
       },
       {
         open: '{',
-        close: '}'
+        close: '}',
       },
       {
         open: '[',
-        close: ']'
+        close: ']',
       },
       {
         open: '"',
-        close: '"'
-      }
+        close: '"',
+      },
     ],
-    wordPattern: /(\"([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\")|(<([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)>)|(\[([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\])|([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)/g
+    wordPattern: /(\"([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\")|(<([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)>)|(\[([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\])|([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)/g,
   }
 }
 

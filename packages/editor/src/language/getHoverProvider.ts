@@ -1,25 +1,25 @@
-import * as monaco from "monaco-editor";
+import * as monaco from 'monaco-editor'
 import { isKeyword, isReference, isAction } from '../utils'
 
 const getKeywordHover = (keyword: string) => {
   switch (keyword) {
-    case 'goto': 
+    case 'goto':
       return [
         {
-          value: 'goto'
+          value: 'goto',
         },
         {
-          value: 'Enter another progress.'
-        }
+          value: 'Enter another progress.',
+        },
       ]
     case 'start':
       return [
         {
-          value: 'start'
+          value: 'start',
         },
         {
-          value: 'Set the progress as a enterance.'
-        }
+          value: 'Set the progress as a enterance.',
+        },
       ]
     default:
       return []
@@ -29,60 +29,63 @@ const getKeywordHover = (keyword: string) => {
 const getHoverProvider = (): monaco.languages.HoverProvider => {
   return {
     provideHover: function (model, position, token) {
-      let word = model.getWordAtPosition(position);
+      let word = model.getWordAtPosition(position)
       if (word) {
         if (isKeyword(word.word)) {
           const contents = getKeywordHover(word.word)
           const range = new monaco.Range(
             position.lineNumber,
             word.startColumn || 0,
-            position.lineNumber, word?.endColumn || 0
+            position.lineNumber,
+            word?.endColumn || 0
           )
           return {
             range,
-            contents
+            contents,
           }
         } else {
           const line = model.getLineContent(position.lineNumber)
           const start = Math.max(0, word.startColumn - 2)
           const end = Math.min(line.length, word.endColumn + 2)
           const content = line.slice(start, end)
-          
+
           if (isReference(content)) {
             const contents = [
               {
-                value: 'Reference'
+                value: 'Reference',
               },
               {
-                value: word.word
-              }
+                value: word.word,
+              },
             ]
             const range = new monaco.Range(
               position.lineNumber,
               word.startColumn || 0,
-              position.lineNumber, word?.endColumn || 0
+              position.lineNumber,
+              word?.endColumn || 0
             )
             return {
               range,
-              contents
+              contents,
             }
           } else if (isAction(content)) {
             const contents = [
               {
-                value: 'Action'
+                value: 'Action',
               },
               {
-                value: word.word
-              }
+                value: word.word,
+              },
             ]
             const range = new monaco.Range(
               position.lineNumber,
               word.startColumn || 0,
-              position.lineNumber, word?.endColumn || 0
+              position.lineNumber,
+              word?.endColumn || 0
             )
             return {
               range,
-              contents
+              contents,
             }
           } else {
             return null
@@ -91,7 +94,7 @@ const getHoverProvider = (): monaco.languages.HoverProvider => {
       } else {
         return null
       }
-    }
+    },
   }
 }
 

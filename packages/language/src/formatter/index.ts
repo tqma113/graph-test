@@ -1,6 +1,4 @@
-
-
- // @ts-nocheck
+// @ts-nocheck
 
 import type {
   Program,
@@ -19,10 +17,10 @@ import type {
   GotoStatement,
   SwitchBlock,
   CaseClause,
-  DefaultClause
+  DefaultClause,
 } from '../parser/ast'
 
 export const format = (ast: Program): Program => {
-  // TODO: 
+  // TODO:
   return ast
 }

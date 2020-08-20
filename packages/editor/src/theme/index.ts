@@ -1,4 +1,4 @@
-import * as monaco from "monaco-editor";
+import * as monaco from 'monaco-editor'
 
 export const GRAPH_THEME = 'graph-dark'
 
@@ -16,7 +16,7 @@ const getTheme = (): monaco.editor.IStandaloneThemeData => {
       { token: 'operator.arrow', foreground: 'c678dd' },
       { token: 'operator.assign', foreground: '61afef' },
     ],
-    colors: {}
+    colors: {},
   }
 }
 

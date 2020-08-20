@@ -1,7 +1,6 @@
 import { SemanticError } from './SemanticError'
-import {
-  FragmentKind
-} from '../parser/ast'
+import { FragmentKind } from '../parser/ast'
+import type { Identifier } from '../lexer/index'
 import type {
   Program,
   InferenceDefinition,
@@ -20,21 +19,18 @@ import type {
   ModuleStatement,
   ModuleItems,
   Statement,
-  Fragment
+  Fragment,
 } from '../parser/ast'
-import type {
-  Identifier
-} from '../lexer/index'
 
 export * from './SemanticError'
 
 export type Inference = {
-  identifier: Identifier,
+  identifier: Identifier
   definition: InferenceDefinition | ImportStatement
 }
 
 export type CheckSemanticResult = {
-  semanticErrors: SemanticError[],
+  semanticErrors: SemanticError[]
   table: Map<string, Inference>
 }
 
@@ -65,7 +61,7 @@ export const analysis = (program: Program): CheckSemanticResult => {
     importStatement.moduleItems.identifiers.forEach((identifier) => {
       addInference({
         identifier,
-        definition: importStatement
+        definition: importStatement,
       })
     })
   }
@@ -73,7 +69,7 @@ export const analysis = (program: Program): CheckSemanticResult => {
   const recordDefinition = (inferenceDefinition: InferenceDefinition) => {
     addInference({
       identifier: inferenceDefinition.identifier,
-      definition: inferenceDefinition
+      definition: inferenceDefinition,
     })
   }
 
@@ -81,7 +77,7 @@ export const analysis = (program: Program): CheckSemanticResult => {
     if (startStatement.module.definition) {
       addInference({
         identifier: startStatement.module.identifier,
-        definition: startStatement.module.definition
+        definition: startStatement.module.definition,
       })
     }
   }
@@ -89,7 +85,10 @@ export const analysis = (program: Program): CheckSemanticResult => {
   const addInference = (inference: Inference) => {
     const name = getContent(inference.identifier.word)
     if (inferenceTable.has(name)) {
-      reportError(`Module ${name} has been declared twice`, inference.definition)
+      reportError(
+        `Module ${name} has been declared twice`,
+        inference.definition
+      )
     } else {
       inferenceTable.set(name, inference)
     }
@@ -120,7 +119,9 @@ export const analysis = (program: Program): CheckSemanticResult => {
     }
   }
 
-  const checkInferenceDefinition = (inferenceDefinition: InferenceDefinition) => {
+  const checkInferenceDefinition = (
+    inferenceDefinition: InferenceDefinition
+  ) => {
     checkBlock(inferenceDefinition.block)
   }
 
@@ -128,9 +129,7 @@ export const analysis = (program: Program): CheckSemanticResult => {
     checkModuleItems(importStatement.moduleItems)
   }
 
-  const checkModuleItems = (moduleItems: ModuleItems) => {
-
-  }
+  const checkModuleItems = (moduleItems: ModuleItems) => {}
 
   const checkModule = (module: Module) => {
     const name = getContent(module.identifier.word)
@@ -175,9 +174,7 @@ export const analysis = (program: Program): CheckSemanticResult => {
     }
   }
 
-  const checkStepStatement = (stepStatement: StepStatement) => {
-
-  }
+  const checkStepStatement = (stepStatement: StepStatement) => {}
 
   const checkIfStatement = (ifStatement: IfStatement) => {
     checkBlock(ifStatement.ifBlock)
@@ -225,7 +222,7 @@ export const analysis = (program: Program): CheckSemanticResult => {
     },
     get table() {
       return inferenceTable
-    }
+    },
   }
 }
 

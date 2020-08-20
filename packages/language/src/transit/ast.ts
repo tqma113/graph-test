@@ -4,14 +4,11 @@ export type Tree = {
   starts: string[]
 }
 
-export const createTree = (
-  blocks: TreeBlock[],
-  starts: string[]
-): Tree => {
+export const createTree = (blocks: TreeBlock[], starts: string[]): Tree => {
   return {
     kind: NodeKind.Tree,
     blocks,
-    starts
+    starts,
   }
 }
 
@@ -21,14 +18,11 @@ export type TreeBlock = {
   children: Node[]
 }
 
-export const createTreeBlock = (
-  name: string,
-  children: Node[]
-): TreeBlock => {
+export const createTreeBlock = (name: string, children: Node[]): TreeBlock => {
   return {
     kind: NodeKind.Block,
     name,
-    children
+    children,
   }
 }
 
@@ -39,12 +33,10 @@ export type ActionNode = {
   expression: string
 }
 
-export const createActionNode = (
-  expression: string
-): ActionNode => {
+export const createActionNode = (expression: string): ActionNode => {
   return {
     kind: NodeKind.ActionNode,
-    expression
+    expression,
   }
 }
 
@@ -53,12 +45,10 @@ export type GotoNode = {
   name: string
 }
 
-export const createGotoNode = (
-  name: string
-): GotoNode => {
+export const createGotoNode = (name: string): GotoNode => {
   return {
     kind: NodeKind.GotoNode,
-    name
+    name,
   }
 }
 
@@ -78,7 +68,7 @@ export const createSwitchTree = (
     kind: NodeKind.SwitchTree,
     condition,
     children,
-    defaultChild
+    defaultChild,
   }
 }
 
@@ -95,7 +85,7 @@ export const createCaseNode = (
   return {
     kind: NodeKind.CaseNode,
     expectation,
-    children
+    children,
   }
 }
 
@@ -104,19 +94,17 @@ export type DefaultNode = {
   children: Node[]
 }
 
-export const createDefaultNode = (
-  children: Node[]
-): DefaultNode => {
+export const createDefaultNode = (children: Node[]): DefaultNode => {
   return {
     kind: NodeKind.DefaultNode,
-    children
+    children,
   }
 }
 
 export type IfTree = {
   kind: NodeKind.IfTree
-  condition: string,
-  successChildren: Node[],
+  condition: string
+  successChildren: Node[]
   faildChildren: Node[]
 }
 
@@ -129,7 +117,7 @@ export const createIfTree = (
     kind: NodeKind.IfTree,
     condition,
     successChildren,
-    faildChildren
+    faildChildren,
   }
 }
 
@@ -141,5 +129,5 @@ export enum NodeKind {
   SwitchTree = 'SwitchTree',
   CaseNode = 'CaseNode',
   DefaultNode = 'DefaultNode',
-  IfTree = 'IfTree'
+  IfTree = 'IfTree',
 }

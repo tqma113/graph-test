@@ -3,10 +3,13 @@
  * https://microsoft.github.io/language-server-protocol/
  */
 
-// @ts-nocheck
-
-import { createParser, analysis } from 'graph-language'
-import type { Inference, LexicalError, SyntaxError, SemanticError } from 'graph-language'
+import { createParser, analysis } from '@gtl/language'
+import type {
+  Inference,
+  LexicalError,
+  SyntaxError,
+  SemanticError,
+} from '@gtl/language'
 
 const createServer = (input: string = '') => {
   let definations: Map<string, Inference> = new Map()
@@ -26,7 +29,9 @@ const createServer = (input: string = '') => {
     lexicalErrors = parser.lexcialErrors
     syntaxErrors = parser.syntaxErrors
     if (parser.program) {
-      const { semanticErrors: _semanticErrors, table } = analysis(parser.program)
+      const { semanticErrors: _semanticErrors, table } = analysis(
+        parser.program
+      )
       semanticErrors = _semanticErrors
       definations = table
     } else {

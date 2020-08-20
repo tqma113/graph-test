@@ -1,4 +1,15 @@
+import { FragmentKind } from '../parser/ast'
 import {
+  NodeKind,
+  createTreeBlock,
+  createActionNode,
+  createIfTree,
+  createSwitchTree,
+  createCaseNode,
+  createDefaultNode,
+  createGotoNode,
+} from './ast'
+import type {
   Program,
   InferenceDefinition,
   ImportStatement,
@@ -16,22 +27,8 @@ import {
   ModuleStatement,
   ModuleItems,
   Statement,
-  FragmentKind
 } from '../parser/ast'
-import {
-  Tree,
-  TreeBlock,
-  Node,
-  IfTree,
-  NodeKind,
-  createTreeBlock,
-  createActionNode,
-  createIfTree,
-  createSwitchTree,
-  createCaseNode,
-  createDefaultNode,
-  createGotoNode
-} from './ast'
+import type { Tree, TreeBlock, Node, IfTree } from './ast'
 
 export const convert = (program: Program): Tree => {
   let blocks: TreeBlock[] = []
@@ -62,7 +59,9 @@ export const convert = (program: Program): Tree => {
     }
   }
 
-  const convertInferenceDefinition = (inferenceDefinition: InferenceDefinition) => {
+  const convertInferenceDefinition = (
+    inferenceDefinition: InferenceDefinition
+  ) => {
     const name = getContent(inferenceDefinition.identifier.word)
     const children = convertBlock(inferenceDefinition.block)
     blocks.push(createTreeBlock(name, children))
@@ -72,9 +71,7 @@ export const convert = (program: Program): Tree => {
     convertModuleItems(importStatement.moduleItems)
   }
 
-  const convertModuleItems = (moduleItems: ModuleItems) => {
-
-  }
+  const convertModuleItems = (moduleItems: ModuleItems) => {}
 
   const convertModule = (module: Module) => {
     if (module.definition) {
@@ -82,9 +79,7 @@ export const convert = (program: Program): Tree => {
     }
   }
 
-  const convertExportStatement = (exportStatement: ExportStatement) => {
-
-  }
+  const convertExportStatement = (exportStatement: ExportStatement) => {}
 
   const convertStartStatement = (startStatement: StartStatement) => {
     const name = getContent(startStatement.module.identifier.word)
@@ -113,7 +108,6 @@ export const convert = (program: Program): Tree => {
     }
   }
 
-
   const convertStepStatement = (stepStatement: StepStatement) => {
     const expression = getContent(stepStatement.expression.word)
     return createActionNode(expression)
@@ -122,23 +116,26 @@ export const convert = (program: Program): Tree => {
   const convertIfStatement = (ifStatement: IfStatement): IfTree => {
     const expression = getContent(ifStatement.expression.word)
     const successChildren = convertBlock(ifStatement.ifBlock)
-    const faildChildren
-      = ifStatement.elseBlock
-        ? convertBlock(ifStatement.elseBlock)
-        : []
+    const faildChildren = ifStatement.elseBlock
+      ? convertBlock(ifStatement.elseBlock)
+      : []
     return createIfTree(expression, successChildren, faildChildren)
   }
 
   const convertSwitchStatement = (switchStatement: SwitchStatement) => {
     const condition = getContent(switchStatement.expression.word)
-    const [children, defaultChild] = convertSwitchBlock(switchStatement.switchBlock)
+    const [children, defaultChild] = convertSwitchBlock(
+      switchStatement.switchBlock
+    )
     return createSwitchTree(condition, children, defaultChild)
   }
 
   const convertSwitchBlock = (switchBlock: SwitchBlock) => {
     return [
       switchBlock.caseClauses.map(convertCaseClause),
-      switchBlock.defaultClause ? convertDefaultClause(switchBlock.defaultClause) : null
+      switchBlock.defaultClause
+        ? convertDefaultClause(switchBlock.defaultClause)
+        : null,
     ] as const
   }
 
@@ -163,7 +160,7 @@ export const convert = (program: Program): Tree => {
   return {
     kind: NodeKind.Tree,
     blocks,
-    starts
+    starts,
   }
 }
 

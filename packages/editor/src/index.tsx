@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
-import * as monaco from "monaco-editor";
+import React, { useLayoutEffect, useRef, useState } from 'react'
+import * as monaco from 'monaco-editor'
 import registerLanguage from './language'
 import createEditor from './createEditor'
 import { initTheme } from './theme'
@@ -18,16 +18,14 @@ const defaultStyle: React.CSSProperties = {
 }
 
 const defaultOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
-  fontSize: 12
+  fontSize: 12,
 }
 
-function MonacoEditor({
-  onChange,
-  style,
-  initialValue
-}: MonacoEditorProps) {
-  const [value, setValue] = useState(initialValue|| '# start from here\n\n')
-  const [options, setOptions] = useState<monaco.editor.IStandaloneEditorConstructionOptions>(defaultOptions)
+function MonacoEditor({ onChange, style, initialValue }: MonacoEditorProps) {
+  const [value, setValue] = useState(initialValue || '# start from here\n\n')
+  const [options, setOptions] = useState<
+    monaco.editor.IStandaloneEditorConstructionOptions
+  >(defaultOptions)
   const containerRef = useRef<HTMLDivElement>(null)
   const editor = useRef<monaco.editor.IStandaloneCodeEditor>()
   const subscription = useRef<monaco.IDisposable>()
@@ -80,26 +78,26 @@ function MonacoEditor({
     const fontSize = Number(event.target.value)
     setOptions({
       ...options,
-      fontSize
+      fontSize,
     })
   }
 
   style = {
     ...defaultStyle,
-    ...style
+    ...style,
   }
-  
+
   return (
     <div>
       <span>
-        <FontSizeSelect value={options.fontSize} onChange={handleFonSizeSelect} />
+        <FontSizeSelect
+          value={options.fontSize}
+          onChange={handleFonSizeSelect}
+        />
       </span>
-      <div
-        ref={containerRef}
-        style={style}
-      />
+      <div ref={containerRef} style={style} />
     </div>
-  );
+  )
 }
 
-export default MonacoEditor;
+export default MonacoEditor
