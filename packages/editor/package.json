@@ -1,5 +1,5 @@
 {
-  "name": "graph-editor",
+  "name": "@gtl/editor",
   "version": "1.0.0",
   "description": "A graph language editor.",
   "main": "index.js",
