@@ -1,3 +1,4 @@
+const fs = require('fs-extra')
 const execa = require('execa')
 const path = require('path')
 const chalk = require('chalk')
@@ -15,7 +16,15 @@ async function build(target) {
   )
 }
 
-
+async function tsc(target) {
+  const pkgDir = path.resolve(`packages/${target}`)
+  const tsconfig = path.resolve(pkgDir, `tsconfig.json`)
+  await execa(
+    'tsc', [
+      '-p', [tsconfig]
+    ], { stdio: 'inherit' }
+  )
+}
 
 function dts(target) {
   const pkgDir = path.resolve(`packages/${target}`)
@@ -39,16 +48,8 @@ function dts(target) {
     )
     process.exitCode = 1
   }
-}
 
-async function tsc(target) {
-  const pkgDir = path.resolve(`packages/${target}`)
-  const tsconfig = path.resolve(pkgDir, `tsconfig.json`)
-  await execa(
-    'tsc', [
-      '-p', [tsconfig]
-    ], { stdio: 'inherit' }
-  )
+  fs.removeSync(path.resolve(pkgDir, 'dist/src'))
 }
 
 async function run() {
