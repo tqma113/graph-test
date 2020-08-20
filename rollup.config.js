@@ -21,7 +21,7 @@ function createConfig() {
       commonjs({ extensions: ['.js', '.jsx', '.ts', '.tsx'] }),
     ],
     output: {
-      format: 'es',
+      format: 'cjs',
       file: output,
     },
     onwarn: (msg, warn) => {
