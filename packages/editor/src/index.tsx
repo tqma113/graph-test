@@ -40,7 +40,7 @@ function MonacoEditor({
 
   useLayoutEffect(() => {
     if (tree) {
-      // TODO
+      setCode('')
     }
   }, [])
 
@@ -57,7 +57,9 @@ function MonacoEditor({
     editor.current = createEditor(
       containerRef.current as HTMLElement,
       code,
-      options
+      options,
+      onSave,
+      onError
     )
   }
 

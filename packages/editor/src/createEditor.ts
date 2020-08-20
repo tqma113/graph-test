@@ -67,6 +67,8 @@ const createEditor = (
     const content = lines.join('\n')
     server.didChange(content)
   })
+  
+  server.didChange(value)
 
   return editor
 }

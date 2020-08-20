@@ -2,11 +2,11 @@ import React from 'react';
 import Editor from '@gtl/editor'
 
 function App() {
-  const onChange = (c: any) => {
-    // console.log({
-    //   c,
-    //   e
-    // })
+  const onChange = (code: any, tree: any) => {
+    console.log({
+      code,
+      tree
+    })
   }
   const initialValue = `<从首页进入旅游频道> = {
     [打开携程首页]
@@ -92,7 +92,7 @@ function App() {
 `
   return (
     <div className="App">
-      <Editor onChange={onChange} initialValue={initialValue} />
+      <Editor onSave={onChange} value={initialValue} />
     </div>
   );
 }

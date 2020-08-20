@@ -44,7 +44,7 @@ import type {
   ModuleItems,
   Module,
 } from './ast'
-import type { Token, Identifier, Action, Path } from '../lexer'
+import type { Token, Identifier, Action, Path, Comment } from '../lexer'
 
 export * from './ast'
 export * from './SyntaxError'
@@ -64,6 +64,7 @@ export const createParser = (
 
   let token = (null as any) as Token
   let cache: Token[] = []
+  let comments: Comment[] = []
 
   let program: Program | null = null
   let errors: SyntaxError[] = []
@@ -81,6 +82,8 @@ export const createParser = (
       const tok = lexer.next()
       if (tok.kind !== TokenKind.Comment) {
         return tok
+      } else {
+        comments.push(tok)
       }
     }
   }
@@ -105,6 +108,12 @@ export const createParser = (
       cache.push(token)
       return token
     }
+  }
+
+  const consumeComments = () => {
+    const cms = comments
+    comments = []
+    return cms
   }
 
   /**
@@ -132,13 +141,17 @@ export const createParser = (
       }
     }
 
-    return createProgram(moduleStatemens, {
-      start: {
-        line: 1,
-        column: 1,
+    return createProgram(
+      moduleStatemens,
+      {
+        start: {
+          line: 1,
+          column: 1,
+        },
+        end: lexer.getPosition(),
       },
-      end: lexer.getPosition(),
-    })
+      consumeComments()
+    )
   }
 
   /**
@@ -194,10 +207,15 @@ export const createParser = (
         if (block === null) {
           return null
         } else {
-          return createInferenceDefinition(identifier, block, {
-            start: identifier.range.start,
-            end: block.range.end,
-          })
+          return createInferenceDefinition(
+            identifier,
+            block,
+            {
+              start: identifier.range.start,
+              end: block.range.end,
+            },
+            consumeComments()
+          )
         }
       } else {
         reportError(OperatorEnum.Assign, token)
@@ -268,10 +286,15 @@ export const createParser = (
         if (requireKeyword(KeywordEnum.From)) {
           if (requirePath()) {
             const path = token as Path
-            return createImportStatement(moduleItems, path, {
-              start,
-              end: token.range.end,
-            })
+            return createImportStatement(
+              moduleItems,
+              path,
+              {
+                start,
+                end: token.range.end,
+              },
+              consumeComments()
+            )
           } else {
             reportError('Path: "somethings"', token)
             return null
@@ -358,10 +381,14 @@ export const createParser = (
       const start = token.range.start
       const module = matchModule()
       if (module) {
-        return createExportStatement(module, {
-          start,
-          end: module.range.end,
-        })
+        return createExportStatement(
+          module,
+          {
+            start,
+            end: module.range.end,
+          },
+          consumeComments()
+        )
       } else {
         return null
       }
@@ -384,10 +411,14 @@ export const createParser = (
       const start = token.range.start
       const module = matchModule()
       if (module) {
-        return createStartStatement(module, {
-          start,
-          end: module.range.end,
-        })
+        return createStartStatement(
+          module,
+          {
+            start,
+            end: module.range.end,
+          },
+          consumeComments()
+        )
       } else {
         return null
       }
@@ -479,7 +510,7 @@ export const createParser = (
   const matchStepStatement = (): StepStatement => {
     nextToken()
     const expression = token as Action
-    return createStepStatement(expression, token.range)
+    return createStepStatement(expression, token.range, consumeComments())
   }
 
   /**
@@ -506,21 +537,39 @@ export const createParser = (
               nextToken()
               const elseBlock = matchBlock()
               if (elseBlock) {
-                return createIfStatement(expression, ifBlock, elseBlock, {
-                  start,
-                  end: elseBlock.range.end,
-                })
+                return createIfStatement(
+                  expression,
+                  ifBlock,
+                  elseBlock,
+                  {
+                    start,
+                    end: elseBlock.range.end,
+                  },
+                  consumeComments()
+                )
               } else {
-                return createIfStatement(expression, ifBlock, null, {
-                  start,
-                  end: ifBlock.range.end,
-                })
+                return createIfStatement(
+                  expression,
+                  ifBlock,
+                  null,
+                  {
+                    start,
+                    end: ifBlock.range.end,
+                  },
+                  consumeComments()
+                )
               }
             } else {
-              return createIfStatement(expression, ifBlock, null, {
-                start,
-                end: ifBlock.range.end,
-              })
+              return createIfStatement(
+                expression,
+                ifBlock,
+                null,
+                {
+                  start,
+                  end: ifBlock.range.end,
+                },
+                consumeComments()
+              )
             }
           } else {
             return null
@@ -554,10 +603,15 @@ export const createParser = (
         const expression = token as Action
         const switchBlock = matchSwitchBlock()
         if (switchBlock) {
-          return createSwitchStatement(expression, switchBlock, {
-            start,
-            end: switchBlock.range.end,
-          })
+          return createSwitchStatement(
+            expression,
+            switchBlock,
+            {
+              start,
+              end: switchBlock.range.end,
+            },
+            consumeComments()
+          )
         } else {
           return null
         }
@@ -639,10 +693,15 @@ export const createParser = (
       if (requireOperator(OperatorEnum.Result)) {
         const block = matchBlock()
         if (block) {
-          return createCaseClause(expression, block, {
-            start,
-            end: block.range.end,
-          })
+          return createCaseClause(
+            expression,
+            block,
+            {
+              start,
+              end: block.range.end,
+            },
+            consumeComments()
+          )
         } else {
           return null
         }
@@ -669,10 +728,14 @@ export const createParser = (
     if (requireOperator(OperatorEnum.Result)) {
       const block = matchBlock()
       if (block) {
-        return createDefaultClause(block, {
-          start,
-          end: block.range.end,
-        })
+        return createDefaultClause(
+          block,
+          {
+            start,
+            end: block.range.end,
+          },
+          consumeComments()
+        )
       } else {
         return null
       }
@@ -695,10 +758,14 @@ export const createParser = (
       const start = token.range.start
       if (requireIdentifier()) {
         const identifier = token as Identifier
-        return createGotoStatement(identifier, {
-          start,
-          end: token.range.end,
-        })
+        return createGotoStatement(
+          identifier,
+          {
+            start,
+            end: token.range.end,
+          },
+          consumeComments()
+        )
       } else {
         reportError(`Identifier: <somethings>`, token)
         return null

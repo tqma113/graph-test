@@ -23,6 +23,7 @@ function createConfig() {
     output: {
       format: 'cjs',
       file: output,
+      exports: 'auto'
     },
     onwarn: (msg, warn) => {
       if (!/Circular/.test(msg)) {

@@ -31,6 +31,7 @@ const createServer = (input: string = '') => {
     lexicalErrors = parser.lexcialErrors
     syntaxErrors = parser.syntaxErrors
     if (parser.program) {
+      program = parser.program
       const { semanticErrors: _semanticErrors, table } = analysis(
         parser.program
       )
