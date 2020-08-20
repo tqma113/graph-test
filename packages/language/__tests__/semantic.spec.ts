@@ -1,7 +1,7 @@
 import { createParser, analysis } from '../src'
 
 describe('semantic', () => {
-  describe('defination', () => {
+  describe('definition', () => {
     it('InferenceDefinition', () => {
       const input = `<从首页进入旅游频道> = {
         
@@ -20,9 +20,9 @@ describe('semantic', () => {
         expect(semanticErrors.length).toBe(0)
         expect(table.has('从首页进入旅游频道')).toBeTruthy()
 
-        const defination = table.get('从首页进入旅游频道')
-        if (defination) {
-          expect(defination.identifier.word).toBe('<从首页进入旅游频道>')
+        const definition = table.get('从首页进入旅游频道')
+        if (definition) {
+          expect(definition.identifier.word).toBe('<从首页进入旅游频道>')
         }
       }
     })
@@ -45,9 +45,9 @@ describe('semantic', () => {
         expect(semanticErrors.length).toBe(0)
         expect(table.has('从首页进入旅游频道')).toBeTruthy()
 
-        const defination = table.get('从首页进入旅游频道')
-        if (defination) {
-          expect(defination.identifier.word).toBe('<从首页进入旅游频道>')
+        const definition = table.get('从首页进入旅游频道')
+        if (definition) {
+          expect(definition.identifier.word).toBe('<从首页进入旅游频道>')
         }
       }
     })
@@ -77,15 +77,15 @@ describe('semantic', () => {
         expect(semanticErrors.length).toBe(0)
 
         expect(table.has('从首页进入旅游频道')).toBeTruthy()
-        const defination1 = table.get('从首页进入旅游频道')
-        if (defination1) {
-          expect(defination1.identifier.word).toBe('<从首页进入旅游频道>')
+        const definition1 = table.get('从首页进入旅游频道')
+        if (definition1) {
+          expect(definition1.identifier.word).toBe('<从首页进入旅游频道>')
         }
 
         expect(table.has('创建出行人')).toBeTruthy()
-        const defination2 = table.get('创建出行人')
-        if (defination2) {
-          expect(defination2.identifier.word).toBe('<创建出行人>')
+        const definition2 = table.get('创建出行人')
+        if (definition2) {
+          expect(definition2.identifier.word).toBe('<创建出行人>')
         }
       }
     })

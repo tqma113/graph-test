@@ -14,7 +14,7 @@ import type {
 
 const createServer = (input: string = '') => {
   let program: Program | null = null
-  let definations: Map<string, Inference> = new Map()
+  let definitions: Map<string, Inference> = new Map()
 
   let lexicalErrors: LexicalError[] = []
   let syntaxErrors: SyntaxError[] = []
@@ -36,10 +36,10 @@ const createServer = (input: string = '') => {
         parser.program
       )
       semanticErrors = _semanticErrors
-      definations = table
+      definitions = table
     } else {
       semanticErrors = []
-      definations = new Map()
+      definitions = new Map()
     }
   }
 
@@ -54,8 +54,8 @@ const createServer = (input: string = '') => {
     get program() {
       return program
     },
-    get definations() {
-      return definations
+    get definitions() {
+      return definitions
     },
     get lexicalErrors() {
       return lexicalErrors

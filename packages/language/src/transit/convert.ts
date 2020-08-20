@@ -28,7 +28,7 @@ import type {
   ModuleItems,
   Statement,
 } from '../parser/ast'
-import type { Tree, TreeBlock, Node, IfTree } from './ast'
+import type { Tree, TreeBlock, TreeNode, IfTree } from './ast'
 import type { Comment } from '../lexer'
 
 export const convert = (program: Program): Tree => {
@@ -86,7 +86,7 @@ export const convert = (program: Program): Tree => {
     starts.push(name)
   }
 
-  const convertBlock = (block: Block): Node[] => {
+  const convertBlock = (block: Block): TreeNode[] => {
     return block.list.map(checkStatement)
   }
 

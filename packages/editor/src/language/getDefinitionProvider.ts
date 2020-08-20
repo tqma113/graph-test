@@ -9,15 +9,15 @@ const getDefinitionProvider = (): monaco.languages.DefinitionProvider => {
       const word = model.getWordAtPosition(position)
       if (word && isReference(word.word)) {
         const name = word.word.slice(1, word.word.length - 1)
-        const defination = server.definations.get(name)
-        if (defination) {
+        const definition = server.definitions.get(name)
+        if (definition) {
           return {
             uri,
             range: {
-              startLineNumber: defination.definition.range.start.line,
-              startColumn: defination.definition.range.start.column,
-              endLineNumber: defination.definition.range.end.line,
-              endColumn: defination.definition.range.end.column,
+              startLineNumber: definition.definition.range.start.line,
+              startColumn: definition.definition.range.start.column,
+              endLineNumber: definition.definition.range.end.line,
+              endColumn: definition.definition.range.end.column,
             },
           }
         }

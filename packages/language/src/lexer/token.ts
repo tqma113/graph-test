@@ -109,7 +109,7 @@ export const createComment = (
 
 export type EOP = {
   kind: TokenKind.EOP
-  word: null
+  word: 'eop'
   range: Range
 }
 
@@ -118,7 +118,7 @@ export const createEOP = (
 ): EOP => {
   return {
     kind: TokenKind.EOP,
-    word: null,
+    word: 'eop',
     range
   }
 }

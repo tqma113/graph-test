@@ -157,12 +157,12 @@ const getIdentifierSuggestions = (
 ): monaco.languages.CompletionItem[] => {
   let suggestions: monaco.languages.CompletionItem[] = []
 
-  server.definations.forEach((defination) => {
+  server.definitions.forEach((definition) => {
     suggestions.push({
-      label: defination.identifier.word,
+      label: definition.identifier.word,
       kind: monaco.languages.CompletionItemKind.Function,
-      insertText: `<${defination.identifier.word}>`,
-      detail: `Inference ${defination.identifier.word}`,
+      insertText: `<${definition.identifier.word}>`,
+      detail: `Inference ${definition.identifier.word}`,
       range,
     })
   })

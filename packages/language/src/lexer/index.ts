@@ -129,11 +129,7 @@ export const createLexer = (
     while (true) {
       const char = getCurrentChar()
       if (isEoP()) {
-        return {
-          kind: TokenKind.EOP,
-          word: null,
-          range: getRange(),
-        }
+        return createEOP(getRange())
       }
       if (isWhitespace(char)) {
         if (isNewLineChar(char)) {

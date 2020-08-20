@@ -152,7 +152,7 @@ describe('parser', () => {
       }
     })
 
-    it('export defination', () => {
+    it('export definition', () => {
       const input = `export <从首页进入旅游频道> = {
         [打开携程首页]
       
@@ -206,7 +206,7 @@ describe('parser', () => {
       }
     })
 
-    it('start defination', () => {
+    it('start definition', () => {
       const input = `start <从首页进入旅游频道> = {
         [打开携程首页]
       
