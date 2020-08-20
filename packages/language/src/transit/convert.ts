@@ -1,6 +1,5 @@
 import { FragmentKind } from '../parser/ast'
 import {
-  NodeKind,
   createTreeBlock,
   createActionNode,
   createIfTree,
@@ -8,6 +7,7 @@ import {
   createCaseNode,
   createDefaultNode,
   createGotoNode,
+  createTree,
 } from './ast'
 import type {
   Program,
@@ -29,11 +29,9 @@ import type {
   Statement,
 } from '../parser/ast'
 import type { Tree, TreeBlock, Node, IfTree } from './ast'
+import type { Comment } from '../lexer'
 
 export const convert = (program: Program): Tree => {
-  let blocks: TreeBlock[] = []
-  let starts: string[] = []
-
   const convertProgram = (program: Program) => {
     program.moduleStatemens.forEach(convertModuleStatement)
   }
@@ -64,7 +62,8 @@ export const convert = (program: Program): Tree => {
   ) => {
     const name = getContent(inferenceDefinition.identifier.word)
     const children = convertBlock(inferenceDefinition.block)
-    blocks.push(createTreeBlock(name, children))
+    const comments = inferenceDefinition.comments.map(trimComment)
+    blocks.push(createTreeBlock(name, children, comments))
   }
 
   const convertImportStatement = (importStatement: ImportStatement) => {
@@ -110,7 +109,8 @@ export const convert = (program: Program): Tree => {
 
   const convertStepStatement = (stepStatement: StepStatement) => {
     const expression = getContent(stepStatement.expression.word)
-    return createActionNode(expression)
+    const comments = stepStatement.comments.map(trimComment)
+    return createActionNode(expression, comments)
   }
 
   const convertIfStatement = (ifStatement: IfStatement): IfTree => {
@@ -119,7 +119,8 @@ export const convert = (program: Program): Tree => {
     const faildChildren = ifStatement.elseBlock
       ? convertBlock(ifStatement.elseBlock)
       : []
-    return createIfTree(expression, successChildren, faildChildren)
+    const comments = ifStatement.comments.map(trimComment)
+    return createIfTree(expression, successChildren, faildChildren, comments)
   }
 
   const convertSwitchStatement = (switchStatement: SwitchStatement) => {
@@ -127,7 +128,8 @@ export const convert = (program: Program): Tree => {
     const [children, defaultChild] = convertSwitchBlock(
       switchStatement.switchBlock
     )
-    return createSwitchTree(condition, children, defaultChild)
+    const comments = switchStatement.comments.map(trimComment)
+    return createSwitchTree(condition, children, defaultChild, comments)
   }
 
   const convertSwitchBlock = (switchBlock: SwitchBlock) => {
@@ -142,28 +144,36 @@ export const convert = (program: Program): Tree => {
   const convertCaseClause = (caseClause: CaseClause) => {
     const expectation = getContent(caseClause.expression.word)
     const children = convertBlock(caseClause.block)
-    return createCaseNode(expectation, children)
+    const comments = caseClause.comments.map(trimComment)
+    return createCaseNode(expectation, children, comments)
   }
 
   const convertDefaultClause = (defaultClause: DefaultClause) => {
     const children = convertBlock(defaultClause.block)
-    return createDefaultNode(children)
+    const comments = defaultClause.comments.map(trimComment)
+    return createDefaultNode(children, comments)
   }
 
   const convertGotoStatement = (gotoStatement: GotoStatement) => {
     const name = getContent(gotoStatement.identifier.word)
-    return createGotoNode(name)
+    const comments = gotoStatement.comments.map(trimComment)
+    return createGotoNode(name, comments)
   }
+
+  let blocks: TreeBlock[] = []
+  let starts: string[] = []
 
   convertProgram(program)
 
-  return {
-    kind: NodeKind.Tree,
-    blocks,
-    starts,
-  }
+  const comments = program.comments.map(trimComment)
+
+  return createTree(blocks, starts, comments)
 }
 
 const getContent = (word: string): string => {
   return word.slice(1, word.length - 1)
+}
+
+const trimComment = (comment: Comment) => {
+  return comment.word.replace(/^#/, '').trim()
 }
