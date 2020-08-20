@@ -7,6 +7,8 @@
   "scripts": {
     "dev": "node example/scripts/start.js",
     "build": "node scripts/build.js",
+    "build:editor": "node scripts/build.editor.js",
+    "build:language": "node scripts/build.language.js",
     "dts": "node scripts/dts.js",
     "test": "jest",
     "build:antlr": "node scripts/build.antlr.js",

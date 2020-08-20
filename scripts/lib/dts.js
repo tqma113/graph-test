@@ -1,8 +1,6 @@
 const path = require('path')
 const chalk = require('chalk')
-const execa = require('execa')
 const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor')
-const targets = require('./targets')
 
 function dts(target) {
   const pkgDir = path.resolve(`packages/${target}`)
@@ -28,21 +26,4 @@ function dts(target) {
   }
 }
 
-async function tsc(target) {
-  const pkgDir = path.resolve(`packages/${target}`)
-  const tsconfig = path.resolve(pkgDir, `tsconfig.json`)
-  await execa(
-    'tsc', [
-      '-p', [tsconfig]
-    ], { stdio: 'inherit' }
-  )
-}
-
-async function run() {
-  for (const target of targets) {
-    await tsc(target)
-    dts(target)
-  }
-}
-
-run()
+module.exports = dts

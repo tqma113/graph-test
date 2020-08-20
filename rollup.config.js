@@ -14,11 +14,11 @@ function createConfig() {
 
   return {
     input,
-    external: ['react', 'monaco-editor', 'monaco-editor/esm/vs/editor/editor.api'],
+    external: ['react', 'monaco-editor', 'monaco-editor/esm/vs/editor/editor.api', '@gtl/language'],
     plugins: [
       babel({ babelHelpers: 'bundled', presets: ['@babel/preset-react'] }),
       typescript({ module: 'CommonJS' }),
-      commonjs({ extensions: ['.js', '.ts'] }),
+      commonjs({ extensions: ['.js', '.jsx', '.ts', '.tsx'] }),
     ],
     output: {
       format: 'es',

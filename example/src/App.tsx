@@ -1,5 +1,5 @@
 import React from 'react';
-import Editor from 'graph-editor'
+import Editor from '@gtl/editor'
 
 function App() {
   const onChange = (c: any) => {
