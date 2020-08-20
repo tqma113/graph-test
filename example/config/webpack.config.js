@@ -630,7 +630,7 @@ module.exports = function(webpackEnv) {
         formatter: isEnvProduction ? typescriptFormatter : undefined,
       }),
       new MonacoWebpackPlugin({
-        languages: ["graph"],
+        languages: ["graph", "json"],
       })
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.

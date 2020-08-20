@@ -625,7 +625,7 @@ describe('parser', () => {
 
       expect(parser.lexcialErrors.length).toBe(0)
       expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe("Expect { } }, accept 'null'")
+      expect(parser.syntaxErrors[0].message).toBe("Expect { } }, accept 'eop'")
     })
 
     it('ImportStatement case 1', () => {
@@ -669,7 +669,7 @@ describe('parser', () => {
 
       expect(parser.lexcialErrors.length).toBe(0)
       expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe("Expect { { }, accept 'null'")
+      expect(parser.syntaxErrors[0].message).toBe("Expect { { }, accept 'eop'")
     })
 
     it('ExportStatement case 2', () => {
@@ -680,7 +680,7 @@ describe('parser', () => {
       expect(parser.lexcialErrors.length).toBe(0)
       expect(parser.syntaxErrors.length).toBe(1)
       expect(parser.syntaxErrors[0].message).toBe(
-        "Expect { Identifier: <somethings> }, accept 'null'"
+        "Expect { Identifier: <somethings> }, accept 'eop'"
       )
     })
 
@@ -692,7 +692,7 @@ describe('parser', () => {
       expect(parser.lexcialErrors.length).toBe(0)
       expect(parser.syntaxErrors.length).toBe(1)
       expect(parser.syntaxErrors[0].message).toBe(
-        "Expect { Identifier: <somethings> }, accept 'null'"
+        "Expect { Identifier: <somethings> }, accept 'eop'"
       )
     })
 
@@ -703,7 +703,7 @@ describe('parser', () => {
 
       expect(parser.lexcialErrors.length).toBe(0)
       expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe("Expect { { }, accept 'null'")
+      expect(parser.syntaxErrors[0].message).toBe("Expect { { }, accept 'eop'")
     })
 
     it('IfStatement case 1', () => {
@@ -731,7 +731,7 @@ describe('parser', () => {
       expect(parser.lexcialErrors.length).toBe(0)
       expect(parser.syntaxErrors.length).toBe(2)
       expect(parser.syntaxErrors[0].message).toBe("Expect { { }, accept '}'")
-      expect(parser.syntaxErrors[1].message).toBe("Expect { } }, accept 'null'")
+      expect(parser.syntaxErrors[1].message).toBe("Expect { } }, accept 'eop'")
     })
 
     it('GotoStatement case 1', () => {
@@ -746,7 +746,7 @@ describe('parser', () => {
       expect(parser.syntaxErrors[0].message).toBe(
         "Expect { Identifier: <somethings> }, accept '}'"
       )
-      expect(parser.syntaxErrors[1].message).toBe("Expect { } }, accept 'null'")
+      expect(parser.syntaxErrors[1].message).toBe("Expect { } }, accept 'eop'")
     })
   })
 })

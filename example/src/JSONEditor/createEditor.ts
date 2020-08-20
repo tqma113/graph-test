@@ -1,9 +1,12 @@
 import * as monaco from 'monaco-editor'
+import { Tree } from '@gtl/language'
 
-export default (
+const createEditor = (
   container: HTMLElement,
   value: string,
-  options?: monaco.editor.IStandaloneEditorConstructionOptions
+  options: monaco.editor.IStandaloneEditorConstructionOptions = {},
+  onSave?: (tree: Tree) => void,
+  onError?: (message: string) => void
 ) => {
   const model = monaco.editor.createModel(value, 'json')
   const editor = monaco.editor.create(container, {
@@ -13,6 +16,10 @@ export default (
     theme: 'vs-dark',
     model,
   })
+
+  const tryToError = (message: string) => {
+    onError && onError(message)
+  }
 
   editor.addAction({
     // An unique identifier of the contributed action.
@@ -38,15 +45,18 @@ export default (
     // Method that will be executed when the action is triggered.
     // @param editor The editor instance is passed in as a convinience
     run: function (ed) {
-      // TODO: do save operation
-      console.log("i'm running => " + ed.getPosition())
+      const lines = model.getLinesContent()
+      const content = lines.join('\n')
+      try {
+        const tree = JSON.parse(content)
+        onSave && onSave(tree)
+      } catch (err) {
+        tryToError(err)
+      }
     },
   })
-
-  model.onDidChangeContent((e) => {
-    const lines = model.getLinesContent()
-    const content = lines.join('\n')
-  })
-
+  
   return editor
 }
+
+export default createEditor

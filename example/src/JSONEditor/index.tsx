@@ -1,10 +1,11 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import * as monaco from 'monaco-editor'
 import createEditor from './createEditor'
+import { Tree } from '@gtl/language'
 
 export type MonacoEditorProps = {
-  onChange?: (content: string) => void
-  onSave?: (content: string) => void
+  onSave?: (tree: Tree) => void,
+  onError?: (message: string) => void
   style?: React.CSSProperties
   initialValue?: string
 }
@@ -18,8 +19,8 @@ const defaultOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   fontSize: 12,
 }
 
-function MonacoEditor({ onChange, style, initialValue }: MonacoEditorProps) {
-  const [value, setValue] = useState(initialValue || '# start from here\n\n')
+function MonacoEditor({ onSave, onError, style, initialValue = '{}' }: MonacoEditorProps) {
+  const [value, setValue] = useState(initialValue)
   const [options, setOptions] = useState<
     monaco.editor.IStandaloneEditorConstructionOptions
   >(defaultOptions)
@@ -28,31 +29,26 @@ function MonacoEditor({ onChange, style, initialValue }: MonacoEditorProps) {
   const subscription = useRef<monaco.IDisposable>()
 
   useLayoutEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  useLayoutEffect(() => {
     initMonaco()
     return () => {
       destoryMonaco()
     }
-  }, [options])
+  }, [options, value])
 
   const initMonaco = () => {
+    console.log(value)
     editor.current = createEditor(
       containerRef.current as HTMLElement,
       value,
-      options
+      options,
+      onSave,
+      onError
     )
-
-    const model = editor.current.getModel()
-    if (model) {
-      subscription.current = model.onDidChangeContent((e) => {
-        if (onChange) {
-          const lines = model.getLinesContent()
-          const content = lines.join('\n')
-
-          setValue(content)
-          onChange(content)
-        }
-      })
-    }
+    editor.current.getAction('editor.action.formatDocument').run()
   }
 
   const destoryMonaco = () => {

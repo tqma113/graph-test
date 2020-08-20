@@ -99,7 +99,7 @@ describe('lexer', () => {
         'import',
         'from',
         'export',
-        null,
+        'eop',
       ]
       const input = `start goto if else switch case default import from export`
       const lexer = createLexer(input)
@@ -118,7 +118,7 @@ describe('lexer', () => {
     })
 
     it('Operator', () => {
-      const operators = ['{', '}', '=', '->', ',', null]
+      const operators = ['{', '}', '=', '->', ',', 'eop']
       const input = `{ } = -> ,`
       const lexer = createLexer(input)
       lexer.run()
@@ -284,7 +284,7 @@ describe('lexer', () => {
         'import',
         'from',
         'export',
-        null,
+        'eop',
       ]
       const input = `start goto if else switch case default import from export`
       const lexer = createLexer(input)
@@ -303,7 +303,7 @@ describe('lexer', () => {
     })
 
     it('Operator', () => {
-      const operators = ['{', '}', '=', '->', ',', null]
+      const operators = ['{', '}', '=', '->', ',', 'eop']
       const input = `{ } = -> ,`
       const lexer = createLexer(input)
 

@@ -1,13 +1,25 @@
-import React from 'react';
-import Editor from '@gtl/editor'
+import React, { useState } from 'react';
+import CodeEditor from '@gtl/editor'
+import { Tree } from '@gtl/language'
+import JSONEditor from './JSONEditor'
 
 function App() {
-  const onChange = (code: any, tree: any) => {
+  const [tree, setTree] = useState({} as Tree)
+
+  const onCodeChange = (code: any, tree: any) => {
     console.log({
       code,
       tree
     })
+    setTree(tree)
   }
+
+  const onJSONChange = (tree: any) => {
+    console.log({
+      tree
+    })
+  }
+
   const initialValue = `<从首页进入旅游频道> = {
     [打开携程首页]
   
@@ -92,7 +104,8 @@ function App() {
 `
   return (
     <div className="App">
-      <Editor onSave={onChange} value={initialValue} />
+      <CodeEditor style={{ width: '40%', float: "left" }} onSave={onCodeChange} value={initialValue} />
+      <JSONEditor style={{ width: '40%', float: "right" }} onSave={onJSONChange} initialValue={JSON.stringify(tree)} />
     </div>
   );
 }
