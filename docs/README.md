@@ -1,1 +1,1 @@
-# graphq-render
+# Graph Test Language

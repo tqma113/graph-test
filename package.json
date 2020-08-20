@@ -23,14 +23,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tqma113/graph-render.git"
+    "url": "git+https://github.com/tqma113/graph-test-language.git"
   },
   "author": "Ma Tianqi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tqma113/graph-render/issues"
+    "url": "https://github.com/tqma113/graph-test-language/issues"
   },
-  "homepage": "https://github.com/tqma113/graph-render#readme",
+  "homepage": "https://github.com/tqma113/graph-test-language#readme",
   "lint-staged": {
     "*.js": [
       "prettier --write"

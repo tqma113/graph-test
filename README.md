@@ -1,11 +1,11 @@
-# graph-render
+# Graph Test Language
 
-A graph render.
+A graph test language.
 
 ## example
 
-1. `git clone https://github.com/tqma113/graph-render.git`
-2. `cd graph-render`
+1. `git clone https://github.com/tqma113/graph-test-language.git`
+2. `cd graph-test-language`
 3. `yarn`
 4. `cd example`
 5. `yarn`

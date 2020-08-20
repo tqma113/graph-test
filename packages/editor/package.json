@@ -1,20 +1,20 @@
 {
   "name": "@gtl/editor",
   "version": "1.0.0",
-  "description": "A graph language editor.",
+  "description": "A graph test language editor.",
   "main": "index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tqma113/graph-render.git"
+    "url": "git+https://github.com/tqma113/graph-test-language.git"
   },
   "author": "Ma Tianqi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tqma113/graph-render/issues"
+    "url": "https://github.com/tqma113/graph-test-language/issues"
   },
-  "homepage": "https://github.com/tqma113/graph-render/packages/editor#readme",
+  "homepage": "https://github.com/tqma113/graph-test-language/packages/editor#readme",
   "files": [
     "index.js",
     "dist"
