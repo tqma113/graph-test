@@ -5,6 +5,7 @@
 
 import { createParser, analysis } from '@gtl/language'
 import type {
+  Program,
   Inference,
   LexicalError,
   SyntaxError,
@@ -12,6 +13,7 @@ import type {
 } from '@gtl/language'
 
 const createServer = (input: string = '') => {
+  let program: Program | null = null
   let definations: Map<string, Inference> = new Map()
 
   let lexicalErrors: LexicalError[] = []
@@ -47,6 +49,9 @@ const createServer = (input: string = '') => {
 
     get input() {
       return input
+    },
+    get program() {
+      return program
     },
     get definations() {
       return definations
