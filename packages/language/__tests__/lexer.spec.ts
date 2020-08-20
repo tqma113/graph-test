@@ -135,6 +135,17 @@ describe('lexer', () => {
       }
     })
 
+    it('Comment', () => {
+      const input = `# test`
+      const lexer = createLexer(input)
+      lexer.run()
+
+      expect(lexer.tokens.length).toBe(2)
+      expect(lexer.lexicalErrors.length).toBe(0)
+      expect(lexer.tokens[0].kind).toBe('comment')
+      expect(lexer.tokens[0].word).toBe('# test')
+    })
+
     it('unknown token error', () => {
       const input = `star`
       const lexer = createLexer(input)
@@ -307,6 +318,19 @@ describe('lexer', () => {
       }
       expect(lexer.tokens.length).toBe(6)
       expect(lexer.lexicalErrors.length).toBe(0)
+    })
+
+    it('Comment', () => {
+      const input = `# test`
+      const lexer = createLexer(input)
+      const token = lexer.next()
+      const eop = lexer.next()
+
+      expect(lexer.tokens.length).toBe(2)
+      expect(lexer.lexicalErrors.length).toBe(0)
+      expect(token.kind).toBe('comment')
+      expect(token.word).toBe('# test')
+      expect(eop.kind).toBe('eop')
     })
 
     it('unknown token error', () => {
