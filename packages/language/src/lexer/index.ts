@@ -1,4 +1,8 @@
-import { SymbolChar, TokenKind, OperatorEnum, KeywordEnum } from './constants'
+import {
+  SymbolChar,
+  TokenKind,
+  OperatorEnum,
+} from './constants'
 import { LexicalError } from './LexicalError'
 import {
   isLetter,
@@ -7,61 +11,33 @@ import {
   isWhitespace,
   isKeyword,
 } from './util'
-import type { Range, Position } from '../index'
+import {
+  createKeyword,
+  createOperator,
+  createIdentifier,
+  createComment,
+  createAction,
+  createPath,
+  createEOP
+} from './token'
+import type {
+  Token,
+  Keyword,
+  Operator,
+  Identifier,
+  Action,
+  Path,
+  Comment,
+  EOP
+} from './token'
+import type {
+  Range,
+  Position
+} from '../index'
 
+export * from './token'
 export * from './constants'
 export * from './LexicalError'
-
-export type Keyword = {
-  kind: TokenKind.Keyword
-  word: KeywordEnum
-  range: Range
-}
-
-export type Operator = {
-  kind: TokenKind.Operator
-  word: OperatorEnum
-  range: Range
-}
-
-export type Identifier = {
-  kind: TokenKind.Identifier
-  word: string
-  range: Range
-}
-
-export type Action = {
-  kind: TokenKind.Action
-  word: string
-  range: Range
-}
-
-export type Path = {
-  kind: TokenKind.Path
-  word: string
-  range: Range
-}
-
-export type Comment = {
-  kind: TokenKind.Comment
-  word: string
-  range: Range
-}
-
-export type EOP = {
-  kind: TokenKind.EOP
-  word: null
-  range: Range
-}
-
-export type Token =
-  | Keyword
-  | Operator
-  | Identifier
-  | Action
-  | Path
-  | Comment
-  | EOP
 
 export const createLexer = (
   input: string
@@ -93,11 +69,7 @@ export const createLexer = (
       tokens.length === 0 ||
       tokens[tokens.length - 1].kind !== TokenKind.EOP
     ) {
-      tokens.push({
-        kind: TokenKind.EOP,
-        word: null,
-        range: getRange(),
-      })
+      tokens.push(createEOP(getRange()))
     }
     return tokens[tokens.length - 1]
   }
@@ -105,11 +77,7 @@ export const createLexer = (
   const next = (): Token => {
     if (isEoP() && tokens.length > 0) {
       if (tokens[tokens.length - 1].kind !== TokenKind.EOP) {
-        tokens.push({
-          kind: TokenKind.EOP,
-          word: null,
-          range: getRange(),
-        })
+        tokens.push(createEOP(getRange()))
       }
       return tokens[tokens.length - 1]
     }
@@ -189,11 +157,7 @@ export const createLexer = (
 
     endWord()
 
-    return {
-      kind: TokenKind.Comment,
-      word,
-      range,
-    }
+    return createComment(word, range)
   }
 
   const matchIdentifier = (): Identifier | LexicalError => {
@@ -207,11 +171,7 @@ export const createLexer = (
 
         endWord()
 
-        return {
-          kind: TokenKind.Identifier,
-          word,
-          range,
-        }
+        return createIdentifier(word, range)
       }
       if (isEoP() || !isValidContentChar(char)) {
         const word = getCurrentWord()
@@ -233,11 +193,7 @@ export const createLexer = (
         const range = getRange()
         endWord()
 
-        return {
-          kind: TokenKind.Action,
-          word,
-          range,
-        }
+        return createAction(word, range)
       }
       if (isEoP() || !isValidContentChar(char)) {
         const word = getCurrentWord()
@@ -259,11 +215,7 @@ export const createLexer = (
         const range = getRange()
         endWord()
 
-        return {
-          kind: TokenKind.Path,
-          word,
-          range,
-        }
+        return createPath(word, range)
       }
       if (isEoP() || !isValidContentChar(char)) {
         const word = getCurrentWord()
@@ -285,11 +237,7 @@ export const createLexer = (
           const range = getRange()
           endWord()
 
-          return {
-            kind: TokenKind.Keyword,
-            word: word as KeywordEnum,
-            range,
-          }
+          return createKeyword(word, range)
         } else {
           return new LexicalError(`Unknown token: ${word}`, getPosition())
         }
@@ -305,33 +253,21 @@ export const createLexer = (
         const range = getRange()
         endWord()
 
-        return {
-          kind: TokenKind.Operator,
-          word: OperatorEnum.OpenBrace,
-          range,
-        }
+        return createOperator(OperatorEnum.OpenBrace, range)
       }
       case OperatorEnum.CloseBrace: {
         nextChar()
         const range = getRange()
         endWord()
 
-        return {
-          kind: TokenKind.Operator,
-          word: OperatorEnum.CloseBrace,
-          range,
-        }
+        return createOperator(OperatorEnum.CloseBrace, range)
       }
       case OperatorEnum.Assign: {
         nextChar()
         const range = getRange()
         endWord()
 
-        return {
-          kind: TokenKind.Operator,
-          word: OperatorEnum.Assign,
-          range,
-        }
+        return createOperator(OperatorEnum.Assign, range)
       }
       case OperatorEnum.Result[0]: {
         const nc = nextChar()
@@ -340,11 +276,7 @@ export const createLexer = (
           const range = getRange()
           endWord()
 
-          return {
-            kind: TokenKind.Operator,
-            word: OperatorEnum.Result,
-            range,
-          }
+          return createOperator(OperatorEnum.Result, range)
         } else {
           nextChar()
           const word = getCurrentWord()
@@ -356,11 +288,7 @@ export const createLexer = (
         const range = getRange()
         endWord()
 
-        return {
-          kind: TokenKind.Operator,
-          word: OperatorEnum.Comma,
-          range,
-        }
+        return createOperator(OperatorEnum.Comma, range)
       }
       default: {
         nextChar()

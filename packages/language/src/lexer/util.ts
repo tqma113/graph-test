@@ -1,12 +1,12 @@
 import { KeywordEnum, OperatorEnum } from './constants'
 
 const keywords = Object.values(KeywordEnum)
-export const isKeyword = (word: string) => {
+export const isKeyword = (word: string): word is KeywordEnum => {
   return keywords.includes(word as any)
 }
 
 const operators = Object.values(OperatorEnum)
-export const isOperator = (word: string) => {
+export const isOperator = (word: string): word is OperatorEnum => {
   return operators.includes(word as any)
 }
 
