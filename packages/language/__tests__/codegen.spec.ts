@@ -1,4 +1,4 @@
-import { codegen, Program } from '../src'
+import { codegen, createParser } from '../src'
 import { sample, program } from './sample'
 
 describe('codegen', () => {
@@ -8,134 +8,217 @@ describe('codegen', () => {
     })
 
     it('work', () => {
-      const program = {
-        kind: 'Program',
-        moduleStatemens: [],
-        range: {
-          start: {
-            line: 1,
-            column: 1,
-          },
-          end: {
-            line: 1,
-            column: 1,
-          },
-        },
-        comments: [],
-      } as Program
-      const source = ''
-      expect(codegen(program)).toBe(source)
+      const source = ``
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
     })
   })
 
   describe('InferenceDefinition', () => {
     it('empty', () => {
-      const program = {
-        kind: 'Program',
-        moduleStatemens: [
-          {
-            kind: 'InferenceDefinition',
-            identifier: {
-              kind: 'identifier',
-              word: '<从首页进入旅游频道>',
-              range: {
-                start: {
-                  line: 1,
-                  column: 0,
-                },
-                end: {
-                  line: 1,
-                  column: 11,
-                },
-              },
-            },
-            block: {
-              kind: 'Block',
-              list: [],
-              range: {
-                start: {
-                  line: 1,
-                  column: 14,
-                },
-                end: {
-                  line: 3,
-                  column: 8,
-                },
-              },
-            },
-            range: {
-              start: {
-                line: 1,
-                column: 0,
-              },
-              end: {
-                line: 3,
-                column: 8,
-              },
-            },
-            comments: [],
-          },
-        ],
-        range: {
-          start: {
-            line: 1,
-            column: 1,
-          },
-          end: {
-            line: 3,
-            column: 9,
-          },
-        },
-        comments: [],
-      } as Program
       const source = `<从首页进入旅游频道> = {\n\n}`
-      expect(codegen(program)).toBe(source)
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
     })
 
-    it.todo('with step')
+    it('with step', () => {
+      const source = `<从首页进入旅游频道> = {\n  [打开携程首页]\n\n  [点击旅游频道]\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
   })
 
   describe('ImportStatement', () => {
-    it.todo('single item')
+    it('single item', () => {
+      const source = `import { <测试> } from "测试"`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
 
-    it.todo('multiple item')
+    it('multiple item', () => {
+      const source = `import { <测试>, <测试1> } from "测试"`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
   })
 
   describe('ExportStatement', () => {
-    it.todo('inference')
+    it('inference', () => {
+      const source = `export <从首页进入旅游频道>`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
 
-    it.todo('definition')
+    it('definition', () => {
+      const source = `export <从首页进入旅游频道> = {\n  [打开携程首页]\n\n  [点击旅游频道]\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
   })
-  
+
   describe('StartStatement', () => {
-    it.todo('inference')
+    it('inference', () => {
+      const source = `start <从首页进入旅游频道>`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
 
-    it.todo('definition')
+    it('definition', () => {
+      const source = `start <从首页进入旅游频道> = {\n  [打开携程首页]\n\n  [点击旅游频道]\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
   })
-  
+
   describe('StepStatement', () => {
-    it.todo('single in module block')
+    it('single in module block', () => {
+      const source = `<从首页进入旅游频道> = {\n  [打开携程首页]\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
 
-    it.todo('multiple in module block')
+    it('multiple in module block', () => {
+      const source = `<从首页进入旅游频道> = {\n  [打开携程首页]\n\n  [点击旅游频道]\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
   })
-  
+
   describe('IfStatement', () => {
-    it.todo('without else in module block')
+    it('without else in module block', () => {
+      const source = `<从首页进入旅游频道> = {\n  if [不是上海站] -> {\n\n  }\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
 
-    it.todo('with else in module block')
+    it('with else in module block', () => {
+      const source = `<从首页进入旅游频道> = {\n  if [不是上海站] -> {\n\n  } else {\n\n  }\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
   })
-  
+
   describe('SwitchStatement', () => {
-    it.todo('empty block')
+    it('empty block', () => {
+      const source = `<从首页进入旅游频道> = {\n  switch [当前城市] {\n\n  }\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
 
-    it.todo('single case clause block without default clause block')
+    it('single case clause block without default clause block', () => {
+      const source = `<从首页进入旅游频道> = {\n  switch [当前城市] {\n    case [上海] -> {\n\n    }\n  }\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
 
-    it.todo('multiple cases clause block without default clause block')
+    it('multiple cases clause block without default clause block', () => {
+      const source = `<从首页进入旅游频道> = {\n  switch [当前城市] {\n    case [上海] -> {\n\n    }\n    case [北京] -> {\n\n    }\n  }\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
 
-    it.todo('multiple cases clause block with default clause block')
+    it('multiple cases clause block with default clause block', () => {
+      const source = `<从首页进入旅游频道> = {\n  switch [当前城市] {\n    case [上海] -> {\n\n    }\n    case [北京] -> {\n\n    }\n    default -> {\n\n    }\n  }\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
   })
-  
+
   describe('GotoStatement', () => {
-    it.todo('single in module block')
+    it('single in module block', () => {
+      const source = `<从首页进入旅游频道> = {\n  goto <选择出行人>\n}`
+      const parser = createParser(source)
+      parser.parse()
+      if (parser.program) {
+        expect(codegen(parser.program)).toBe(source)
+      } else {
+        expect(false).toBeTruthy()
+      }
+    })
   })
 })

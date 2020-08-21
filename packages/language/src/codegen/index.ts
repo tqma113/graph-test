@@ -156,9 +156,9 @@ export const codegen = (ast: Program): string => {
       .map((caseClause) => genCaseClause(caseClause, depth + 1))
       .join('\n')
     const defaultClause = switchBlock.defaultClause
-      ? genDefaultClause(switchBlock.defaultClause, depth + 1)
+      ? '\n' + genDefaultClause(switchBlock.defaultClause, depth + 1)
       : ''
-    return `{\n${caseClauses}\n${defaultClause}\n${prefix}}`
+    return `{\n${caseClauses}${defaultClause}\n${prefix}}`
   }
 
   const genCaseClause = (caseClause: CaseClause, depth: number): string => {
