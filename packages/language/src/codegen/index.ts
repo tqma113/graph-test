@@ -18,19 +18,16 @@ import type {
   ModuleItems,
   Statement,
 } from '../parser/ast'
-import type { Comment } from 'src/lexer'
+import type { Comment } from '../lexer/token'
 
 export const codegen = (ast: Program): string => {
   const genProgram = (program: Program): string => {
-    const moduleStatement = program.moduleStatemens.reduce(
-      (source, moduleStatement) => {
-        source += genModuleStatement(moduleStatement)
-        source += '\n\n'
-        return source
-      },
-      ''
-    )
-    const comments = genComments(program.comments, 0)
+    const moduleStatement = program.moduleStatemens.map((moduleStatement) => {
+      return genModuleStatement(moduleStatement)
+    }).join('\n\n')
+    const comments = program.comments.length > 0
+      ? `${program.comments.map((comment) => comment.word).join('\n')}\n`
+      : ''
     return moduleStatement + comments
   }
 
@@ -156,7 +153,7 @@ export const codegen = (ast: Program): string => {
   const genSwitchBlock = (switchBlock: SwitchBlock, depth: number): string => {
     const prefix = getTabPrefix(depth)
     const caseClauses = switchBlock.caseClauses
-      .map((caseClause) => genCaseClause(caseClause, depth))
+      .map((caseClause) => genCaseClause(caseClause, depth + 1))
       .join('\n')
     const defaultClause = switchBlock.defaultClause
       ? genDefaultClause(switchBlock.defaultClause, depth + 1)
@@ -186,13 +183,16 @@ export const codegen = (ast: Program): string => {
     gotoStatement: GotoStatement,
     depth: number
   ): string => {
-    return `${getTabPrefix(depth)}goto ${gotoStatement.identifier.word}`
+    const prefix = getTabPrefix(depth)
+    const comments = genComments(gotoStatement.comments, depth)
+    const identifier = gotoStatement.identifier.word
+    return `${comments}${prefix}goto ${identifier}`
   }
 
   const genComments = (comments: Comment[], depth: number): string => {
     const prefix = getTabPrefix(depth)
     return comments.length > 0
-      ? `${comments.map((comment) => comment.word).join(`\n${prefix}`)}\n`
+      ? `${comments.map((comment) => prefix + comment.word).join('\n')}\n`
       : ''
   }
 
@@ -200,5 +200,5 @@ export const codegen = (ast: Program): string => {
 }
 
 const getTabPrefix = (size: number): string => {
-  return Array(size).fill('  ').join()
+  return new Array(size).fill('  ').join('')
 }

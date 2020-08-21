@@ -131,7 +131,7 @@ describe('parser', () => {
   })
 
   describe('ExportStatement', () => {
-    it('export inference', () => {
+    it('inference', () => {
       const input = `export <从首页进入旅游频道>`
       const parser = createParser(input)
       parser.parse()
@@ -153,7 +153,7 @@ describe('parser', () => {
       }
     })
 
-    it('export definition', () => {
+    it('definition', () => {
       const input = `export <从首页进入旅游频道> = {
         [打开携程首页]
       
@@ -186,7 +186,7 @@ describe('parser', () => {
   })
 
   describe('StartStatement', () => {
-    it('start inference', () => {
+    it('inference', () => {
       const input = `start <从首页进入旅游频道>`
       const parser = createParser(input)
       parser.parse()
@@ -207,7 +207,7 @@ describe('parser', () => {
       }
     })
 
-    it('start definition', () => {
+    it('definition', () => {
       const input = `start <从首页进入旅游频道> = {
         [打开携程首页]
       
@@ -448,7 +448,7 @@ describe('parser', () => {
       }
     })
 
-    it('multiple case clause block without default clause block', () => {
+    it('multiple cases clause block without default clause block', () => {
       const input = `<从首页进入旅游频道> = {
         switch [当前城市] {
           case [上海] -> {

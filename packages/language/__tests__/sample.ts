@@ -1,5 +1,6 @@
-export const sample = `
-<从首页进入旅游频道> = {
+import type { Tree, Program } from '../src'
+
+export const sample = `<从首页进入旅游频道> = {
   [打开携程首页]
 
   [点击旅游频道]
@@ -25,7 +26,7 @@ start <下单流程> = {
   [选择1成人]
 
   [点击确定按钮进入填写页]
-  
+
   # 去选择出行人
   goto <选择出行人>
 
@@ -36,13 +37,11 @@ start <下单流程> = {
 
   switch [当前城市] {
     case [上海] -> {
-      
-    }
 
+    }
     case [北京] -> {
 
     }
-
     default -> {
 
     }
@@ -52,6 +51,7 @@ start <下单流程> = {
 start <选择上海站> = {
   if [不是上海站] -> {
     [点击顶部城市选择栏]
+
     [选择上海出发地]
   }
 }
@@ -71,13 +71,17 @@ start <选择上海站> = {
 
 <创建出行人> = {
   [点击新增旅客按钮]
+
   [填写中文姓名]
+
   [填写手机号]
+
   [点击保存]
 }
 
 <填写联系人> = {
   [填写联系人姓名]
+
   [填写联系人手机号]
 }`
 
@@ -1496,13 +1500,13 @@ export const program = {
       }
   },
   "comments": []
-}
+} as Program
 
 export const tree = {
   "kind": "Tree",
   "blocks": [
       {
-          "kind": "Block",
+          "kind": "TreeBlock",
           "name": "从首页进入旅游频道",
           "children": [
               {
@@ -1730,4 +1734,4 @@ export const tree = {
       "选择上海站"
   ],
   "comments": []
-}
+} as Tree
