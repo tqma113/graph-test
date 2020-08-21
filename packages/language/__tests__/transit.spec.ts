@@ -1,11 +1,20 @@
 import {
   createParser,
   convert,
+  reverse,
   NodeKind,
+  FragmentKind,
   ActionNode,
   IfTree,
   SwitchTree,
-  GotoNode
+  GotoNode,
+  Tree,
+  InferenceDefinition,
+  StepStatement,
+  StartStatement,
+  GotoStatement,
+  IfStatement,
+  SwitchStatement,
 } from '../src'
 
 describe('transit', () => {
@@ -287,6 +296,448 @@ describe('transit', () => {
   })
 
   describe('reverse', () => {
-    it.todo('wotk')
+    describe('TreeBlock', () => {
+      it('empty', () => {
+        const tree = {
+          kind: 'Tree',
+          blocks: [],
+          starts: [],
+          comments: [],
+        } as Tree
+        const program = reverse(tree)
+
+        expect(program.kind).toBe(FragmentKind.Program)
+        expect(program.moduleStatemens.length).toBe(0)
+      })
+
+      it('without step', () => {
+        const tree = {
+          kind: 'Tree',
+          blocks: [
+            {
+              kind: 'TreeBlock',
+              name: '从首页进入旅游频道',
+              children: [],
+              comments: [],
+            },
+          ],
+          starts: [],
+          comments: [],
+        } as Tree
+        const program = reverse(tree)
+
+        expect(program.moduleStatemens.length).toBe(1)
+        expect(program.moduleStatemens[0].kind).toBe(
+          FragmentKind.InferenceDefinition
+        )
+
+        const inferenceDefinition = program
+          .moduleStatemens[0] as InferenceDefinition
+        expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
+        expect(inferenceDefinition.block.list.length).toBe(0)
+      })
+
+      it('with step', () => {
+        const tree = {
+          kind: 'Tree',
+          blocks: [
+            {
+              kind: 'TreeBlock',
+              name: '从首页进入旅游频道',
+              children: [
+                {
+                  kind: 'ActionNode',
+                  expression: '打开携程首页',
+                  comments: [],
+                },
+                {
+                  kind: 'ActionNode',
+                  expression: '点击旅游频道',
+                  comments: [],
+                },
+              ],
+              comments: [],
+            },
+          ],
+          starts: [],
+          comments: [],
+        } as Tree
+        const program = reverse(tree)
+
+        expect(program.moduleStatemens.length).toBe(1)
+        expect(program.moduleStatemens[0].kind).toBe(
+          FragmentKind.InferenceDefinition
+        )
+        const inferenceDefinition = program
+          .moduleStatemens[0] as InferenceDefinition
+        expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
+        expect(inferenceDefinition.block.list.length).toBe(2)
+        expect(inferenceDefinition.block.list[0].kind).toBe(
+          FragmentKind.StepStatement
+        )
+      })
+    })
+
+    describe('start', () => {
+      it('with definition', () => {
+        const tree = {
+          kind: 'Tree',
+          blocks: [
+            {
+              kind: 'TreeBlock',
+              name: '从首页进入旅游频道',
+              children: [],
+              comments: [],
+            },
+          ],
+          starts: ['从首页进入旅游频道'],
+          comments: [],
+        } as Tree
+        const program = reverse(tree)
+
+        expect(program.moduleStatemens.length).toBe(1)
+        expect(program.moduleStatemens[0].kind).toBe(
+          FragmentKind.StartStatement
+        )
+        const startStatement = program.moduleStatemens[0] as StartStatement
+        expect(startStatement.module.identifier.word).toBe(
+          '<从首页进入旅游频道>'
+        )
+        expect(startStatement.module.definition).toBeDefined()
+        if (startStatement.module.definition) {
+          expect(startStatement.module.definition.identifier).toStrictEqual(
+            startStatement.module.identifier
+          )
+        }
+      })
+    })
+
+    describe('ActionNode', () => {
+      it('work', () => {
+        const tree = {
+          kind: 'Tree',
+          blocks: [
+            {
+              kind: 'TreeBlock',
+              name: '从首页进入旅游频道',
+              children: [
+                {
+                  kind: 'ActionNode',
+                  expression: '打开携程首页',
+                  comments: [],
+                },
+                {
+                  kind: 'ActionNode',
+                  expression: '点击旅游频道',
+                  comments: [],
+                },
+              ],
+              comments: [],
+            },
+          ],
+          starts: [],
+          comments: [],
+        } as Tree
+        const program = reverse(tree)
+
+        expect(program.moduleStatemens.length).toBe(1)
+        expect(program.moduleStatemens[0].kind).toBe(
+          FragmentKind.InferenceDefinition
+        )
+        const inferenceDefinition = program
+          .moduleStatemens[0] as InferenceDefinition
+        expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
+        expect(inferenceDefinition.block.list.length).toBe(2)
+        expect(inferenceDefinition.block.list[0].kind).toBe(
+          FragmentKind.StepStatement
+        )
+        const stepStatement1 = inferenceDefinition.block
+          .list[0] as StepStatement
+        expect(stepStatement1.expression.word).toBe('[打开携程首页]')
+        expect(inferenceDefinition.block.list[1].kind).toBe(
+          FragmentKind.StepStatement
+        )
+        const stepStatement2 = inferenceDefinition.block
+          .list[1] as StepStatement
+        expect(stepStatement2.expression.word).toBe('[点击旅游频道]')
+      })
+    })
+
+    describe('GotoNode', () => {
+      it('work', () => {
+        const tree = {
+          kind: 'Tree',
+          blocks: [
+            {
+              kind: 'TreeBlock',
+              name: '从首页进入旅游频道',
+              children: [
+                {
+                  kind: 'GotoNode',
+                  name: '选择出行人',
+                  comments: [],
+                },
+              ],
+              comments: [],
+            },
+            {
+              kind: 'TreeBlock',
+              name: '选择出行人',
+              children: [],
+              comments: [],
+            },
+          ],
+          starts: [],
+          comments: [],
+        } as Tree
+        const program = reverse(tree)
+
+        expect(program.moduleStatemens.length).toBe(2)
+        expect(program.moduleStatemens[0].kind).toBe(
+          FragmentKind.InferenceDefinition
+        )
+        const inferenceDefinition = program
+          .moduleStatemens[0] as InferenceDefinition
+        expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
+        expect(inferenceDefinition.block.list.length).toBe(1)
+        expect(inferenceDefinition.block.list[0].kind).toBe(
+          FragmentKind.GotoStatement
+        )
+        const gotoStatement = inferenceDefinition.block.list[0] as GotoStatement
+        expect(gotoStatement.identifier.word).toBe('<选择出行人>')
+      })
+    })
+
+    describe('IfTree', () => {
+      it('without else', () => {
+        const tree = {
+          kind: 'Tree',
+          blocks: [
+            {
+              kind: 'TreeBlock',
+              name: '从首页进入旅游频道',
+              children: [
+                {
+                  kind: 'IfTree',
+                  condition: '不是上海站',
+                  successChildren: [],
+                  faildChildren: [],
+                  comments: [],
+                },
+              ],
+              comments: [],
+            },
+          ],
+          starts: [],
+          comments: [],
+        } as Tree
+        const program = reverse(tree)
+
+        expect(program.moduleStatemens.length).toBe(1)
+        expect(program.moduleStatemens[0].kind).toBe(
+          FragmentKind.InferenceDefinition
+        )
+        const inferenceDefinition = program
+          .moduleStatemens[0] as InferenceDefinition
+        expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
+        expect(inferenceDefinition.block.list.length).toBe(1)
+        expect(inferenceDefinition.block.list[0].kind).toBe(
+          FragmentKind.IfStatement
+        )
+        const ifStatement = inferenceDefinition.block.list[0] as IfStatement
+        expect(ifStatement.expression.word).toBe('[不是上海站]')
+        expect(ifStatement.ifBlock).toBeDefined()
+        expect(ifStatement.elseBlock).toBeNull()
+      })
+
+      it('with else', () => {
+        const tree = {
+          kind: 'Tree',
+          blocks: [
+            {
+              kind: 'TreeBlock',
+              name: '从首页进入旅游频道',
+              children: [
+                {
+                  kind: 'IfTree',
+                  condition: '不是上海站',
+                  successChildren: [],
+                  faildChildren: [
+                    {
+                      kind: 'ActionNode',
+                      expression: '打开携程首页',
+                      comments: [],
+                    },
+                  ],
+                  comments: [],
+                },
+              ],
+              comments: [],
+            },
+          ],
+          starts: [],
+          comments: [],
+        } as Tree
+        const program = reverse(tree)
+
+        expect(program.moduleStatemens.length).toBe(1)
+        expect(program.moduleStatemens[0].kind).toBe(
+          FragmentKind.InferenceDefinition
+        )
+        const inferenceDefinition = program
+          .moduleStatemens[0] as InferenceDefinition
+        expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
+        expect(inferenceDefinition.block.list.length).toBe(1)
+        expect(inferenceDefinition.block.list[0].kind).toBe(
+          FragmentKind.IfStatement
+        )
+        const ifStatement = inferenceDefinition.block.list[0] as IfStatement
+        expect(ifStatement.expression.word).toBe('[不是上海站]')
+        expect(ifStatement.ifBlock).toBeDefined()
+        expect(ifStatement.elseBlock).toBeDefined()
+      })
+    })
+
+    describe('SwitchTree', () => {
+      it('without default', () => {
+        const tree = {
+          kind: 'Tree',
+          blocks: [
+            {
+              kind: 'TreeBlock',
+              name: '从首页进入旅游频道',
+              children: [
+                {
+                  kind: 'SwitchTree',
+                  condition: '当前城市',
+                  children: [
+                    {
+                      kind: 'CaseNode',
+                      expectation: '上海',
+                      children: [],
+                      comments: [],
+                    },
+                    {
+                      kind: 'CaseNode',
+                      expectation: '北京',
+                      children: [],
+                      comments: [],
+                    },
+                  ],
+                  defaultChild: null,
+                  comments: [],
+                },
+              ],
+              comments: [],
+            },
+          ],
+          starts: [],
+          comments: [],
+        } as Tree
+        const program = reverse(tree)
+
+        expect(program.moduleStatemens.length).toBe(1)
+        expect(program.moduleStatemens[0].kind).toBe(
+          FragmentKind.InferenceDefinition
+        )
+        const inferenceDefinition = program
+          .moduleStatemens[0] as InferenceDefinition
+        expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
+        expect(inferenceDefinition.block.list.length).toBe(1)
+        expect(inferenceDefinition.block.list[0].kind).toBe(
+          FragmentKind.SwitchStatement
+        )
+        const switchStatement = inferenceDefinition.block
+          .list[0] as SwitchStatement
+        expect(switchStatement.expression.word).toBe('[当前城市]')
+        expect(switchStatement.switchBlock.caseClauses.length).toBe(2)
+        expect(switchStatement.switchBlock.caseClauses[0].expression.word).toBe(
+          '[上海]'
+        )
+        expect(
+          switchStatement.switchBlock.caseClauses[0].block.list.length
+        ).toBe(0)
+        expect(switchStatement.switchBlock.caseClauses[1].expression.word).toBe(
+          '[北京]'
+        )
+        expect(
+          switchStatement.switchBlock.caseClauses[1].block.list.length
+        ).toBe(0)
+        expect(switchStatement.switchBlock.defaultClause).toBeNull()
+      })
+
+      it('with default', () => {
+        const tree = {
+          kind: 'Tree',
+          blocks: [
+            {
+              kind: 'TreeBlock',
+              name: '从首页进入旅游频道',
+              children: [
+                {
+                  kind: 'SwitchTree',
+                  condition: '当前城市',
+                  children: [
+                    {
+                      kind: 'CaseNode',
+                      expectation: '上海',
+                      children: [],
+                      comments: [],
+                    },
+                    {
+                      kind: 'CaseNode',
+                      expectation: '北京',
+                      children: [],
+                      comments: [],
+                    },
+                  ],
+                  defaultChild: {
+                    kind: 'DefaultNode',
+                    children: [],
+                    comments: [],
+                  },
+                  comments: [],
+                },
+              ],
+              comments: [],
+            },
+          ],
+          starts: [],
+          comments: [],
+        } as Tree
+        const program = reverse(tree)
+
+        expect(program.moduleStatemens.length).toBe(1)
+        expect(program.moduleStatemens[0].kind).toBe(
+          FragmentKind.InferenceDefinition
+        )
+        const inferenceDefinition = program
+          .moduleStatemens[0] as InferenceDefinition
+        expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
+        expect(inferenceDefinition.block.list.length).toBe(1)
+        expect(inferenceDefinition.block.list[0].kind).toBe(
+          FragmentKind.SwitchStatement
+        )
+        const switchStatement = inferenceDefinition.block
+          .list[0] as SwitchStatement
+        expect(switchStatement.expression.word).toBe('[当前城市]')
+        expect(switchStatement.switchBlock.caseClauses.length).toBe(2)
+        expect(switchStatement.switchBlock.caseClauses[0].expression.word).toBe(
+          '[上海]'
+        )
+        expect(
+          switchStatement.switchBlock.caseClauses[0].block.list.length
+        ).toBe(0)
+        expect(switchStatement.switchBlock.caseClauses[1].expression.word).toBe(
+          '[北京]'
+        )
+        expect(switchStatement.switchBlock.defaultClause).toBeDefined()
+        if (switchStatement.switchBlock.defaultClause) {
+          expect(
+            switchStatement.switchBlock.defaultClause.block.list.length
+          ).toBe(0)
+        }
+      })
+    })
   })
 })

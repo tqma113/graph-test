@@ -8,6 +8,7 @@ import {
   IfStatement,
   SwitchStatement,
   GotoStatement,
+  FragmentKind,
 } from '../src'
 import { sample } from './sample'
 
@@ -53,7 +54,7 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('InferenceDefinition')
+        expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
@@ -76,7 +77,7 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('InferenceDefinition')
+        expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
@@ -97,7 +98,7 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('ImportStatement')
+        expect(moduleStatement.kind).toBe(FragmentKind.ImportStatement)
 
         const importStatement = moduleStatement as ImportStatement
         expect(importStatement.path.word).toBe('"测试"')
@@ -118,7 +119,7 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('ImportStatement')
+        expect(moduleStatement.kind).toBe(FragmentKind.ImportStatement)
 
         const importStatement = moduleStatement as ImportStatement
         expect(importStatement.path.word).toBe('"测试"')
@@ -142,7 +143,7 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('ExportStatement')
+        expect(moduleStatement.kind).toBe(FragmentKind.ExportStatement)
 
         const exportStatement = moduleStatement as ExportStatement
         expect(exportStatement.module.identifier.word).toBe(
@@ -168,7 +169,7 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('ExportStatement')
+        expect(moduleStatement.kind).toBe(FragmentKind.ExportStatement)
 
         const exportStatement = moduleStatement as ExportStatement
         expect(exportStatement.module.identifier.word).toBe(
@@ -197,7 +198,7 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('StartStatement')
+        expect(moduleStatement.kind).toBe(FragmentKind.StartStatement)
 
         const startStatement = moduleStatement as StartStatement
         expect(startStatement.module.identifier.word).toBe(
@@ -222,7 +223,7 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('StartStatement')
+        expect(moduleStatement.kind).toBe(FragmentKind.StartStatement)
 
         const startStatement = moduleStatement as StartStatement
         expect(startStatement.module.identifier.word).toBe(
@@ -253,14 +254,14 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('InferenceDefinition')
+        expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
 
         const statement = inferenceDefinition.block.list[0]
-        expect(statement.kind).toBe('StepStatement')
+        expect(statement.kind).toBe(FragmentKind.StepStatement)
 
         const stepStatement = statement as StepStatement
         expect(stepStatement.expression.word).toBe('[打开携程首页]')
@@ -283,20 +284,20 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('InferenceDefinition')
+        expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(2)
 
         const statement1 = inferenceDefinition.block.list[0]
-        expect(statement1.kind).toBe('StepStatement')
+        expect(statement1.kind).toBe(FragmentKind.StepStatement)
 
         const stepStatement1 = statement1 as StepStatement
         expect(stepStatement1.expression.word).toBe('[打开携程首页]')
 
         const statement2 = inferenceDefinition.block.list[1]
-        expect(statement2.kind).toBe('StepStatement')
+        expect(statement2.kind).toBe(FragmentKind.StepStatement)
 
         const stepStatement2 = statement2 as StepStatement
         expect(stepStatement2.expression.word).toBe('[点击旅游频道]')
@@ -321,14 +322,14 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('InferenceDefinition')
+        expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
 
         const statement = inferenceDefinition.block.list[0]
-        expect(statement.kind).toBe('IfStatement')
+        expect(statement.kind).toBe(FragmentKind.IfStatement)
 
         const ifStatement = statement as IfStatement
         expect(ifStatement.expression.word).toBe('[不是上海站]')
@@ -355,14 +356,14 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('InferenceDefinition')
+        expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
 
         const statement = inferenceDefinition.block.list[0]
-        expect(statement.kind).toBe('IfStatement')
+        expect(statement.kind).toBe(FragmentKind.IfStatement)
 
         const ifStatement = statement as IfStatement
         expect(ifStatement.expression.word).toBe('[不是上海站]')
@@ -389,14 +390,14 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('InferenceDefinition')
+        expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
 
         const statement = inferenceDefinition.block.list[0]
-        expect(statement.kind).toBe('SwitchStatement')
+        expect(statement.kind).toBe(FragmentKind.SwitchStatement)
 
         const switchStatement = statement as SwitchStatement
         expect(switchStatement.expression.word).toBe('[当前城市]')
@@ -423,14 +424,14 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('InferenceDefinition')
+        expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
 
         const statement = inferenceDefinition.block.list[0]
-        expect(statement.kind).toBe('SwitchStatement')
+        expect(statement.kind).toBe(FragmentKind.SwitchStatement)
 
         const switchStatement = statement as SwitchStatement
         expect(switchStatement.expression.word).toBe('[当前城市]')
@@ -469,14 +470,14 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('InferenceDefinition')
+        expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
 
         const statement = inferenceDefinition.block.list[0]
-        expect(statement.kind).toBe('SwitchStatement')
+        expect(statement.kind).toBe(FragmentKind.SwitchStatement)
 
         const switchStatement = statement as SwitchStatement
         expect(switchStatement.expression.word).toBe('[当前城市]')
@@ -525,14 +526,14 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('InferenceDefinition')
+        expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
 
         const statement = inferenceDefinition.block.list[0]
-        expect(statement.kind).toBe('SwitchStatement')
+        expect(statement.kind).toBe(FragmentKind.SwitchStatement)
 
         const switchStatement = statement as SwitchStatement
         expect(switchStatement.expression.word).toBe('[当前城市]')
@@ -576,14 +577,14 @@ describe('parser', () => {
         expect(parser.program.moduleStatemens.length).toBe(1)
 
         const moduleStatement = parser.program.moduleStatemens[0]
-        expect(moduleStatement.kind).toBe('InferenceDefinition')
+        expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
 
         const statement = inferenceDefinition.block.list[0]
-        expect(statement.kind).toBe('GotoStatement')
+        expect(statement.kind).toBe(FragmentKind.GotoStatement)
 
         const gotoStatement = statement as GotoStatement
         expect(gotoStatement.identifier.word).toBe('<选择出行人>')

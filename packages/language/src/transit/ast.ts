@@ -19,7 +19,7 @@ export const createTree = (
 }
 
 export type TreeBlock = {
-  kind: NodeKind.Block
+  kind: NodeKind.TreeBlock
   name: string
   children: TreeNode[]
   comments: string[]
@@ -31,7 +31,7 @@ export const createTreeBlock = (
   comments: string[]
 ): TreeBlock => {
   return {
-    kind: NodeKind.Block,
+    kind: NodeKind.TreeBlock,
     name,
     children,
     comments
@@ -159,7 +159,7 @@ export const createIfTree = (
 
 export enum NodeKind {
   Tree = 'Tree',
-  Block = 'Block',
+  TreeBlock = 'TreeBlock',
   ActionNode = 'ActionNode',
   GotoNode = 'GotoNode',
   SwitchTree = 'SwitchTree',
