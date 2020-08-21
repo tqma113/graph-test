@@ -1,18 +1,15 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import * as monaco from 'monaco-editor'
-import registerLanguage from './language'
 import createEditor from './createEditor'
-import { initTheme } from './theme'
-import { FontSizeSelect } from './component'
-import { Tree, Program } from '@gtl/language'
+import { Tree } from '@gtl/language'
+import { FontSizeSelect } from './FontSizeSelect'
 
 export type MonacoEditorProps = {
-  onSave?: (content: string, tree: Tree, program: Program) => void
+  onSave?: (tree: Tree) => void,
   onError?: (message: string) => void
   containerStyle?: React.CSSProperties
   style?: React.CSSProperties
-  value?: string
-  tree?: Tree
+  initialValue?: string
 }
 
 const defaultStyle: React.CSSProperties = {
@@ -24,15 +21,8 @@ const defaultOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   fontSize: 12,
 }
 
-function MonacoEditor({
-  onSave,
-  onError,
-  style,
-  containerStyle,
-  value = '# start from here\n\n',
-  tree
-}: MonacoEditorProps) {
-  const [code, setCode] = useState(value)
+function MonacoEditor({ onSave, onError, style, containerStyle, initialValue = '{}' }: MonacoEditorProps) {
+  const [value, setValue] = useState(initialValue)
   const [options, setOptions] = useState<
     monaco.editor.IStandaloneEditorConstructionOptions
   >(defaultOptions)
@@ -41,28 +31,26 @@ function MonacoEditor({
   const subscription = useRef<monaco.IDisposable>()
 
   useLayoutEffect(() => {
-    if (tree) {
-      setCode('')
-    }
-  }, [])
+    setValue(initialValue)
+  }, [initialValue])
 
   useLayoutEffect(() => {
     initMonaco()
     return () => {
       destoryMonaco()
     }
-  }, [options])
+  }, [options, value])
 
   const initMonaco = () => {
-    registerLanguage()
-    initTheme()
+    console.log(value)
     editor.current = createEditor(
       containerRef.current as HTMLElement,
-      code,
+      value,
       options,
       onSave,
       onError
     )
+    editor.current.getAction('editor.action.formatDocument').run()
   }
 
   const destoryMonaco = () => {

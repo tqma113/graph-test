@@ -1,11 +1,11 @@
 import * as monaco from 'monaco-editor'
-import { Tree } from '@gtl/language'
+import { Program } from '@gtl/language'
 
 const createEditor = (
   container: HTMLElement,
   value: string,
   options: monaco.editor.IStandaloneEditorConstructionOptions = {},
-  onSave?: (tree: Tree) => void,
+  onSave?: (program: Program) => void,
   onError?: (message: string) => void
 ) => {
   const model = monaco.editor.createModel(value, 'json')
@@ -13,7 +13,6 @@ const createEditor = (
     ...options,
     value,
     language: 'json',
-    theme: 'vs-dark',
     model,
   })
 

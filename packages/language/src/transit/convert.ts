@@ -87,10 +87,10 @@ export const convert = (program: Program): Tree => {
   }
 
   const convertBlock = (block: Block): TreeNode[] => {
-    return block.list.map(checkStatement)
+    return block.list.map(convertStatement)
   }
 
-  const checkStatement = (statement: Statement) => {
+  const convertStatement = (statement: Statement) => {
     switch (statement.kind) {
       case FragmentKind.StepStatement: {
         return convertStepStatement(statement)

@@ -1,23 +1,18 @@
 import * as monaco from 'monaco-editor'
-import { MODE_ID } from './language'
-import { GRAPH_THEME } from './theme'
-import server from './language/server'
-import { convert, Program } from '@gtl/language'
 import { Tree } from '@gtl/language'
 
 const createEditor = (
   container: HTMLElement,
   value: string,
   options: monaco.editor.IStandaloneEditorConstructionOptions = {},
-  onSave?: (content: string, tree: Tree, program: Program) => void,
+  onSave?: (tree: Tree) => void,
   onError?: (message: string) => void
 ) => {
-  const model = monaco.editor.createModel(value, MODE_ID)
+  const model = monaco.editor.createModel(value, 'json')
   const editor = monaco.editor.create(container, {
     ...options,
     value,
-    language: MODE_ID,
-    theme: GRAPH_THEME,
+    language: 'json',
     model,
   })
 
@@ -49,27 +44,17 @@ const createEditor = (
     // Method that will be executed when the action is triggered.
     // @param editor The editor instance is passed in as a convinience
     run: function (ed) {
-      const input = server.input
-      const program = server.program
-      if (program) {
-        if (onSave) {
-          const tree = convert(program)
-          onSave(input, tree, program)
-        }
-      } else {
-        tryToError('Program maybe empty or has error. Please check it.')
+      const lines = model.getLinesContent()
+      const content = lines.join('\n')
+      try {
+        const tree = JSON.parse(content)
+        onSave && onSave(tree)
+      } catch (err) {
+        tryToError(err)
       }
     },
   })
-
-  model.onDidChangeContent((e) => {
-    const lines = model.getLinesContent()
-    const content = lines.join('\n')
-    server.didChange(content)
-  })
   
-  server.didChange(value)
-
   return editor
 }
 

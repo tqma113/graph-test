@@ -1,20 +1,31 @@
 import React, { useState } from 'react';
 import CodeEditor from '@gtl/editor'
-import { Tree } from '@gtl/language'
-import JSONEditor from './JSONEditor'
+import { Tree, Program } from '@gtl/language'
+import TreeEditor from './TreeEditor'
+import ProgramEditor from './ProgramEditor'
+import './App.css'
 
 function App() {
+  const [program, setProgram] = useState({} as Program)
   const [tree, setTree] = useState({} as Tree)
 
-  const onCodeChange = (code: any, tree: any) => {
+  const onCodeChange = (code: string, tree: Tree, program: Program) => {
     console.log({
       code,
-      tree
+      tree,
+      program
     })
+    setProgram(program)
     setTree(tree)
   }
 
-  const onJSONChange = (tree: any) => {
+  const onTreeChange = (tree: Tree) => {
+    console.log({
+      tree
+    })
+  }
+
+  const onProgramChange = (program: Program) => {
     console.log({
       tree
     })
@@ -69,7 +80,7 @@ function App() {
       }
     }
   }
-  
+
   start <选择上海站> = {
     if [不是上海站] -> {
       [点击顶部城市选择栏]
@@ -104,8 +115,9 @@ function App() {
 `
   return (
     <div className="App">
-      <CodeEditor style={{ width: '40%', float: "left" }} onSave={onCodeChange} value={initialValue} />
-      <JSONEditor style={{ width: '40%', float: "right" }} onSave={onJSONChange} initialValue={JSON.stringify(tree)} />
+      <CodeEditor style={{ width: '100%'}} containerStyle={{ width: '640px' }} onSave={onCodeChange} value={initialValue} />
+      <ProgramEditor style={{ width: '100%'}} containerStyle={{ width: '640px' }} onSave={onProgramChange} initialValue={JSON.stringify(program)} />
+      <TreeEditor style={{ width: '100%'}} containerStyle={{ width: '640px' }} onSave={onTreeChange} initialValue={JSON.stringify(tree)} />
     </div>
   );
 }
