@@ -26,8 +26,10 @@
       "cjs"
     ]
   },
-  "dependencies": {
-    "monaco-editor": "^0.20.0",
+  "peerDependencies": {
     "gtl-language": "^1.0.0"
+  },
+  "dependencies": {
+    "monaco-editor": "^0.20.0"
   }
 }
