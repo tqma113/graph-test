@@ -191,8 +191,13 @@ async function publishPackage(pkgName, version, runIfNotDry) {
   step(`Publishing ${pkgName}...`)
   try {
     await runIfNotDry(
-      'npm', [
-        'publish'
+      'yarn', [
+        'publish',
+        '--new-version',
+        version,
+        ...(releaseTag ? ['--tag', releaseTag] : []),
+        '--access',
+        'public'
       ], {
         cwd: pkgRoot,
         stdio: 'pipe'
