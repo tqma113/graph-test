@@ -1,3 +1,9 @@
+/**
+ * Code formater
+ * 
+ * Format AST(Abstruct Syntax Tree).
+ */
+
 import { FragmentKind } from '../parser/ast'
 import type { Program } from '../parser/ast'
 

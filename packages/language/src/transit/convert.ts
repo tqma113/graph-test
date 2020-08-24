@@ -1,3 +1,9 @@
+/**
+ * Convert
+ * 
+ * Transit AST(Abstruct Syntax Tree) to Mid-Tree.
+ */
+
 import { FragmentKind } from '../parser/ast'
 import {
   createTreeBlock,

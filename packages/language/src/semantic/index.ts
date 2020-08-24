@@ -1,3 +1,9 @@
+/**
+ * Semantic
+ * 
+ * Analysis AST(Abstruct Syntax Tree) and check semantic error.
+ */
+
 import { SemanticError } from './SemanticError'
 import { FragmentKind } from '../parser/ast'
 import type { Identifier } from '../lexer/index'

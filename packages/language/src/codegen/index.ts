@@ -1,3 +1,9 @@
+/**
+ * Code generation
+ * 
+ * Transit AST(Abstruct Syntax Tree) to source code.
+ */
+
 import { FragmentKind } from '../parser/ast'
 import type {
   Program,

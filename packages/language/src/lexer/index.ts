@@ -1,3 +1,9 @@
+/**
+ * Lexer
+ * 
+ * Transit source code to tokens.
+ */
+
 import { SymbolChar, TokenKind, OperatorEnum } from './constants'
 import { LexicalError } from './LexicalError'
 import {
