@@ -13,14 +13,14 @@ export type Result<A, B> = Ok<A> | Err<B>
 export const Err = <B>(value: B): Result<any, B> => {
   return {
     kind: 'Err',
-    value
+    value,
   }
 }
 
 export const Ok = <A>(value: A): Result<A, any> => {
   return {
     kind: 'Ok',
-    value
+    value,
   }
 }
 
@@ -51,7 +51,7 @@ const hooks: ParserStateHooks = {
   },
   setError: (newMessage: string) => {
     currentMessage = newMessage
-  }
+  },
 }
 
 export type Parser<T = any> = () => Result<T, string>
@@ -78,7 +78,7 @@ export const runParser = <P extends Parser>(
   let info = {
     source,
     offset: currentOffset,
-    message: currentMessage
+    message: currentMessage,
   }
 
   currentSource = ''
@@ -104,7 +104,10 @@ export const map = <A, B>(parser: Parser<A>, f: (a: A) => B): Parser<B> => {
   }
 }
 
-export const ap = <A, B>(parserFn: Parser<(a: A) => B>, parserArg: Parser<A>): Parser<B> => {
+export const ap = <A, B>(
+  parserFn: Parser<(a: A) => B>,
+  parserArg: Parser<A>
+): Parser<B> => {
   return () => {
     let resultFn = parserFn()
 
@@ -122,7 +125,10 @@ export const ap = <A, B>(parserFn: Parser<(a: A) => B>, parserArg: Parser<A>): P
   }
 }
 
-export function apply<A, B>(parserFn: Parser<(a: A) => B>, a: Parser<A>): Parser<B>
+export function apply<A, B>(
+  parserFn: Parser<(a: A) => B>,
+  a: Parser<A>
+): Parser<B>
 
 export function apply<A, B, C>(
   parserFn: Parser<(a: A) => (b: B) => C>,
@@ -164,7 +170,9 @@ export function apply<A, B, C, D, E, F>(
 ): Parser<F>
 
 export function apply<A, B, C, D, E, F, G>(
-  parserFn: Parser<(a: A) => (b: B) => (c: C) => (d: D) => (e: E) => (f: F) => G>,
+  parserFn: Parser<
+    (a: A) => (b: B) => (c: C) => (d: D) => (e: E) => (f: F) => G
+  >,
   a: Parser<A>,
   b: Parser<B>,
   c: Parser<C>,
@@ -209,23 +217,26 @@ export const satisfy = (predicate: (a: string) => boolean): Parser<string> => {
   }
 }
 
-export const digit = satisfy(c => c >= '0' && c <= '9')
-export const lower = satisfy(c => c >= 'a' && c <= 'z')
-export const uppper = satisfy(c => c >= 'A' && c <= 'Z')
+export const digit = satisfy((c) => c >= '0' && c <= '9')
+export const lower = satisfy((c) => c >= 'a' && c <= 'z')
+export const uppper = satisfy((c) => c >= 'A' && c <= 'Z')
 
 export const char = (target: string) => {
-  return satisfy(c => c === target)
+  return satisfy((c) => c === target)
 }
 
 export const notChar = (x: string) => {
-  return satisfy(value => value !== x)
+  return satisfy((value) => value !== x)
 }
 
 export const comma = char(',')
 
 export const semicolon = char(':')
 
-export const either = <A, B>(parserA: Parser<A>, parserB: Parser<B>): Parser<A | B> => {
+export const either = <A, B>(
+  parserA: Parser<A>,
+  parserB: Parser<B>
+): Parser<A | B> => {
   return () => {
     let offset = getOffset()
     let resultA = parserA()
@@ -241,7 +252,10 @@ export const either = <A, B>(parserA: Parser<A>, parserB: Parser<B>): Parser<A |
 
 export function oneOf<A>(parserA: Parser<A>): Parser<A>
 
-export function oneOf<A, B>(parserA: Parser<A>, parserB: Parser<B>): Parser<A | B>
+export function oneOf<A, B>(
+  parserA: Parser<A>,
+  parserB: Parser<B>
+): Parser<A | B>
 
 export function oneOf<A, B, C>(
   parserA: Parser<A>,
@@ -285,12 +299,14 @@ export function oneOf<A, B, C, D, E, F, G>(
 
 export function oneOf(...parsers: Parser[]) {
   if (parsers.length < 2) {
-    throw new Error(`Expected received at least two parsers, but got ${parsers.length}`)
+    throw new Error(
+      `Expected received at least two parsers, but got ${parsers.length}`
+    )
   }
   return parsers.reduce(either)
 }
 
-export const whiteSpace = satisfy(x => {
+export const whiteSpace = satisfy((x) => {
   if (x === ' ') return true
   if (x === '\n') return true
   if (x === '\t') return true
@@ -410,7 +426,11 @@ export const positiveFloat: Parser<number> = () => {
     return digitsResult1
   }
 
-  let value = Number(digitsResult0.value.join('') + dotResult.value + digitsResult1.value.join(''))
+  let value = Number(
+    digitsResult0.value.join('') +
+      dotResult.value +
+      digitsResult1.value.join('')
+  )
 
   return Ok(value)
 }
@@ -436,7 +456,10 @@ export const float = either(positiveFloat, negativeFloat)
 // tslint:disable-next-line: variable-name
 export const number = either(float, integer)
 
-export const separateBy = <A, S>(parser: Parser<A>, separator: Parser<S>): Parser<A[]> => {
+export const separateBy = <A, S>(
+  parser: Parser<A>,
+  separator: Parser<S>
+): Parser<A[]> => {
   let pair: Parser<A> = () => {
     let separatorResult = separator()
 
@@ -494,7 +517,10 @@ export const bracket = <O, A, C>(
   return parserResult
 }
 
-export const aroundBy = <A, S>(parser: Parser<A>, surround: Parser<S>): Parser<A> => {
+export const aroundBy = <A, S>(
+  parser: Parser<A>,
+  surround: Parser<S>
+): Parser<A> => {
   return bracket(many(surround), parser, many(surround))
 }
 
@@ -502,6 +528,7 @@ export const aroundBySpace = <A>(parser: Parser<A>): Parser<A> => {
   return aroundBy(parser, whiteSpace)
 }
 
-export const stringLiteral = map(bracket(char('"'), many(notChar('"')), char('"')), list =>
-  list.join('')
+export const stringLiteral = map(
+  bracket(char('"'), many(notChar('"')), char('"')),
+  (list) => list.join('')
 )

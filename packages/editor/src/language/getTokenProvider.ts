@@ -1,8 +1,9 @@
-import * as monaco from "monaco-editor";
+import * as monaco from 'monaco-editor'
 
 const getTokenProvider = (): monaco.languages.IMonarchLanguage => {
   return {
     tokenizer: {
+      // prettier-ignore
       root: [
         [/->/,                                                                      'operator.arrow'],
         [/=/,                                                                       'operator.assign'],
@@ -24,7 +25,7 @@ const getTokenProvider = (): monaco.languages.IMonarchLanguage => {
         [/\"([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]*)\"/,      'path'],
         [/#.*/,                                                                     'comment'],
       ]
-    }
+    },
   }
 }
 

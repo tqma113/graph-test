@@ -22,12 +22,15 @@ import type { Comment } from '../lexer/token'
 
 export const codegen = (ast: Program): string => {
   const genProgram = (program: Program): string => {
-    const moduleStatement = program.moduleStatemens.map((moduleStatement) => {
-      return genModuleStatement(moduleStatement)
-    }).join('\n\n')
-    const comments = program.comments.length > 0
-      ? `${program.comments.map((comment) => comment.word).join('\n')}\n`
-      : ''
+    const moduleStatement = program.moduleStatemens
+      .map((moduleStatement) => {
+        return genModuleStatement(moduleStatement)
+      })
+      .join('\n\n')
+    const comments =
+      program.comments.length > 0
+        ? `${program.comments.map((comment) => comment.word).join('\n')}\n`
+        : ''
     return moduleStatement + comments
   }
 

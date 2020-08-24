@@ -1,3 +1,4 @@
+// prettier-ignore
 export enum SymbolChar {
   OpenBrace             =         '{',
   CloseBrace            =         '}',
@@ -12,6 +13,7 @@ export enum SymbolChar {
   Well                  =         '#'
 }
 
+// prettier-ignore
 export enum OperatorEnum {
   OpenBrace             =         '{',
   CloseBrace            =         '}',
@@ -20,6 +22,7 @@ export enum OperatorEnum {
   Comma                 =         ',',
 }
 
+// prettier-ignore
 export enum KeywordEnum {
   Start                 =         'start',
   Goto                  =         'goto',
@@ -33,7 +36,7 @@ export enum KeywordEnum {
   Export                =         'export',
 }
 
-
+// prettier-ignore
 export enum TokenKind {
   Comment               =         'comment',
   Operator              =         'operator',

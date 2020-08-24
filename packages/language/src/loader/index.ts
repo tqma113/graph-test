@@ -1,5 +1,3 @@
 // loader
 
-export const load = () => {
-  
-}
+export const load = () => {}

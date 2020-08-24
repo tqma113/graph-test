@@ -22,9 +22,7 @@ import {
   comma,
   apply,
   inject,
-  semicolon
+  semicolon,
 } from './core'
 
-let a = {
-
-}
+let a = {}
