@@ -1,8 +1,4 @@
-import {
-  TokenKind,
-  OperatorEnum,
-  KeywordEnum
-} from './constants'
+import { TokenKind, OperatorEnum, KeywordEnum } from './constants'
 import type { Range } from '../index'
 
 export type Keyword = {
@@ -11,14 +7,11 @@ export type Keyword = {
   range: Range
 }
 
-export const createKeyword = (
-  word: KeywordEnum,
-  range: Range
-): Keyword => {
+export const createKeyword = (word: KeywordEnum, range: Range): Keyword => {
   return {
     kind: TokenKind.Keyword,
     word,
-    range
+    range,
   }
 }
 
@@ -28,14 +21,11 @@ export type Operator = {
   range: Range
 }
 
-export const createOperator = (
-  word: OperatorEnum,
-  range: Range
-): Operator => {
+export const createOperator = (word: OperatorEnum, range: Range): Operator => {
   return {
     kind: TokenKind.Operator,
     word,
-    range
+    range,
   }
 }
 
@@ -45,14 +35,11 @@ export type Identifier = {
   range: Range
 }
 
-export const createIdentifier = (
-  word: string,
-  range: Range
-): Identifier => {
+export const createIdentifier = (word: string, range: Range): Identifier => {
   return {
     kind: TokenKind.Identifier,
     word,
-    range
+    range,
   }
 }
 
@@ -62,14 +49,11 @@ export type Action = {
   range: Range
 }
 
-export const createAction = (
-  word: string,
-  range: Range
-): Action => {
+export const createAction = (word: string, range: Range): Action => {
   return {
     kind: TokenKind.Action,
     word,
-    range
+    range,
   }
 }
 
@@ -79,14 +63,11 @@ export type Path = {
   range: Range
 }
 
-export const createPath = (
-  word: string,
-  range: Range
-): Path => {
+export const createPath = (word: string, range: Range): Path => {
   return {
     kind: TokenKind.Path,
     word,
-    range
+    range,
   }
 }
 
@@ -96,14 +77,11 @@ export type Comment = {
   range: Range
 }
 
-export const createComment = (
-  word: string,
-  range: Range
-): Comment => {
+export const createComment = (word: string, range: Range): Comment => {
   return {
     kind: TokenKind.Comment,
     word,
-    range
+    range,
   }
 }
 
@@ -113,13 +91,11 @@ export type EOP = {
   range: Range
 }
 
-export const createEOP = (
-  range: Range
-): EOP => {
+export const createEOP = (range: Range): EOP => {
   return {
     kind: TokenKind.EOP,
     word: 'eop',
-    range
+    range,
   }
 }
 

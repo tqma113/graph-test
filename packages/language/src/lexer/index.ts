@@ -1,8 +1,4 @@
-import {
-  SymbolChar,
-  TokenKind,
-  OperatorEnum,
-} from './constants'
+import { SymbolChar, TokenKind, OperatorEnum } from './constants'
 import { LexicalError } from './LexicalError'
 import {
   isLetter,
@@ -18,7 +14,7 @@ import {
   createComment,
   createAction,
   createPath,
-  createEOP
+  createEOP,
 } from './token'
 import type {
   Token,
@@ -28,12 +24,9 @@ import type {
   Action,
   Path,
   Comment,
-  EOP
+  EOP,
 } from './token'
-import type {
-  Range,
-  Position
-} from '../index'
+import type { Range, Position } from '../index'
 
 export * from './token'
 export * from './constants'

@@ -60,4 +60,3 @@ export const getWordType = (word: string) => {
 
   return WordType.Invalid
 }
-

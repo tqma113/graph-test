@@ -14,7 +14,7 @@ export const createTree = (
     kind: NodeKind.Tree,
     blocks,
     starts,
-    comments
+    comments,
   }
 }
 
@@ -34,7 +34,7 @@ export const createTreeBlock = (
     kind: NodeKind.TreeBlock,
     name,
     children,
-    comments
+    comments,
   }
 }
 
@@ -53,7 +53,7 @@ export const createActionNode = (
   return {
     kind: NodeKind.ActionNode,
     expression,
-    comments
+    comments,
   }
 }
 
@@ -63,14 +63,11 @@ export type GotoNode = {
   comments: string[]
 }
 
-export const createGotoNode = (
-  name: string,
-  comments: string[]
-): GotoNode => {
+export const createGotoNode = (name: string, comments: string[]): GotoNode => {
   return {
     kind: NodeKind.GotoNode,
     name,
-    comments
+    comments,
   }
 }
 
@@ -93,7 +90,7 @@ export const createSwitchTree = (
     condition,
     children,
     defaultChild,
-    comments
+    comments,
   }
 }
 
@@ -113,7 +110,7 @@ export const createCaseNode = (
     kind: NodeKind.CaseNode,
     expectation,
     children,
-    comments
+    comments,
   }
 }
 
@@ -130,7 +127,7 @@ export const createDefaultNode = (
   return {
     kind: NodeKind.DefaultNode,
     children,
-    comments
+    comments,
   }
 }
 
@@ -153,7 +150,7 @@ export const createIfTree = (
     condition,
     successChildren,
     faildChildren,
-    comments
+    comments,
   }
 }
 

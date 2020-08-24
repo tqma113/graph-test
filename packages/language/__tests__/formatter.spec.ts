@@ -25,7 +25,9 @@ describe('formatter', () => {
         expect(program.moduleStatemens[0].kind === FragmentKind.ImportStatement)
         expect(program.moduleStatemens[1].kind === FragmentKind.ExportStatement)
         expect(program.moduleStatemens[2].kind === FragmentKind.StartStatement)
-        expect(program.moduleStatemens[3].kind === FragmentKind.InferenceDefinition)
+        expect(
+          program.moduleStatemens[3].kind === FragmentKind.InferenceDefinition
+        )
       }
     })
   })

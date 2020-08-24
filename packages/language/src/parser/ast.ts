@@ -46,7 +46,7 @@ export const createProgram = (
     kind: FragmentKind.Program,
     moduleStatemens,
     range,
-    comments
+    comments,
   }
 }
 
@@ -75,7 +75,7 @@ export const createInferenceDefinition = (
     identifier,
     block,
     range,
-    comments
+    comments,
   }
 }
 
@@ -98,7 +98,7 @@ export const createImportStatement = (
     moduleItems,
     path,
     range,
-    comments
+    comments,
   }
 }
 
@@ -155,7 +155,7 @@ export const createExportStatement = (
     kind: FragmentKind.ExportStatement,
     module,
     range,
-    comments
+    comments,
   }
 }
 
@@ -175,7 +175,7 @@ export const createStartStatement = (
     kind: FragmentKind.StartStatement,
     module,
     range,
-    comments
+    comments,
   }
 }
 
@@ -215,7 +215,7 @@ export const createStepStatement = (
     kind: FragmentKind.StepStatement,
     expression,
     range,
-    comments
+    comments,
   }
 }
 
@@ -241,7 +241,7 @@ export const createIfStatement = (
     ifBlock,
     elseBlock,
     range,
-    comments
+    comments,
   }
 }
 
@@ -264,7 +264,7 @@ export const createSwitchStatement = (
     expression,
     switchBlock,
     range,
-    comments
+    comments,
   }
 }
 
@@ -307,7 +307,7 @@ export const createCaseClause = (
     expression,
     block,
     range,
-    comments
+    comments,
   }
 }
 
@@ -327,7 +327,7 @@ export const createDefaultClause = (
     kind: FragmentKind.DefaultClause,
     block,
     range,
-    comments
+    comments,
   }
 }
 
@@ -347,6 +347,6 @@ export const createGotoStatement = (
     kind: FragmentKind.GotoStatement,
     identifier,
     range,
-    comments
+    comments,
   }
 }

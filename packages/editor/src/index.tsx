@@ -30,7 +30,7 @@ function MonacoEditor({
   style,
   containerStyle,
   value = '# start from here\n\n',
-  tree
+  tree,
 }: MonacoEditorProps) {
   const [code, setCode] = useState(value)
   const [options, setOptions] = useState<

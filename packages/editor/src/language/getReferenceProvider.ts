@@ -7,11 +7,6 @@ const getReferenceProvider = (): monaco.languages.ReferenceProvider => {
     provideReferences(model, position, context, token) {
       const uri = model.uri
       const word = model.getWordAtPosition(position)
-      console.log({
-        word,
-        uri,
-        isReference: isReference(word?.word || ''),
-      })
       if (word && isReference(word.word)) {
         const name = word.word.slice(1, word.word.length - 1)
         const definition = server.definitions.get(name)
