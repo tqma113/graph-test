@@ -1,6 +1,6 @@
 /**
  * Semantic
- * 
+ *
  * Analysis AST(Abstruct Syntax Tree) and check semantic error.
  */
 

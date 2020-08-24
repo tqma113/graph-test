@@ -1,6 +1,6 @@
 /**
  * Code formater
- * 
+ *
  * Format AST(Abstruct Syntax Tree).
  */
 

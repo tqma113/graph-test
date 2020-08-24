@@ -1,6 +1,6 @@
 /**
  * Lexer
- * 
+ *
  * Transit source code to tokens.
  */
 

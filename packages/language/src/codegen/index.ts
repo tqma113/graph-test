@@ -1,6 +1,6 @@
 /**
  * Code generation
- * 
+ *
  * Transit AST(Abstruct Syntax Tree) to source code.
  */
 

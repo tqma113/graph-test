@@ -1,6 +1,6 @@
 /**
  * Reverse
- * 
+ *
  * Transit Mid-Tree to AST(Abstruct Syntax Tree).
  */
 

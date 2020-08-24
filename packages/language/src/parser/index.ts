@@ -1,8 +1,8 @@
 /**
  * Parser
- * 
+ *
  * Transit tokens to AST(Abstruct Syntax Tree).
- * 
+ *
  * 递归下降分析法(recursive-descent parsing)
  *
  * 预测分析法(prdictive parsing)
