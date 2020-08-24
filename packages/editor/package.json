@@ -1,6 +1,6 @@
 {
   "name": "@gtl/editor",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.0",
   "description": "A graph test language editor.",
   "main": "index.js",
   "module": "dist/index.js",
@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "monaco-editor": "^0.20.0",
-    "@gtl/language": "^1.0.0"
+    "@gtl/language": "1.0.0-alpha.0"
   }
 }
