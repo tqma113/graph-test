@@ -22,8 +22,7 @@
     "types": ["node", "jest"],
     "paths": {
       "@gtl/*": ["packages/*/src"],
-    },
-    "rootDir": "."
+    }
   },
   "include": ["packages/*/src"]
 }
