@@ -1,3 +1,7 @@
+# [1.0.0](https://github.com/tqma113/graph-test-language/compare/v1.0.0-alpha.0...v1.0.0) (2020-08-24)
+
+
+
 # 1.0.0-alpha.0 (2020-08-24)
 
 
