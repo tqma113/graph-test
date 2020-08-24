@@ -1,5 +1,5 @@
 import * as monaco from 'monaco-editor'
-import { Program } from '@gtl/language'
+import { Program } from 'gtl-language'
 
 const createEditor = (
   container: HTMLElement,

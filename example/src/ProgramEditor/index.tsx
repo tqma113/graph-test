@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import * as monaco from 'monaco-editor'
 import createEditor from './createEditor'
-import { Program } from '@gtl/language'
+import { Program } from 'gtl-language'
 import { FontSizeSelect } from './FontSizeSelect'
 
 export type MonacoEditorProps = {

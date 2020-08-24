@@ -2,8 +2,8 @@ import * as monaco from 'monaco-editor'
 import { MODE_ID } from './language'
 import { GRAPH_THEME } from './theme'
 import server from './language/server'
-import { convert, Program } from '@gtl/language'
-import { Tree } from '@gtl/language'
+import { convert, Program } from 'gtl-language'
+import { Tree } from 'gtl-language'
 
 const createEditor = (
   container: HTMLElement,

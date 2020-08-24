@@ -14,7 +14,7 @@ function createConfig() {
 
   return {
     input,
-    external: ['react', 'monaco-editor', 'monaco-editor/esm/vs/editor/editor.api', '@gtl/language'],
+    external: ['react', 'monaco-editor', 'monaco-editor/esm/vs/editor/editor.api', 'gtl-language'],
     plugins: [
       babel({ babelHelpers: 'bundled', presets: ['@babel/preset-react'] }),
       typescript({ module: 'CommonJS' }),

@@ -1,5 +1,5 @@
 {
-  "name": "@gtl/language",
+  "name": "gtl-language",
   "version": "1.0.0-alpha.0",
   "description": "A graph test language.",
   "main": "index.js",

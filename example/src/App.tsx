@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import CodeEditor from '@gtl/editor'
-import { Tree, Program } from '@gtl/language'
+import CodeEditor from 'gtl-editor'
+import { Tree, Program } from 'gtl-language'
 import TreeEditor from './TreeEditor'
 import ProgramEditor from './ProgramEditor'
 import './App.css'
