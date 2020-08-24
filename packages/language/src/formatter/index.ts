@@ -11,9 +11,9 @@ export const format = (ast: Program): Program => {
     ] as const
     program.moduleStatemens = program.moduleStatemens.sort((a, b) => {
       const index = kinds.indexOf(a.kind)
-      const ks = kinds.slice(0, index + 1)
-      const needToggle = ks.includes(b.kind)
-      return needToggle ? 1 : -1
+      const ks = kinds.slice(0, index)
+      const needExchange = ks.includes(b.kind)
+      return needExchange ? 1 : -1
     })
     return program
   }
