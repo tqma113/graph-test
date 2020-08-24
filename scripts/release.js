@@ -7,7 +7,6 @@ const currentVersion = require('../package.json').version
 const { prompt } = require('enquirer')
 const execa = require('execa')
 
-console.log(currentVersion)
 const preId = args.preid || semver.major(currentVersion)[0] || 'alpha'
 const isDryRun = args.dry
 const skipTests = args.skipTests
@@ -192,13 +191,8 @@ async function publishPackage(pkgName, version, runIfNotDry) {
   step(`Publishing ${pkgName}...`)
   try {
     await runIfNotDry(
-      'yarn', [
-        'publish',
-        '--new-version',
-        version,
-        ...(releaseTag ? ['--tag', releaseTag] : []),
-        '--access',
-        'public'
+      'npm', [
+        'publish'
       ], {
         cwd: pkgRoot,
         stdio: 'pipe'
