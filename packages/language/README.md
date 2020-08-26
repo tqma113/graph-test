@@ -2,6 +2,29 @@
 
 ## Usage
 
+* Install
+
+```bash
+# npm
+npm install gtl-language
+
+# yarn
+yarn  add gtl-language
+```
+
+* use
+
+```ts
+import { createParser, analysis } from '../src'
+
+const input = sample
+const parser = createParser(input)
+parser.parse()
+if (parser.program) {
+  const result = analysis(parser.program)
+}
+```
+
 ## Module
 
 #### Lexer
