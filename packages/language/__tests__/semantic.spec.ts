@@ -1,4 +1,4 @@
-import { createParser, analysis } from '../src'
+import { parse, analysis } from '../src'
 
 describe('semantic', () => {
   describe('definition', () => {
@@ -6,16 +6,15 @@ describe('semantic', () => {
       const input = `<从首页进入旅游频道> = {
         
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const { table, semanticErrors } = analysis(parser.program)
+        const { table, semanticErrors } = analysis(program)
         expect(table.size).toBe(1)
         expect(semanticErrors.length).toBe(0)
         expect(table.has('从首页进入旅游频道')).toBeTruthy()
@@ -31,16 +30,15 @@ describe('semantic', () => {
       const input = `start <从首页进入旅游频道> = {
         
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const { table, semanticErrors } = analysis(parser.program)
+        const { table, semanticErrors } = analysis(program)
         expect(table.size).toBe(1)
         expect(semanticErrors.length).toBe(0)
         expect(table.has('从首页进入旅游频道')).toBeTruthy()
@@ -63,16 +61,15 @@ describe('semantic', () => {
         [填写手机号]
         [点击保存]
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(2)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(2)
 
-        const { table, semanticErrors } = analysis(parser.program)
+        const { table, semanticErrors } = analysis(program)
         expect(table.size).toBe(2)
         expect(semanticErrors.length).toBe(0)
 
@@ -103,16 +100,15 @@ describe('semantic', () => {
         [填写手机号]
         [点击保存]
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(2)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(2)
 
-        const { table, semanticErrors } = analysis(parser.program)
+        const { table, semanticErrors } = analysis(program)
         expect(table.size).toBe(1)
         expect(semanticErrors.length).toBe(1)
         expect(semanticErrors[0].message).toBe(
@@ -125,16 +121,15 @@ describe('semantic', () => {
       const input = `start <从首页进入旅游频道> = {
         goto <创建出行人>
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const { table, semanticErrors } = analysis(parser.program)
+        const { table, semanticErrors } = analysis(program)
         expect(table.size).toBe(1)
         expect(semanticErrors.length).toBe(1)
         expect(semanticErrors[0].message).toBe(
@@ -145,16 +140,15 @@ describe('semantic', () => {
 
     it('have not been defined(start)', () => {
       const input = `start <从首页进入旅游频道>`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const { table, semanticErrors } = analysis(parser.program)
+        const { table, semanticErrors } = analysis(program)
         expect(table.size).toBe(0)
         expect(semanticErrors.length).toBe(1)
         expect(semanticErrors[0].message).toBe(
@@ -165,16 +159,15 @@ describe('semantic', () => {
 
     it('have not been defined(export)', () => {
       const input = `export <从首页进入旅游频道>`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const { table, semanticErrors } = analysis(parser.program)
+        const { table, semanticErrors } = analysis(program)
         expect(table.size).toBe(0)
         expect(semanticErrors.length).toBe(1)
         expect(semanticErrors[0].message).toBe(

@@ -1,4 +1,4 @@
-import { createParser, format, FragmentKind } from '../src'
+import { parse, format, FragmentKind } from '../src'
 
 describe('formatter', () => {
   describe('Program', () => {
@@ -13,20 +13,29 @@ describe('formatter', () => {
       }
       export <从首页进入旅游频道>
       import { <测试> } from "测试"`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(4)
-        const program = format(parser.program)
-        expect(program.moduleStatemens[0].kind === FragmentKind.ImportStatement)
-        expect(program.moduleStatemens[1].kind === FragmentKind.ExportStatement)
-        expect(program.moduleStatemens[2].kind === FragmentKind.StartStatement)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(4)
+        const programAfterFMT = format(program)
         expect(
-          program.moduleStatemens[3].kind === FragmentKind.InferenceDefinition
+          programAfterFMT.moduleStatemens[0].kind ===
+            FragmentKind.ImportStatement
+        )
+        expect(
+          programAfterFMT.moduleStatemens[1].kind ===
+            FragmentKind.ExportStatement
+        )
+        expect(
+          programAfterFMT.moduleStatemens[2].kind ===
+            FragmentKind.StartStatement
+        )
+        expect(
+          programAfterFMT.moduleStatemens[3].kind ===
+            FragmentKind.InferenceDefinition
         )
       }
     })

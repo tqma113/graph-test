@@ -1,5 +1,5 @@
 import {
-  createParser,
+  parse,
   InferenceDefinition,
   ImportStatement,
   ExportStatement,
@@ -16,25 +16,23 @@ describe('parser', () => {
   describe('Program', () => {
     it('work', () => {
       const input = sample
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.program).toBeDefined()
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
     })
 
     it('empty', () => {
       const input = ``
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
 
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(0)
       }
     })
   })
@@ -44,16 +42,15 @@ describe('parser', () => {
       const input = `<从首页进入旅游频道> = {
         
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
@@ -67,16 +64,15 @@ describe('parser', () => {
       
         [点击旅游频道]
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
@@ -88,16 +84,15 @@ describe('parser', () => {
   describe('ImportStatement', () => {
     it('single item', () => {
       const input = `import { <测试> } from "测试"`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.ImportStatement)
 
         const importStatement = moduleStatement as ImportStatement
@@ -109,16 +104,15 @@ describe('parser', () => {
 
     it('multiple item', () => {
       const input = `import { <测试>, <测试1> } from "测试"`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.ImportStatement)
 
         const importStatement = moduleStatement as ImportStatement
@@ -133,16 +127,15 @@ describe('parser', () => {
   describe('ExportStatement', () => {
     it('inference', () => {
       const input = `export <从首页进入旅游频道>`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.ExportStatement)
 
         const exportStatement = moduleStatement as ExportStatement
@@ -159,16 +152,15 @@ describe('parser', () => {
       
         [点击旅游频道]
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.ExportStatement)
 
         const exportStatement = moduleStatement as ExportStatement
@@ -188,16 +180,15 @@ describe('parser', () => {
   describe('StartStatement', () => {
     it('inference', () => {
       const input = `start <从首页进入旅游频道>`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.StartStatement)
 
         const startStatement = moduleStatement as StartStatement
@@ -213,16 +204,15 @@ describe('parser', () => {
       
         [点击旅游频道]
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.StartStatement)
 
         const startStatement = moduleStatement as StartStatement
@@ -244,16 +234,15 @@ describe('parser', () => {
       const input = `<从首页进入旅游频道> = {
         [打开携程首页]
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
@@ -274,16 +263,15 @@ describe('parser', () => {
       
         [点击旅游频道]
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
@@ -312,16 +300,15 @@ describe('parser', () => {
 
         }
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
@@ -346,16 +333,15 @@ describe('parser', () => {
 
         }
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
@@ -380,16 +366,15 @@ describe('parser', () => {
 
         }
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
@@ -414,16 +399,15 @@ describe('parser', () => {
           }
         }
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
@@ -460,16 +444,15 @@ describe('parser', () => {
           }
         }
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
@@ -516,16 +499,15 @@ describe('parser', () => {
           }
         }
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
@@ -567,16 +549,15 @@ describe('parser', () => {
       const input = `<从首页进入旅游频道> = {
         goto <选择出行人>
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(0)
-      expect(parser.program).toBeDefined()
-      if (parser.program) {
-        expect(parser.program.moduleStatemens.length).toBe(1)
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(0)
+      expect(program).toBeDefined()
+      if (program) {
+        expect(program.moduleStatemens.length).toBe(1)
 
-        const moduleStatement = parser.program.moduleStatemens[0]
+        const moduleStatement = program.moduleStatemens[0]
         expect(moduleStatement.kind).toBe(FragmentKind.InferenceDefinition)
 
         const inferenceDefinition = moduleStatement as InferenceDefinition
@@ -597,114 +578,102 @@ describe('parser', () => {
       const input = `<从首页进入旅游频道> {
 
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe("Expect { = }, accept '{'")
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(1)
+      expect(syntaxErrors[0].message).toBe("Expect { = }, accept '{'")
     })
 
     it('InferenceDefinition case 2', () => {
       const input = `<从首页进入旅游频道> =
 
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe("Expect { { }, accept '}'")
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(1)
+      expect(syntaxErrors[0].message).toBe("Expect { { }, accept '}'")
     })
 
     it('InferenceDefinition case 3', () => {
       const input = `<从首页进入旅游频道> = {
 
       `
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe("Expect { } }, accept 'eop'")
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(1)
+      expect(syntaxErrors[0].message).toBe("Expect { } }, accept 'eop'")
     })
 
     it('ImportStatement case 1', () => {
       const input = `import { } from "测试"`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe(
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(1)
+      expect(syntaxErrors[0].message).toBe(
         "Expect { Identifier: <somethings> }, accept '}'"
       )
     })
 
     it('ImportStatement case 2', () => {
       const input = `import { <测试> } "测试"`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe(
-        'Expect { from }, accept \'"测试"\''
-      )
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(1)
+      expect(syntaxErrors[0].message).toBe('Expect { from }, accept \'"测试"\'')
     })
 
     it('ImportStatement case 3', () => {
       const input = `import from "测试"`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe("Expect { { }, accept 'from'")
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(1)
+      expect(syntaxErrors[0].message).toBe("Expect { { }, accept 'from'")
     })
 
     it('ExportStatement case 1', () => {
       const input = `export <从首页进入旅游频道> =`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe("Expect { { }, accept 'eop'")
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(1)
+      expect(syntaxErrors[0].message).toBe("Expect { { }, accept 'eop'")
     })
 
     it('ExportStatement case 2', () => {
       const input = `export`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe(
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(1)
+      expect(syntaxErrors[0].message).toBe(
         "Expect { Identifier: <somethings> }, accept 'eop'"
       )
     })
 
     it('StartStatement case 1', () => {
       const input = `start`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe(
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(1)
+      expect(syntaxErrors[0].message).toBe(
         "Expect { Identifier: <somethings> }, accept 'eop'"
       )
     })
 
     it('StartStatement case 2', () => {
       const input = `start <从首页进入旅游频道> =`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe("Expect { { }, accept 'eop'")
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(1)
+      expect(syntaxErrors[0].message).toBe("Expect { { }, accept 'eop'")
     })
 
     it('IfStatement case 1', () => {
@@ -714,40 +683,37 @@ describe('parser', () => {
           [选择上海出发地]
         }
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(1)
-      expect(parser.syntaxErrors[0].message).toBe("Expect { -> }, accept '{'")
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(1)
+      expect(syntaxErrors[0].message).toBe("Expect { -> }, accept '{'")
     })
 
     it('IfStatement case 2', () => {
       const input = `start <选择上海站> = {
         if [不是上海站] ->
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(2)
-      expect(parser.syntaxErrors[0].message).toBe("Expect { { }, accept '}'")
-      expect(parser.syntaxErrors[1].message).toBe("Expect { } }, accept 'eop'")
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(2)
+      expect(syntaxErrors[0].message).toBe("Expect { { }, accept '}'")
+      expect(syntaxErrors[1].message).toBe("Expect { } }, accept 'eop'")
     })
 
     it('GotoStatement case 1', () => {
       const input = `start <选择上海站> = {
         goto
       }`
-      const parser = createParser(input)
-      parser.parse()
+      const { lexcialErrors, syntaxErrors } = parse(input)
 
-      expect(parser.lexcialErrors.length).toBe(0)
-      expect(parser.syntaxErrors.length).toBe(2)
-      expect(parser.syntaxErrors[0].message).toBe(
+      expect(lexcialErrors.length).toBe(0)
+      expect(syntaxErrors.length).toBe(2)
+      expect(syntaxErrors[0].message).toBe(
         "Expect { Identifier: <somethings> }, accept '}'"
       )
-      expect(parser.syntaxErrors[1].message).toBe("Expect { } }, accept 'eop'")
+      expect(syntaxErrors[1].message).toBe("Expect { } }, accept 'eop'")
     })
   })
 })

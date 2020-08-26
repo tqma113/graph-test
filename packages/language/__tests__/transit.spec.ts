@@ -1,5 +1,5 @@
 import {
-  createParser,
+  parse,
   convert,
   reverse,
   NodeKind,
@@ -24,14 +24,13 @@ describe('transit', () => {
         const input = `<从首页进入旅游频道> = {
         
         }`
-        const parser = createParser(input)
-        parser.parse()
+        const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-        expect(parser.lexcialErrors.length).toBe(0)
-        expect(parser.syntaxErrors.length).toBe(0)
-        expect(parser.program).toBeDefined()
-        if (parser.program) {
-          const tree = convert(parser.program)
+        expect(lexcialErrors.length).toBe(0)
+        expect(syntaxErrors.length).toBe(0)
+        expect(program).toBeDefined()
+        if (program) {
+          const tree = convert(program)
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(0)
@@ -45,14 +44,13 @@ describe('transit', () => {
         
           [点击旅游频道]
         }`
-        const parser = createParser(input)
-        parser.parse()
+        const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-        expect(parser.lexcialErrors.length).toBe(0)
-        expect(parser.syntaxErrors.length).toBe(0)
-        expect(parser.program).toBeDefined()
-        if (parser.program) {
-          const tree = convert(parser.program)
+        expect(lexcialErrors.length).toBe(0)
+        expect(syntaxErrors.length).toBe(0)
+        expect(program).toBeDefined()
+        if (program) {
+          const tree = convert(program)
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(2)
@@ -72,14 +70,13 @@ describe('transit', () => {
         const input = `start <从首页进入旅游频道> = {
         
         }`
-        const parser = createParser(input)
-        parser.parse()
+        const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-        expect(parser.lexcialErrors.length).toBe(0)
-        expect(parser.syntaxErrors.length).toBe(0)
-        expect(parser.program).toBeDefined()
-        if (parser.program) {
-          const tree = convert(parser.program)
+        expect(lexcialErrors.length).toBe(0)
+        expect(syntaxErrors.length).toBe(0)
+        expect(program).toBeDefined()
+        if (program) {
+          const tree = convert(program)
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(0)
@@ -96,14 +93,13 @@ describe('transit', () => {
         
           [点击旅游频道]
         }`
-        const parser = createParser(input)
-        parser.parse()
+        const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-        expect(parser.lexcialErrors.length).toBe(0)
-        expect(parser.syntaxErrors.length).toBe(0)
-        expect(parser.program).toBeDefined()
-        if (parser.program) {
-          const tree = convert(parser.program)
+        expect(lexcialErrors.length).toBe(0)
+        expect(syntaxErrors.length).toBe(0)
+        expect(program).toBeDefined()
+        if (program) {
+          const tree = convert(program)
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(2)
@@ -126,14 +122,13 @@ describe('transit', () => {
           }
         }
         `
-        const parser = createParser(input)
-        parser.parse()
+        const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-        expect(parser.lexcialErrors.length).toBe(0)
-        expect(parser.syntaxErrors.length).toBe(0)
-        expect(parser.program).toBeDefined()
-        if (parser.program) {
-          const tree = convert(parser.program)
+        expect(lexcialErrors.length).toBe(0)
+        expect(syntaxErrors.length).toBe(0)
+        expect(program).toBeDefined()
+        if (program) {
+          const tree = convert(program)
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(1)
@@ -158,14 +153,13 @@ describe('transit', () => {
           }
         }
         `
-        const parser = createParser(input)
-        parser.parse()
+        const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-        expect(parser.lexcialErrors.length).toBe(0)
-        expect(parser.syntaxErrors.length).toBe(0)
-        expect(parser.program).toBeDefined()
-        if (parser.program) {
-          const tree = convert(parser.program)
+        expect(lexcialErrors.length).toBe(0)
+        expect(syntaxErrors.length).toBe(0)
+        expect(program).toBeDefined()
+        if (program) {
+          const tree = convert(program)
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(1)
@@ -199,14 +193,13 @@ describe('transit', () => {
           }
         }
         `
-        const parser = createParser(input)
-        parser.parse()
+        const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-        expect(parser.lexcialErrors.length).toBe(0)
-        expect(parser.syntaxErrors.length).toBe(0)
-        expect(parser.program).toBeDefined()
-        if (parser.program) {
-          const tree = convert(parser.program)
+        expect(lexcialErrors.length).toBe(0)
+        expect(syntaxErrors.length).toBe(0)
+        expect(program).toBeDefined()
+        if (program) {
+          const tree = convert(program)
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(1)
@@ -238,14 +231,13 @@ describe('transit', () => {
           }
         }
         `
-        const parser = createParser(input)
-        parser.parse()
+        const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-        expect(parser.lexcialErrors.length).toBe(0)
-        expect(parser.syntaxErrors.length).toBe(0)
-        expect(parser.program).toBeDefined()
-        if (parser.program) {
-          const tree = convert(parser.program)
+        expect(lexcialErrors.length).toBe(0)
+        expect(syntaxErrors.length).toBe(0)
+        expect(program).toBeDefined()
+        if (program) {
+          const tree = convert(program)
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(1)
@@ -276,14 +268,13 @@ describe('transit', () => {
           
         }
         `
-        const parser = createParser(input)
-        parser.parse()
+        const { program, lexcialErrors, syntaxErrors } = parse(input)
 
-        expect(parser.lexcialErrors.length).toBe(0)
-        expect(parser.syntaxErrors.length).toBe(0)
-        expect(parser.program).toBeDefined()
-        if (parser.program) {
-          const tree = convert(parser.program)
+        expect(lexcialErrors.length).toBe(0)
+        expect(syntaxErrors.length).toBe(0)
+        expect(program).toBeDefined()
+        if (program) {
+          const tree = convert(program)
           expect(tree.blocks.length).toBe(2)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(1)

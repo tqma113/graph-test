@@ -3,7 +3,7 @@
  * https://microsoft.github.io/language-server-protocol/
  */
 
-import { createParser, analysis } from 'gtl-language'
+import { parse, analysis } from 'gtl-language'
 import type {
   Program,
   Inference,
@@ -26,15 +26,16 @@ const createServer = (input: string = '') => {
   }
 
   const analyze = () => {
-    const parser = createParser(input)
-    parser.parse()
-    lexicalErrors = parser.lexcialErrors
-    syntaxErrors = parser.syntaxErrors
-    if (parser.program) {
-      program = parser.program
-      const { semanticErrors: _semanticErrors, table } = analysis(
-        parser.program
-      )
+    const {
+      program: _program,
+      lexcialErrors: _lexcialErrors,
+      syntaxErrors: _syntaxErrors,
+    } = parse(input)
+    lexicalErrors = _lexcialErrors
+    syntaxErrors = _syntaxErrors
+    if (_program) {
+      program = _program
+      const { semanticErrors: _semanticErrors, table } = analysis(_program)
       semanticErrors = _semanticErrors
       definitions = table
     } else {

@@ -1,18 +1,17 @@
-import { createParser, analysis } from '../src'
+import { parse, analysis } from '../src'
 import { sample } from './sample'
 
 describe('graph', () => {
   it('work', () => {
     const input = sample
-    const parser = createParser(input)
-    parser.parse()
-    if (parser.program) {
-      const result = analysis(parser.program)
+    const { program, lexcialErrors, syntaxErrors } = parse(input)
+    if (program) {
+      const result = analysis(program)
 
       expect(result.semanticErrors.length).toBe(0)
     }
 
-    expect(parser.lexcialErrors.length).toBe(0)
-    expect(parser.syntaxErrors.length).toBe(0)
+    expect(lexcialErrors.length).toBe(0)
+    expect(syntaxErrors.length).toBe(0)
   })
 })

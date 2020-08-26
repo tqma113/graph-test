@@ -55,14 +55,13 @@ export * from './SyntaxError'
 
 export type BlockType = 'global' | 'local'
 
-export const createParser = (
+export const parse = (
   input: string
 ): {
   program: Program | null
   tokens: Token[]
   lexcialErrors: LexicalError[]
   syntaxErrors: SyntaxError[]
-  parse: () => void
 } => {
   const lexer = createLexer(input)
 
@@ -72,14 +71,6 @@ export const createParser = (
 
   let program: Program | null = null
   let errors: SyntaxError[] = []
-
-  const parse = () => {
-    if (program) {
-      return
-    }
-
-    program = matchProgram()
-  }
 
   const getNextToken = (): Token => {
     while (true) {
@@ -862,6 +853,8 @@ export const createParser = (
     }
   }
 
+  program = matchProgram()
+
   return {
     get program() {
       return program
@@ -875,7 +868,5 @@ export const createParser = (
     get syntaxErrors() {
       return errors
     },
-
-    parse,
   }
 }
