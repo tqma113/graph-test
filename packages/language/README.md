@@ -80,6 +80,18 @@ convert: (program: Program) => Tree
 reverse: (tree: Tree) => Program
 ```
 
+* unfold
+
+```ts
+unfold = (tree: Tree): TreeNodeRecord[]
+```
+
+* fold
+
+```ts
+fold = (records: TreeNodeRecord[]): Tree
+```
+
 #### Codegen
 
 * codegen
@@ -103,9 +115,7 @@ format: (ast: Program) => Program
 
 ## Structure
 
-#### Main Type
-
-* Common
+#### Common
 
 ```ts
 export type Position = {
@@ -119,7 +129,7 @@ export type Range = {
 }
 ```
 
-* Lexer
+#### Lexer
 
 ```ts
 export type Keyword = {
@@ -206,7 +216,7 @@ export enum TokenKind {
 
 ```
 
-* AST(Abstract Syntax Tree)
+#### AST(Abstract Syntax Tree)
 
 ```ts
 export enum FragmentKind {
@@ -361,7 +371,7 @@ export type GotoStatement = {
 }
 ```
 
-* Mid-Tree
+#### Mid-Tree
 
 ```ts
 export type Tree = {
@@ -434,7 +444,54 @@ export enum NodeKind {
 
 ```
 
-* Error
+#### Record
+
+```ts
+export enum LeafNodeKind {
+  Start = 'Start',
+  Comment = 'Comment',
+  Expression = 'Expression',
+  Condition = 'Condition',
+  Name = 'Name',
+  Expectation = 'Expectation',
+}
+
+export enum AntherNodeKind {
+  SuccessBlock = 'SuccessBlock',
+  FaildBlock = 'FaildBlock',
+}
+
+export type TreeNonLeafNodeRecord = {
+  id: string
+  floorId: number
+  parentId: string
+  kind: NodeKind | AntherNodeKind
+  content: null
+}
+
+export type TreeLeafNodeRecord = {
+  id: string
+  floorId: number
+  parentId: string
+  kind: LeafNodeKind
+  content: string
+}
+
+export type TreeNodeRecord = TreeNonLeafNodeRecord | TreeLeafNodeRecord
+
+export type TreeNodeStatusRecord = {
+  id: string
+  path: string
+  status: number
+}
+
+export type TreeNodeRecordWithDocumentId = TreeNodeRecord & {
+  documentId: string
+}
+
+```
+
+#### Error
 
 ```ts
 class LexicalError extends Error {
@@ -521,6 +578,17 @@ SemanticError extends Error {
                               +---------------------+
                               |                     |
                               |       Mid-Tree      |
+                              |                     |
+                              +-----+--------+------+
+                                  |             ^
+                                  |             |
+                               unfold         fold
+                                  |             |
+                                  |             |
+                                  v             |
+                              +---------------------+
+                              |                     |
+                              |        Record       |
                               |                     |
                               +-----+--------+------+
 ```
