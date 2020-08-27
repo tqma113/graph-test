@@ -571,16 +571,18 @@ SemanticError extends Error {
                               +-----+--------+------+
                                   |             ^
                                   |             |
+                                  |             |
                               convert        reverse
                                   |             |
                                   |             |
                                   v             |
                               +---------------------+
                               |                     |
-                              |       Mid-Tree      |
+                              |         Tree        |
                               |                     |
                               +-----+--------+------+
                                   |             ^
+                                  |             |
                                   |             |
                                unfold         fold
                                   |             |
@@ -588,7 +590,7 @@ SemanticError extends Error {
                                   v             |
                               +---------------------+
                               |                     |
-                              |        Record       |
+                              |   TreeNodeRecord    |
                               |                     |
                               +-----+--------+------+
 ```
