@@ -19,7 +19,7 @@ import {
   createModule,
 } from '../parser/ast'
 import { createComment, createIdentifier, createAction } from '../lexer'
-import { NodeKind } from './ast'
+import { NodeKind } from './tree'
 import type { Program, Block } from '../parser/ast'
 import type {
   Tree,
@@ -31,7 +31,7 @@ import type {
   SwitchTree,
   CaseNode,
   DefaultNode,
-} from './ast'
+} from './tree'
 import type { Comment } from '../lexer'
 import type { Range } from '../'
 

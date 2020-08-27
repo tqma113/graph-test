@@ -731,4 +731,12 @@ describe('transit', () => {
       })
     })
   })
+
+  describe('fold', () => {
+    it.todo('work')
+  })
+
+  describe('unfold', () => {
+    it.todo('work')
+  })
 })

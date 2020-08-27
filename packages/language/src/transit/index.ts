@@ -1,3 +1,3 @@
 export * from './convert'
 export * from './reverse'
-export * from './ast'
+export * from './tree'

@@ -14,7 +14,7 @@ import {
   createDefaultNode,
   createGotoNode,
   createTree,
-} from './ast'
+} from './tree'
 import type {
   Program,
   InferenceDefinition,
@@ -34,7 +34,7 @@ import type {
   ModuleItems,
   Statement,
 } from '../parser/ast'
-import type { Tree, TreeBlock, TreeNode, IfTree } from './ast'
+import type { Tree, TreeBlock, TreeNode, IfTree } from './tree'
 import type { Comment } from '../lexer'
 
 export const convert = (program: Program): Tree => {
