@@ -560,7 +560,7 @@ SemanticError extends Error {
               |               +-----+--------+------+
               |                         |
               |                         |
-              |                    createParser
+              |                       parse
               |                         |      +--------------------+
               |                         |      |                    |
               |                         v      v                  format
