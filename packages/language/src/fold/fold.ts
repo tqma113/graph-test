@@ -7,13 +7,12 @@ import {
   createDefaultNode,
   createGotoNode,
   createTree,
-  LeafNodeKind,
   NodeKind,
-  AntherNodeKind,
-} from './tree'
+} from '../transit/tree'
+import { LeafNodeKind, AntherNodeKind } from './index'
+import type { TreeNodeRecord } from './index'
 import type {
   Tree,
-  TreeNodeRecord,
   TreeBlock,
   TreeNode,
   ActionNode,
@@ -22,7 +21,7 @@ import type {
   SwitchTree,
   CaseNode,
   DefaultNode,
-} from './tree'
+} from '../transit/tree'
 
 export type TreeNodeKind =
   | NodeKind.ActionNode
@@ -132,7 +131,7 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
       )
     }
 
-    return foldTreeNodes(parentId)
+    return foldTreeNodes(record.id)
   }
 
   const foldFaildChildren = (parentId: string): TreeNode[] => {
@@ -148,7 +147,7 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
       )
     }
 
-    return foldTreeNodes(parentId)
+    return foldTreeNodes(record.id)
   }
 
   const foldSwitchTree = (id: string): SwitchTree => {

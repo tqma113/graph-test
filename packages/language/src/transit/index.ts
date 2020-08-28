@@ -1,5 +1,3 @@
 export * from './convert'
 export * from './reverse'
-export * from './fold'
-export * from './unfold'
 export * from './tree'

@@ -1,7 +1,8 @@
-import { NodeKind, LeafNodeKind, AntherNodeKind } from './tree'
+import { NodeKind } from '../transit/tree'
+import { LeafNodeKind, AntherNodeKind } from './index'
+import type { TreeNodeRecord } from './index'
 import type {
   Tree,
-  TreeNodeRecord,
   TreeBlock,
   TreeNode,
   ActionNode,
@@ -10,7 +11,7 @@ import type {
   SwitchTree,
   CaseNode,
   DefaultNode,
-} from './tree'
+} from '../transit/tree'
 
 export const unfold = (tree: Tree): TreeNodeRecord[] => {
   const unfoldTree = (tree: Tree): TreeNodeRecord[] => {

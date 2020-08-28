@@ -2,6 +2,7 @@ import {
   parse,
   convert,
   reverse,
+  codegen,
   NodeKind,
   FragmentKind,
   ActionNode,
@@ -16,8 +17,21 @@ import {
   IfStatement,
   SwitchStatement,
 } from '../src'
+import { sample } from './sample'
 
 describe('transit', () => {
+  it('Program <-> Tree', () => {
+    const input = sample
+    const { program, lexcialErrors, syntaxErrors } = parse(input)
+
+    expect(lexcialErrors.length).toBe(0)
+    expect(syntaxErrors.length).toBe(0)
+    expect(program).toBeDefined()
+    if (program) {
+      expect(codegen(reverse(convert(program)))).toStrictEqual(sample)
+    }
+  })
+
   describe('convert', () => {
     describe('InferenceDefinition', () => {
       it('empty', () => {
@@ -730,13 +744,5 @@ describe('transit', () => {
         }
       })
     })
-  })
-
-  describe('fold', () => {
-    it.todo('work')
-  })
-
-  describe('unfold', () => {
-    it.todo('work')
   })
 })
