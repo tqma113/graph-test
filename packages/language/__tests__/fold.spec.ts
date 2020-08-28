@@ -129,7 +129,7 @@ describe('fold', () => {
         expect(records[3].content).toBe('从首页进入旅游频道')
       })
     })
-    
+
     describe('ActionNode', () => {
       it('work', () => {
         const tree = {
@@ -492,7 +492,7 @@ describe('fold', () => {
         expect(fold(unfold(tree))).toStrictEqual(tree)
       })
     })
-    
+
     describe('ActionNode', () => {
       it('work', () => {
         const tree = {
