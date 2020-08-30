@@ -522,7 +522,7 @@ class SyntaxError extends Error {
   }
 }
 
-SemanticError extends Error {
+class SemanticError extends Error {
   kind = 'error' as const
   fragment: Fragment
   range: Range
