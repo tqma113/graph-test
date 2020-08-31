@@ -3,7 +3,6 @@ const path = require('path')
 const { babel } = require('@rollup/plugin-babel');
 const commonjs = require('@rollup/plugin-commonjs');
 const typescript = require('@rollup/plugin-typescript')
-const { terser } = require('rollup-plugin-terser')
 
 module.exports = createConfig()
 
@@ -19,13 +18,7 @@ function createConfig() {
     plugins: [
       babel({ babelHelpers: 'bundled', presets: ['@babel/preset-react'] }),
       typescript({ module: 'CommonJS' }),
-      commonjs({ extensions: ['.js', '.jsx', '.ts', '.tsx'] }),
-      terser({
-        compress: {
-          ecma: 2015,
-          pure_getters: true
-        }
-      })
+      commonjs({ extensions: ['.js', '.jsx', '.ts', '.tsx'] })
     ],
     output: {
       format: 'cjs',
