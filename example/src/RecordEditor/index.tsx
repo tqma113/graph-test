@@ -42,7 +42,6 @@ function MonacoEditor({ onSave, onError, style, containerStyle, initialValue = '
   }, [options, value])
 
   const initMonaco = () => {
-    console.log(value)
     editor.current = createEditor(
       containerRef.current as HTMLElement,
       value,
