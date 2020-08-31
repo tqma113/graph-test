@@ -16,7 +16,6 @@ import type {
 export const unfold = (tree: Tree): TreeNodeRecord[] => {
   const unfoldTree = (tree: Tree): TreeNodeRecord[] => {
     const record = createTNLNR(NodeKind.Tree, '', 0)
-
     return [
       record,
       ...unfoldTreeBlocks(tree.blocks, record.id),
@@ -29,11 +28,10 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
     treeBlocks: TreeBlock[],
     parentId: string
   ): TreeNodeRecord[] => {
-    return treeBlocks
-      .map((treeBlock, index) => {
-        return unfoldTreeBlock(treeBlock, parentId, index)
-      })
-      .flat()
+    const draftArr = treeBlocks.map((treeBlock, index) => {
+      return unfoldTreeBlock(treeBlock, parentId, index)
+    })
+    return flat(draftArr)
   }
 
   const unfoldTreeBlock = (
@@ -42,7 +40,6 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
     index: number
   ): TreeNodeRecord[] => {
     const record = createTNLNR(NodeKind.TreeBlock, parentId, index)
-
     return [
       record,
       unfoldName(treeBlock.name, record.id),
@@ -55,11 +52,10 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
     treeNodes: TreeNode[],
     parentId: string
   ): TreeNodeRecord[] => {
-    return treeNodes
-      .map((treeNode, index) => {
-        return unfoldTreeNode(treeNode, parentId, index)
-      })
-      .flat()
+    const draftArr = treeNodes.map((treeNode, index) => {
+      return unfoldTreeNode(treeNode, parentId, index)
+    })
+    return flat(draftArr)
   }
 
   const unfoldTreeNode = (
@@ -89,7 +85,6 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
     index: number
   ): TreeNodeRecord[] => {
     const record = createTNLNR(NodeKind.ActionNode, parentId, index)
-
     return [
       record,
       unfoldExpression(actionNode.expression, record.id),
@@ -103,7 +98,6 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
     index: number
   ): TreeNodeRecord[] => {
     const record = createTNLNR(NodeKind.GotoNode, parentId, index)
-
     return [
       record,
       unfoldName(gotoNode.name, record.id),
@@ -117,7 +111,6 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
     index: number
   ): TreeNodeRecord[] => {
     const record = createTNLNR(NodeKind.IfTree, parentId, index)
-
     return [
       record,
       unfoldCondition(ifTree.condition, record.id),
@@ -132,7 +125,6 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
     parentId: string
   ): TreeNodeRecord[] => {
     const record = createTNLNR(AntherNodeKind.SuccessBlock, parentId, 0)
-
     return [record, ...unfoldTreeNodes(treeNodes, record.id)]
   }
 
@@ -141,7 +133,6 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
     parentId: string
   ): TreeNodeRecord[] => {
     const record = createTNLNR(AntherNodeKind.FaildBlock, parentId, 0)
-
     return [record, ...unfoldTreeNodes(treeNodes, record.id)]
   }
 
@@ -151,7 +142,6 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
     index: number
   ): TreeNodeRecord[] => {
     const record = createTNLNR(NodeKind.SwitchTree, parentId, index)
-
     return [
       record,
       unfoldCondition(switchTree.condition, record.id),
@@ -165,11 +155,10 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
     caseNodes: CaseNode[],
     parentId: string
   ): TreeNodeRecord[] => {
-    return caseNodes
-      .map((caseNode, index) => {
-        return unfoldCaseNode(caseNode, parentId, index)
-      })
-      .flat()
+    const draftArr = caseNodes.map((caseNode, index) => {
+      return unfoldCaseNode(caseNode, parentId, index)
+    })
+    return flat(draftArr)
   }
 
   const unfoldCaseNode = (
@@ -178,7 +167,6 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
     index: number
   ): TreeNodeRecord[] => {
     const record = createTNLNR(NodeKind.CaseNode, parentId, index)
-
     return [
       record,
       unfoldExpectation(caseNode.expectation, record.id),
@@ -195,7 +183,6 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
       return []
     }
     const record = createTNLNR(NodeKind.DefaultNode, parentId, 0)
-
     return [
       record,
       ...unfoldTreeNodes(defaultNode.children, record.id),
@@ -280,4 +267,10 @@ export const unfold = (tree: Tree): TreeNodeRecord[] => {
   }
 
   return unfoldTree(tree)
+}
+
+const flat = <T extends any>(arr: T[][]): T[] => {
+  return arr.reduce((flatArr, cur) => {
+    return flatArr.concat(cur)
+  }, [] as T[])
 }
