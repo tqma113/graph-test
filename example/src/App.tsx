@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import CodeEditor from 'gtl-editor'
-import { Tree, Program } from 'gtl-language'
+import { Tree, Program, TreeNodeRecord, unfold } from 'gtl-language'
 import TreeEditor from './TreeEditor'
 import ProgramEditor from './ProgramEditor'
+import RecordEditor from './RecordEditor'
 import './App.css'
 
 function App() {
   const [program, setProgram] = useState({} as Program)
   const [tree, setTree] = useState({} as Tree)
+  const [records, setRecords] = useState([] as TreeNodeRecord[])
 
   const onCodeChange = (code: string, tree: Tree, program: Program) => {
     console.log({
@@ -17,6 +19,7 @@ function App() {
     })
     setProgram(program)
     setTree(tree)
+    setRecords(unfold(tree))
   }
 
   const onTreeChange = (tree: Tree) => {
@@ -26,6 +29,12 @@ function App() {
   }
 
   const onProgramChange = (program: Program) => {
+    console.log({
+      tree
+    })
+  }
+
+  const onRecordsChange = (records: TreeNodeRecord[]) => {
     console.log({
       tree
     })
@@ -118,6 +127,7 @@ function App() {
       <CodeEditor style={{ width: '100%'}} containerStyle={{ width: '640px' }} onSave={onCodeChange} value={initialValue} />
       <ProgramEditor style={{ width: '100%'}} containerStyle={{ width: '640px' }} onSave={onProgramChange} initialValue={JSON.stringify(program)} />
       <TreeEditor style={{ width: '100%'}} containerStyle={{ width: '640px' }} onSave={onTreeChange} initialValue={JSON.stringify(tree)} />
+      <RecordEditor style={{ width: '100%'}} containerStyle={{ width: '640px' }} onSave={onRecordsChange} initialValue={JSON.stringify(records)} />
     </div>
   );
 }
