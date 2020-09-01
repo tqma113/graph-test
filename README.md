@@ -6,6 +6,7 @@ A graph test language.
 
 + [language](./packages/language/README.md)
 + [editor](./packages/editor/README.md)
++ [tree](./packages/tree/README.md)
 
 ## Development
 
