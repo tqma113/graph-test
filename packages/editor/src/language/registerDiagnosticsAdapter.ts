@@ -44,6 +44,10 @@ const registerDiagnosticsAdapter = () => {
   let listener: Record<string, monaco.IDisposable> = Object.create(null)
 
   const onModelAdd = (model: monaco.editor.IModel): void => {
+    if (model.getModeId() !== MODE_ID) {
+      return
+    }
+    
     let handle: number
     const changeSubscription = model.onDidChangeContent(() => {
       clearTimeout(handle)
