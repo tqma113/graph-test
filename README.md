@@ -1,6 +1,6 @@
-# Graph Test Language
+# Graph Test
 
-A graph test language.
+Graph test tool chain.
 
 ## Packages
 
