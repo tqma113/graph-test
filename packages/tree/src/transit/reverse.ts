@@ -20,9 +20,9 @@ import {
   createComment,
   createIdentifier,
   createAction,
-} from 'gtl-language'
+} from 'gt-language'
 import { NodeKind } from './tree'
-import type { Program, Block, Comment, Range } from 'gtl-language'
+import type { Program, Block, Comment, Range } from 'gt-language'
 import type {
   Tree,
   TreeBlock,

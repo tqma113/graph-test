@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
-const { babel } = require('@rollup/plugin-babel');
-const commonjs = require('@rollup/plugin-commonjs');
+const { babel } = require('@rollup/plugin-babel')
+const commonjs = require('@rollup/plugin-commonjs')
 const typescript = require('@rollup/plugin-typescript')
 
 module.exports = createConfig()
@@ -14,16 +14,22 @@ function createConfig() {
 
   return {
     input,
-    external: ['react', 'monaco-editor', 'monaco-editor/esm/vs/editor/editor.api', 'gtl-language'],
+    external: [
+      'react',
+      'monaco-editor',
+      'monaco-editor/esm/vs/editor/editor.api',
+      'gt-language',
+      'gt-tree',
+    ],
     plugins: [
       babel({ babelHelpers: 'bundled', presets: ['@babel/preset-react'] }),
       typescript({ module: 'CommonJS' }),
-      commonjs({ extensions: ['.js', '.jsx', '.ts', '.tsx'] })
+      commonjs({ extensions: ['.js', '.jsx', '.ts', '.tsx'] }),
     ],
     output: {
       format: 'cjs',
       file: output,
-      exports: 'auto'
+      exports: 'auto',
     },
     onwarn: (msg, warn) => {
       if (!/Circular/.test(msg)) {

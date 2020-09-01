@@ -27,7 +27,8 @@
     ]
   },
   "peerDependencies": {
-    "gt-language": "^1.0.0"
+    "gt-language": "^1.2.0",
+    "gt-tree": "^1.2.0"
   },
   "dependencies": {
     "monaco-editor": "^0.20.0"

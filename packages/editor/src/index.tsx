@@ -4,8 +4,8 @@ import registerLanguage from './language'
 import createEditor from './createEditor'
 import { initTheme } from './theme'
 import { FontSizeSelect } from './component'
-import { Program } from 'gtl-language'
-import { Tree } from 'gtl-tree'
+import { Program } from 'gt-language'
+import { Tree } from 'gt-tree'
 
 export type MonacoEditorProps = {
   onSave?: (content: string, tree: Tree, program: Program) => void

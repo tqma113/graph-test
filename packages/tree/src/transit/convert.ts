@@ -4,7 +4,7 @@
  * Transit AST(Abstruct Syntax Tree) to Mid-Tree.
  */
 
-import { FragmentKind } from 'gtl-language'
+import { FragmentKind } from 'gt-language'
 import {
   createTreeBlock,
   createActionNode,
@@ -34,7 +34,7 @@ import type {
   ModuleItems,
   Statement,
   Comment,
-} from 'gtl-language'
+} from 'gt-language'
 import type { Tree, TreeBlock, TreeNode, IfTree } from './tree'
 
 export const convert = (program: Program): Tree => {
