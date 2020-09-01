@@ -6,16 +6,16 @@
 
 ```bash
 # npm
-npm install gtl-language
+npm install gt-language
 
 # yarn
-yarn  add gtl-language
+yarn  add gt-language
 ```
 
-* use
+* Use
 
 ```ts
-import { createParser, analysis } from '../src'
+import { createParser, analysis } from 'gt-language'
 
 const input = sample
 const parser = createParser(input)
@@ -64,32 +64,6 @@ analysis: (program: Program) => {
     semanticErrors: SemanticError[];
     table: Map<string, Inference>;
 }
-```
-
-#### Transit
-
-* convert
-
-```ts
-convert: (program: Program) => Tree
-```
-
-* reverse
-
-```ts
-reverse: (tree: Tree) => Program
-```
-
-* unfold
-
-```ts
-unfold = (tree: Tree): TreeNodeRecord[]
-```
-
-* fold
-
-```ts
-fold = (records: TreeNodeRecord[]): Tree
 ```
 
 #### Codegen
@@ -371,126 +345,6 @@ export type GotoStatement = {
 }
 ```
 
-#### Mid-Tree
-
-```ts
-export type Tree = {
-  kind: NodeKind.Tree
-  blocks: TreeBlock[]
-  starts: string[]
-  comments: string[]
-}
-
-export type TreeBlock = {
-  kind: NodeKind.TreeBlock
-  name: string
-  children: TreeNode[]
-  comments: string[]
-}
-
-export type TreeNode = ActionNode | GotoNode | SwitchTree | IfTree
-
-export type ActionNode = {
-  kind: NodeKind.ActionNode
-  expression: string
-  comments: string[]
-}
-
-export type GotoNode = {
-  kind: NodeKind.GotoNode
-  name: string
-  comments: string[]
-}
-
-export type SwitchTree = {
-  kind: NodeKind.SwitchTree
-  condition: string
-  children: CaseNode[]
-  defaultChild: DefaultNode | null
-  comments: string[]
-}
-
-export type CaseNode = {
-  kind: NodeKind.CaseNode
-  expectation: string
-  children: TreeNode[]
-  comments: string[]
-}
-
-export type DefaultNode = {
-  kind: NodeKind.DefaultNode
-  children: TreeNode[]
-  comments: string[]
-}
-
-export type IfTree = {
-  kind: NodeKind.IfTree
-  condition: string
-  successChildren: TreeNode[]
-  faildChildren: TreeNode[]
-  comments: string[]
-}
-
-export enum NodeKind {
-  Tree = 'Tree',
-  TreeBlock = 'TreeBlock',
-  ActionNode = 'ActionNode',
-  GotoNode = 'GotoNode',
-  SwitchTree = 'SwitchTree',
-  CaseNode = 'CaseNode',
-  DefaultNode = 'DefaultNode',
-  IfTree = 'IfTree',
-}
-
-```
-
-#### Record
-
-```ts
-export enum LeafNodeKind {
-  Start = 'Start',
-  Comment = 'Comment',
-  Expression = 'Expression',
-  Condition = 'Condition',
-  Name = 'Name',
-  Expectation = 'Expectation',
-}
-
-export enum AntherNodeKind {
-  SuccessBlock = 'SuccessBlock',
-  FaildBlock = 'FaildBlock',
-}
-
-export type TreeNonLeafNodeRecord = {
-  id: string
-  floorId: number
-  parentId: string
-  kind: NodeKind | AntherNodeKind
-  content: null
-}
-
-export type TreeLeafNodeRecord = {
-  id: string
-  floorId: number
-  parentId: string
-  kind: LeafNodeKind
-  content: string
-}
-
-export type TreeNodeRecord = TreeNonLeafNodeRecord | TreeLeafNodeRecord
-
-export type TreeNodeStatusRecord = {
-  id: string
-  path: string
-  status: number
-}
-
-export type TreeNodeRecordWithDocumentId = TreeNodeRecord & {
-  documentId: string
-}
-
-```
-
 #### Error
 
 ```ts
@@ -537,62 +391,6 @@ class SemanticError extends Error {
     this.stack = `${message} at line: ${fragment.range.start.line}, column: ${fragment.range.start.column}`
   }
 }
-```
-
-## Conversion graph
-
-```
-                              +---------------------+
-                              |                     |
-              +-------------->|    Source(string)   |
-              |               |                     |
-              |               +-----+--------+------+
-              |                         |
-              |                         |
-              |                    createLexer
-              |                         |
-              |                         |
-              |                         v
-              |               +---------------------+
-              |               |                     |
-           codegen            |       Token[]       |
-              |               |                     |
-              |               +-----+--------+------+
-              |                         |
-              |                         |
-              |                       parse    +--------------------+
-              |                         |      |                    |
-              |                         |      |                    |
-              |                         v      v                  format
-              |               +---------------------+               |
-              |               |                     |               |
-              +---------------|       Program       |---------------+
-                              |                     |
-                              +-----+--------+------+
-                                  |             ^
-                                  |             |
-                                  |             |
-                              convert        reverse
-                                  |             |
-                                  |             |
-                                  v             |
-                              +---------------------+
-                              |                     |
-                              |         Tree        |
-                              |                     |
-                              +-----+--------+------+
-                                  |             ^
-                                  |             |
-                                  |             |
-                               unfold         fold
-                                  |             |
-                                  |             |
-                                  v             |
-                              +---------------------+
-                              |                     |
-                              |   TreeNodeRecord    |
-                              |                     |
-                              +-----+--------+------+
 ```
 
 ## Specification
