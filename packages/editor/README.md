@@ -1,4 +1,4 @@
-# gtl-editor
+# gt-editor
 
 Based on [monaco-editor](https://microsoft.github.io/monaco-editor) and [React](https://reactjs.org/).
 
@@ -8,18 +8,19 @@ Based on [monaco-editor](https://microsoft.github.io/monaco-editor) and [React](
 
 ```base
 # npm
-npm install gtl-language gtl-editor
+npm install gt-language gt-tree gt-editor
 
 # yarn
-yarn add gtl-language gtl-editor
+yarn add gt-language gt-tree gt-editor
 ```
 
 * example
 
 ```ts
 import React, { useState } from 'react';
-import CodeEditor from 'gtl-editor'
-import { Tree, Program } from 'gtl-language'
+import CodeEditor from 'gt-editor'
+import { Program } from 'gt-language'
+import { Tree } from 'gt-tree'
 
 function App() {
   const onCodeChange = (code: string, tree: Tree, program: Program) => {
