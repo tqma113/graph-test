@@ -30,7 +30,5 @@ export type Range = {
 export * from './lexer'
 export * from './parser'
 export * from './semantic'
-export * from './transit'
 export * from './codegen'
 export * from './formatter'
-export * from './fold'

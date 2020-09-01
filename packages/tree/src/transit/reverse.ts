@@ -17,10 +17,12 @@ import {
   createCaseClause,
   createDefaultClause,
   createModule,
-} from '../parser/ast'
-import { createComment, createIdentifier, createAction } from '../lexer'
+  createComment,
+  createIdentifier,
+  createAction,
+} from 'gtl-language'
 import { NodeKind } from './tree'
-import type { Program, Block } from '../parser/ast'
+import type { Program, Block, Comment, Range } from 'gtl-language'
 import type {
   Tree,
   TreeBlock,
@@ -32,8 +34,6 @@ import type {
   CaseNode,
   DefaultNode,
 } from './tree'
-import type { Comment } from '../lexer'
-import type { Range } from '../'
 
 const range: Range = {
   start: {

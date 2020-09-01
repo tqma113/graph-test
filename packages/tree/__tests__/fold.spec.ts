@@ -1,5 +1,5 @@
+import { parse } from 'gtl-language'
 import {
-  parse,
   convert,
   unfold,
   fold,

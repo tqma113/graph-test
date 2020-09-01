@@ -1,5 +1,5 @@
 import * as monaco from 'monaco-editor'
-import { TreeNodeRecord } from 'gtl-language'
+import { TreeNodeRecord } from 'gtl-tree'
 
 const createEditor = (
   container: HTMLElement,

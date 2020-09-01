@@ -4,7 +4,7 @@
  * Transit AST(Abstruct Syntax Tree) to Mid-Tree.
  */
 
-import { FragmentKind } from '../parser/ast'
+import { FragmentKind } from 'gtl-language'
 import {
   createTreeBlock,
   createActionNode,
@@ -33,9 +33,9 @@ import type {
   ModuleStatement,
   ModuleItems,
   Statement,
-} from '../parser/ast'
+  Comment,
+} from 'gtl-language'
 import type { Tree, TreeBlock, TreeNode, IfTree } from './tree'
-import type { Comment } from '../lexer'
 
 export const convert = (program: Program): Tree => {
   const convertProgram = (program: Program) => {
