@@ -8,7 +8,7 @@ import {
   GotoStatement,
   IfStatement,
   SwitchStatement,
-} from 'gtl-language'
+} from 'gt-language'
 import {
   convert,
   reverse,

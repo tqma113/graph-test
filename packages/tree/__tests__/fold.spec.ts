@@ -1,4 +1,4 @@
-import { parse } from 'gtl-language'
+import { parse } from 'gt-language'
 import {
   convert,
   unfold,
