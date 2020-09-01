@@ -3,14 +3,14 @@
  * https://microsoft.github.io/language-server-protocol/
  */
 
-import { parse, analysis } from 'gtl-language'
+import { parse, analysis } from 'gt-language'
 import type {
   Program,
   Inference,
   LexicalError,
   SyntaxError,
   SemanticError,
-} from 'gtl-language'
+} from 'gt-language'
 
 const createServer = (input: string = '') => {
   let program: Program | null = null

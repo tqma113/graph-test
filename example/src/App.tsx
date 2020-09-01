@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import CodeEditor from 'gtl-editor'
-import { Tree, Program, TreeNodeRecord, unfold } from 'gtl-language'
+import CodeEditor from 'gt-editor'
+import { Program } from 'gt-language'
+import { Tree, TreeNodeRecord, unfold } from 'gt-tree'
 import TreeEditor from './TreeEditor'
 import ProgramEditor from './ProgramEditor'
 import RecordEditor from './RecordEditor'

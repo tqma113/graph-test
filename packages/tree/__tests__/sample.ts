@@ -1,4 +1,5 @@
-import type { Program } from '../src'
+import type { Program } from 'gt-language'
+import type { Tree } from '../src'
 
 export const sample = `<从首页进入旅游频道> = {
   [打开携程首页]
@@ -1722,4 +1723,4 @@ export const tree = {
   ],
   starts: ['下单流程', '选择上海站'],
   comments: [],
-}
+} as Tree

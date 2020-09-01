@@ -1,21 +1,23 @@
 import {
   parse,
-  convert,
-  reverse,
   codegen,
-  NodeKind,
   FragmentKind,
-  ActionNode,
-  IfTree,
-  SwitchTree,
-  GotoNode,
-  Tree,
   InferenceDefinition,
   StepStatement,
   StartStatement,
   GotoStatement,
   IfStatement,
   SwitchStatement,
+} from 'gt-language'
+import {
+  convert,
+  reverse,
+  NodeKind,
+  ActionNode,
+  IfTree,
+  SwitchTree,
+  GotoNode,
+  Tree,
 } from '../src'
 import { sample } from './sample'
 
