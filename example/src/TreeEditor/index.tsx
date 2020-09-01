@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as monaco from 'monaco-editor'
 import createEditor from './createEditor'
 import { Tree } from 'gt-tree'
@@ -30,11 +30,11 @@ function MonacoEditor({ onSave, onError, style, containerStyle, initialValue = '
   const editor = useRef<monaco.editor.IStandaloneCodeEditor>()
   const subscription = useRef<monaco.IDisposable>()
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setValue(initialValue)
   }, [initialValue])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     initMonaco()
     return () => {
       destoryMonaco()
