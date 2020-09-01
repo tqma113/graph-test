@@ -25,7 +25,7 @@
     ]
   },
   "homepage": "https://github.com/tqma113/graph-test/packages/tree#readme",
-  "peerDependencies": {
+  "dependencies": {
     "gt-language": ">=1.1.0"
   }
 }

@@ -159,8 +159,8 @@ function updateDeps(pkg, depType, version) {
   if (!deps) return
   Object.keys(deps).forEach(dep => {
     if (
-      dep === 'gtl' ||
-      (dep.startsWith('gtl') && packages.includes(dep.replace(/^gtl\//, '')))
+      dep === 'gt' ||
+      (dep.startsWith('gt') && packages.includes(dep.replace(/^gt-\//, '')))
     ) {
       console.log(
         chalk.yellow(`${pkg.name} -> ${depType} -> ${dep}@${version}`)
