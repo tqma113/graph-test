@@ -109,7 +109,7 @@ This repository employs a [monorepo](https://en.wikipedia.org/wiki/Monorepo) set
                         v        v
     +---------------------+    +----------------------+
     |                     |    |                      |
-    |       gt-editor     +--->|        gt-tree       |
+    |       gt-editor     |    |        gt-tree       |
     |                     |    |                      |
     +---------------------+    +----------------------+
 ```

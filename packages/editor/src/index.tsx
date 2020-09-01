@@ -5,15 +5,13 @@ import createEditor from './createEditor'
 import { initTheme } from './theme'
 import { FontSizeSelect } from './component'
 import { Program } from 'gt-language'
-import { Tree } from 'gt-tree'
 
 export type MonacoEditorProps = {
-  onSave?: (content: string, tree: Tree, program: Program) => void
+  onSave?: (content: string, program: Program) => void
   onError?: (message: string) => void
   containerStyle?: React.CSSProperties
   style?: React.CSSProperties
   value?: string
-  tree?: Tree
 }
 
 const defaultStyle: React.CSSProperties = {
@@ -31,21 +29,14 @@ function MonacoEditor({
   style,
   containerStyle,
   value = '# start from here\n\n',
-  tree,
 }: MonacoEditorProps) {
-  const [code, setCode] = useState(value)
+  const [code] = useState(value)
   const [options, setOptions] = useState<
     monaco.editor.IStandaloneEditorConstructionOptions
   >(defaultOptions)
   const containerRef = useRef<HTMLDivElement>(null)
   const editor = useRef<monaco.editor.IStandaloneCodeEditor>()
   const subscription = useRef<monaco.IDisposable>()
-
-  useLayoutEffect(() => {
-    if (tree) {
-      setCode('')
-    }
-  }, [])
 
   useLayoutEffect(() => {
     initMonaco()

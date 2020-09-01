@@ -3,13 +3,12 @@ import { MODE_ID } from './language'
 import { GRAPH_THEME } from './theme'
 import server from './language/server'
 import { Program } from 'gt-language'
-import { convert, Tree } from 'gt-tree'
 
 const createEditor = (
   container: HTMLElement,
   value: string,
   options: monaco.editor.IStandaloneEditorConstructionOptions = {},
-  onSave?: (content: string, tree: Tree, program: Program) => void,
+  onSave?: (content: string, program: Program) => void,
   onError?: (message: string) => void
 ) => {
   const model = monaco.editor.createModel(value, MODE_ID)
@@ -53,8 +52,7 @@ const createEditor = (
       const program = server.program
       if (program) {
         if (onSave) {
-          const tree = convert(program)
-          onSave(input, tree, program)
+          onSave(input, program)
         }
       } else {
         tryToError('Program maybe empty or has error. Please check it.')
