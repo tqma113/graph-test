@@ -17,13 +17,6 @@
   "bugs": {
     "url": "https://github.com/tqma113/graph-test/issues"
   },
-  "buildOptions": {
-    "name": "tree",
-    "formats": [
-      "esm-bundler",
-      "cjs"
-    ]
-  },
   "homepage": "https://github.com/tqma113/graph-test/packages/tree#readme",
   "dependencies": {
     "gt-language": ">=1.1.0"

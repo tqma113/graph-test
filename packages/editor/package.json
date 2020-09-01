@@ -19,13 +19,6 @@
     "index.js",
     "dist"
   ],
-  "buildOptions": {
-    "name": "editor",
-    "formats": [
-      "esm-bundler",
-      "cjs"
-    ]
-  },
   "dependencies": {
     "monaco-editor": "^0.20.0",
     "gt-language": ">=1.1.0"

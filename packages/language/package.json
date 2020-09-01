@@ -17,12 +17,5 @@
   "bugs": {
     "url": "https://github.com/tqma113/graph-test/issues"
   },
-  "buildOptions": {
-    "name": "language",
-    "formats": [
-      "esm-bundler",
-      "cjs"
-    ]
-  },
   "homepage": "https://github.com/tqma113/graph-test/packages/language#readme"
 }
