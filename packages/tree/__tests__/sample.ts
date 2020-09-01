@@ -1,4 +1,4 @@
-import type { Program } from 'gtl-language'
+import type { Program } from 'gt-language'
 import type { Tree } from '../src'
 
 export const sample = `<从首页进入旅游频道> = {
