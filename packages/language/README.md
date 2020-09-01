@@ -15,13 +15,12 @@ yarn  add gt-language
 * Use
 
 ```ts
-import { createParser, analysis } from 'gt-language'
+import { parse, analysis } from 'gt-language'
 
 const input = sample
-const parser = createParser(input)
-parser.parse()
-if (parser.program) {
-  const result = analysis(parser.program)
+const { program } = parse(input)
+if (program) {
+  const result = analysis(program)
 }
 ```
 
@@ -46,12 +45,11 @@ createLexer: (input: string) => {
 * createParser
 
 ```ts
-createParser: (input: string) => {
+parse: (input: string) => {
     program: Program | null;
     tokens: Token[];
     lexcialErrors: LexicalError[];
     syntaxErrors: SyntaxError[];
-    parse: () => void;
 };
 ```
 

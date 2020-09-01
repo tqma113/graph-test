@@ -17,7 +17,7 @@ yarn add gt-language gt-tree gt-editor
 * example
 
 ```ts
-import React, { useState } from 'react';
+import React from 'react';
 import CodeEditor from 'gt-editor'
 import { Program } from 'gt-language'
 import { Tree } from 'gt-tree'
@@ -29,8 +29,6 @@ function App() {
       tree,
       program
     })
-    setProgram(program)
-    setTree(tree)
   }
 
   return (
@@ -41,4 +39,4 @@ function App() {
 ```
 
 ## Note
-> You must add [monaco-editor-webpack-plugin](https://github.com/microsoft/monaco-editor-webpack-plugin) before use it.
+> You must add [monaco-editor-webpack-plugin](https://github.com/microsoft/monaco-editor-webpack-plugin) before using it.
