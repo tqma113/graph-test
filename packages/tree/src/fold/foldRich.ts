@@ -1,30 +1,30 @@
 import { NodeKind, TreeNodeKind } from '../index'
 import {
-  createTreeBlock,
-  createActionNode,
-  createIfTree,
-  createSwitchTree,
-  createCaseNode,
-  createDefaultNode,
-  createGotoNode,
-  createTree,
-} from '../tree'
+  createRichTreeBlock,
+  createRichActionNode,
+  createRichIfTree,
+  createRichSwitchTree,
+  createRichCaseNode,
+  createRichDefaultNode,
+  createRichGotoNode,
+  createRichTree,
+} from '../richTree'
 import { LeafNodeKind, AntherNodeKind } from './index'
 import type { TreeNodeRecord } from './index'
 import type {
-  Tree,
-  TreeBlock,
-  TreeNode,
-  ActionNode,
-  GotoNode,
-  IfTree,
-  SwitchTree,
-  CaseNode,
-  DefaultNode,
-} from '../tree'
+  RichTree,
+  RichTreeBlock,
+  RichTreeNode,
+  RichActionNode,
+  RichGotoNode,
+  RichIfTree,
+  RichSwitchTree,
+  RichCaseNode,
+  RichDefaultNode,
+} from '../richTree'
 
-export const fold = (records: TreeNodeRecord[]): Tree => {
-  const foldTree = (): Tree => {
+export const foldRich = (records: TreeNodeRecord[]): RichTree => {
+  const foldTree = (): RichTree => {
     const record = records.find(
       (record) => record.parentId === 0 && record.kind === NodeKind.Tree
     )
@@ -33,14 +33,14 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
       throw new Error('Canot find the root record of the document.')
     }
 
-    const blocks = foldTreeBlocks(record.id)
+    const blocks = foldRichTreeBlocks(record.id)
     const starts = foldStarts(record.id)
     const comments = foldComments(record.id)
 
-    return createTree(blocks, starts, comments)
+    return createRichTree(record.id, blocks, starts, comments)
   }
 
-  const foldTreeBlocks = (parentId: number): TreeBlock[] => {
+  const foldRichTreeBlocks = (parentId: number): RichTreeBlock[] => {
     return records
       .filter(
         (record) =>
@@ -50,15 +50,15 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
       .map((record) => foldTreeBlock(record.id))
   }
 
-  const foldTreeBlock = (id: number): TreeBlock => {
+  const foldTreeBlock = (id: number): RichTreeBlock => {
     const name = foldName(id)
     const children = foldTreeNodes(id)
     const comments = foldComments(id)
 
-    return createTreeBlock(name, children, comments)
+    return createRichTreeBlock(id, name, children, comments)
   }
 
-  const foldTreeNodes = (parentId: number): TreeNode[] => {
+  const foldTreeNodes = (parentId: number): RichTreeNode[] => {
     return records
       .filter(
         (record) =>
@@ -72,7 +72,7 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
       .map((record) => foldTreeNode(record.id, record.kind as TreeNodeKind))
   }
 
-  const foldTreeNode = (id: number, kind: TreeNodeKind): TreeNode => {
+  const foldTreeNode = (id: number, kind: TreeNodeKind): RichTreeNode => {
     switch (kind) {
       case NodeKind.ActionNode: {
         return foldActionNode(id)
@@ -89,30 +89,36 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
     }
   }
 
-  const foldActionNode = (id: number): ActionNode => {
+  const foldActionNode = (id: number): RichActionNode => {
     const expression = foldExpression(id)
     const comments = foldComments(id)
 
-    return createActionNode(expression, comments)
+    return createRichActionNode(id, expression, comments)
   }
 
-  const foldGotoNode = (id: number): GotoNode => {
+  const foldGotoNode = (id: number): RichGotoNode => {
     const name = foldName(id)
     const comments = foldComments(id)
 
-    return createGotoNode(name, comments)
+    return createRichGotoNode(id, name, comments)
   }
 
-  const foldIfTree = (id: number): IfTree => {
+  const foldIfTree = (id: number): RichIfTree => {
     const condition = foldCondition(id)
     const successChildren = foldSuccessChildren(id)
     const faildChildren = foldFaildChildren(id)
     const comments = foldComments(id)
 
-    return createIfTree(condition, successChildren, faildChildren, comments)
+    return createRichIfTree(
+      id,
+      condition,
+      successChildren,
+      faildChildren,
+      comments
+    )
   }
 
-  const foldSuccessChildren = (parentId: number): TreeNode[] => {
+  const foldSuccessChildren = (parentId: number): RichTreeNode[] => {
     const record = records.find(
       (record) =>
         record.parentId === parentId &&
@@ -128,7 +134,7 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
     return foldTreeNodes(record.id)
   }
 
-  const foldFaildChildren = (parentId: number): TreeNode[] => {
+  const foldFaildChildren = (parentId: number): RichTreeNode[] => {
     const record = records.find(
       (record) =>
         record.parentId === parentId &&
@@ -144,16 +150,16 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
     return foldTreeNodes(record.id)
   }
 
-  const foldSwitchTree = (id: number): SwitchTree => {
+  const foldSwitchTree = (id: number): RichSwitchTree => {
     const condition = foldCondition(id)
     const children = foldCaseNodes(id)
     const defaultChild = foldDefaultNode(id)
     const comments = foldComments(id)
 
-    return createSwitchTree(condition, children, defaultChild, comments)
+    return createRichSwitchTree(id, condition, children, defaultChild, comments)
   }
 
-  const foldCaseNodes = (parentId: number): CaseNode[] => {
+  const foldCaseNodes = (parentId: number): RichCaseNode[] => {
     return records
       .filter(
         (record) =>
@@ -163,15 +169,15 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
       .map((record) => foldCaseNode(record.id))
   }
 
-  const foldCaseNode = (id: number): CaseNode => {
+  const foldCaseNode = (id: number): RichCaseNode => {
     const expectation = foldExpectation(id)
     const children = foldTreeNodes(id)
     const comments = foldComments(id)
 
-    return createCaseNode(expectation, children, comments)
+    return createRichCaseNode(id, expectation, children, comments)
   }
 
-  const foldDefaultNode = (parentId: number): DefaultNode | null => {
+  const foldDefaultNode = (parentId: number): RichDefaultNode | null => {
     const record = records.find(
       (record) =>
         record.parentId === parentId && record.kind === NodeKind.DefaultNode
@@ -184,7 +190,7 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
     const children = foldTreeNodes(record.id)
     const comments = foldComments(record.id)
 
-    return createDefaultNode(children, comments)
+    return createRichDefaultNode(record.id, children, comments)
   }
 
   const foldStarts = (parentId: number): string[] => {

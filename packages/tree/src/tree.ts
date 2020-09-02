@@ -1,3 +1,5 @@
+import { NodeKind } from './index'
+
 export type Tree = {
   kind: NodeKind.Tree
   blocks: TreeBlock[]
@@ -152,15 +154,4 @@ export const createIfTree = (
     faildChildren,
     comments,
   }
-}
-
-export enum NodeKind {
-  Tree = 'Tree',
-  TreeBlock = 'TreeBlock',
-  ActionNode = 'ActionNode',
-  GotoNode = 'GotoNode',
-  SwitchTree = 'SwitchTree',
-  CaseNode = 'CaseNode',
-  DefaultNode = 'DefaultNode',
-  IfTree = 'IfTree',
 }

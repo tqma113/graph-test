@@ -21,7 +21,7 @@ import {
   createIdentifier,
   createAction,
 } from 'gt-language'
-import { NodeKind } from './tree'
+import { NodeKind } from '../index'
 import type { Program, Block, Comment, Range } from 'gt-language'
 import type {
   Tree,
@@ -33,7 +33,7 @@ import type {
   SwitchTree,
   CaseNode,
   DefaultNode,
-} from './tree'
+} from '../tree'
 
 const range: Range = {
   start: {

@@ -14,7 +14,7 @@ import {
   createDefaultNode,
   createGotoNode,
   createTree,
-} from './tree'
+} from '../tree'
 import type {
   Program,
   InferenceDefinition,
@@ -35,7 +35,7 @@ import type {
   Statement,
   Comment,
 } from 'gt-language'
-import type { Tree, TreeBlock, TreeNode, IfTree } from './tree'
+import type { Tree, TreeBlock, TreeNode, IfTree } from '../tree'
 
 export const convert = (program: Program): Tree => {
   const convertProgram = (program: Program) => {

@@ -1,4 +1,4 @@
-import { NodeKind } from '../transit/tree'
+import { NodeKind } from '../index'
 
 export enum LeafNodeKind {
   Start = 'Start',
@@ -15,17 +15,17 @@ export enum AntherNodeKind {
 }
 
 export type TreeNonLeafNodeRecord = {
-  id: string
+  id: number
   floorId: number
-  parentId: string
+  parentId: number
   kind: NodeKind | AntherNodeKind
   content: null
 }
 
 export type TreeLeafNodeRecord = {
-  id: string
+  id: number
   floorId: number
-  parentId: string
+  parentId: number
   kind: LeafNodeKind
   content: string
 }
@@ -33,14 +33,16 @@ export type TreeLeafNodeRecord = {
 export type TreeNodeRecord = TreeNonLeafNodeRecord | TreeLeafNodeRecord
 
 export type TreeNodeStatusRecord = {
-  id: string
-  path: string
+  id: number
+  path: number
   status: number
 }
 
 export type TreeNodeRecordWithDocumentId = TreeNodeRecord & {
-  documentId: string
+  documentId: number
 }
 
 export * from './fold'
 export * from './unfold'
+export * from './foldRich'
+export * from './unfoldRich'
