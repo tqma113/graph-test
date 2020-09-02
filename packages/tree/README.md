@@ -59,6 +59,17 @@ unfold = (tree: Tree): TreeNodeRecord[]
 fold = (records: TreeNodeRecord[]): Tree
 ```
 
+* unfoldRich
+
+```ts
+unfoldRich = (tree: RichTree): TreeNodeRecord[]
+```
+
+* foldRich
+
+```ts
+foldRich = (records: TreeNodeRecord[]): RichTree
+```
 
 ## Structure
 
@@ -180,4 +191,77 @@ export type TreeNodeRecordWithDocumentId = TreeNodeRecord & {
   documentId: string
 }
 
+```
+
+#### Graph Test Rich Tree
+
+```ts
+export type RichTree = {
+  id: number
+  kind: NodeKind.Tree
+  blocks: RichTreeBlock[]
+  starts: string[]
+  comments: string[]
+}
+
+export type RichTreeBlock = {
+  id: number
+  kind: NodeKind.TreeBlock
+  name: string
+  children: RichTreeNode[]
+  comments: string[]
+}
+
+export type RichTreeNode =
+  | RichActionNode
+  | RichGotoNode
+  | RichSwitchTree
+  | RichIfTree
+
+export type RichActionNode = {
+  id: number
+  kind: NodeKind.ActionNode
+  expression: string
+  comments: string[]
+}
+
+export type RichGotoNode = {
+  id: number
+  kind: NodeKind.GotoNode
+  name: string
+  comments: string[]
+}
+
+export type RichIfTree = {
+  id: number
+  kind: NodeKind.IfTree
+  condition: string
+  successChildren: RichTreeNode[]
+  faildChildren: RichTreeNode[]
+  comments: string[]
+}
+
+export type RichSwitchTree = {
+  id: number
+  kind: NodeKind.SwitchTree
+  condition: string
+  children: RichCaseNode[]
+  defaultChild: RichDefaultNode | null
+  comments: string[]
+}
+
+export type RichCaseNode = {
+  id: number
+  kind: NodeKind.CaseNode
+  expectation: string
+  children: RichTreeNode[]
+  comments: string[]
+}
+
+export type RichDefaultNode = {
+  id: number
+  kind: NodeKind.DefaultNode
+  children: RichTreeNode[]
+  comments: string[]
+}
 ```
