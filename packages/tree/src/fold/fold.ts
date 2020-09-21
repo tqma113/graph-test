@@ -1,4 +1,4 @@
-import { NodeKind, TreeNodeKind } from '../index'
+import { TreeBlockNodeKindType, TreeNodeKind } from '../index'
 import {
   createTreeBlock,
   createActionNode,
@@ -14,7 +14,7 @@ import type { TreeNodeRecord } from './index'
 import type {
   Tree,
   TreeBlock,
-  TreeNode,
+  TreeBlockNode,
   ActionNode,
   GotoNode,
   IfTree,
@@ -26,7 +26,7 @@ import type {
 export const fold = (records: TreeNodeRecord[]): Tree => {
   const foldTree = (): Tree => {
     const record = records.find(
-      (record) => record.parentId === 0 && record.kind === NodeKind.Tree
+      (record) => record.parentId === 0 && record.kind === TreeNodeKind.Tree
     )
 
     if (!record) {
@@ -44,7 +44,7 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
     return records
       .filter(
         (record) =>
-          record.parentId === parentId && record.kind === NodeKind.TreeBlock
+          record.parentId === parentId && record.kind === TreeNodeKind.TreeBlock
       )
       .sort((a, b) => a.floorId - b.floorId)
       .map((record) => foldTreeBlock(record.id))
@@ -52,38 +52,38 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
 
   const foldTreeBlock = (id: number): TreeBlock => {
     const name = foldName(id)
-    const children = foldTreeNodes(id)
+    const children = foldTreeBlockNodes(id)
     const comments = foldComments(id)
 
     return createTreeBlock(name, children, comments)
   }
 
-  const foldTreeNodes = (parentId: number): TreeNode[] => {
+  const foldTreeBlockNodes = (parentId: number): TreeBlockNode[] => {
     return records
       .filter(
         (record) =>
           record.parentId === parentId &&
-          (record.kind === NodeKind.ActionNode ||
-            record.kind === NodeKind.GotoNode ||
-            record.kind === NodeKind.IfTree ||
-            record.kind === NodeKind.SwitchTree)
+          (record.kind === TreeNodeKind.ActionNode ||
+            record.kind === TreeNodeKind.GotoNode ||
+            record.kind === TreeNodeKind.IfTree ||
+            record.kind === TreeNodeKind.SwitchTree)
       )
       .sort((a, b) => a.floorId - b.floorId)
-      .map((record) => foldTreeNode(record.id, record.kind as TreeNodeKind))
+      .map((record) => foldTreeBlockNode(record.id, record.kind as TreeBlockNodeKindType))
   }
 
-  const foldTreeNode = (id: number, kind: TreeNodeKind): TreeNode => {
+  const foldTreeBlockNode = (id: number, kind: TreeBlockNodeKindType): TreeBlockNode => {
     switch (kind) {
-      case NodeKind.ActionNode: {
+      case TreeNodeKind.ActionNode: {
         return foldActionNode(id)
       }
-      case NodeKind.GotoNode: {
+      case TreeNodeKind.GotoNode: {
         return foldGotoNode(id)
       }
-      case NodeKind.IfTree: {
+      case TreeNodeKind.IfTree: {
         return foldIfTree(id)
       }
-      case NodeKind.SwitchTree: {
+      case TreeNodeKind.SwitchTree: {
         return foldSwitchTree(id)
       }
     }
@@ -112,7 +112,7 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
     return createIfTree(condition, successChildren, faildChildren, comments)
   }
 
-  const foldSuccessChildren = (parentId: number): TreeNode[] => {
+  const foldSuccessChildren = (parentId: number): TreeBlockNode[] => {
     const record = records.find(
       (record) =>
         record.parentId === parentId &&
@@ -125,10 +125,10 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
       )
     }
 
-    return foldTreeNodes(record.id)
+    return foldTreeBlockNodes(record.id)
   }
 
-  const foldFaildChildren = (parentId: number): TreeNode[] => {
+  const foldFaildChildren = (parentId: number): TreeBlockNode[] => {
     const record = records.find(
       (record) =>
         record.parentId === parentId &&
@@ -141,7 +141,7 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
       )
     }
 
-    return foldTreeNodes(record.id)
+    return foldTreeBlockNodes(record.id)
   }
 
   const foldSwitchTree = (id: number): SwitchTree => {
@@ -157,7 +157,7 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
     return records
       .filter(
         (record) =>
-          record.parentId === parentId && record.kind === NodeKind.CaseNode
+          record.parentId === parentId && record.kind === TreeNodeKind.CaseNode
       )
       .sort((a, b) => a.floorId - b.floorId)
       .map((record) => foldCaseNode(record.id))
@@ -165,7 +165,7 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
 
   const foldCaseNode = (id: number): CaseNode => {
     const expectation = foldExpectation(id)
-    const children = foldTreeNodes(id)
+    const children = foldTreeBlockNodes(id)
     const comments = foldComments(id)
 
     return createCaseNode(expectation, children, comments)
@@ -174,14 +174,14 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
   const foldDefaultNode = (parentId: number): DefaultNode | null => {
     const record = records.find(
       (record) =>
-        record.parentId === parentId && record.kind === NodeKind.DefaultNode
+        record.parentId === parentId && record.kind === TreeNodeKind.DefaultNode
     )
 
     if (!record) {
       return null
     }
 
-    const children = foldTreeNodes(record.id)
+    const children = foldTreeBlockNodes(record.id)
     const comments = foldComments(record.id)
 
     return createDefaultNode(children, comments)

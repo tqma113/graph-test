@@ -4,16 +4,16 @@
  * Format AST(Abstruct Syntax Tree).
  */
 
-import { FragmentKind } from '../parser/ast'
+import { NodeKind } from '../parser/ast'
 import type { Program } from '../parser/ast'
 
 export const format = (ast: Program): Program => {
   const formatProgram = (program: Program): Program => {
     const kinds = [
-      FragmentKind.ImportStatement,
-      FragmentKind.ExportStatement,
-      FragmentKind.StartStatement,
-      FragmentKind.InferenceDefinition,
+      NodeKind.ImportStatement,
+      NodeKind.ExportStatement,
+      NodeKind.StartStatement,
+      NodeKind.InferenceDefinition,
     ] as const
     program.moduleStatemens = program.moduleStatemens.sort((a, b) => {
       const index = kinds.indexOf(a.kind)

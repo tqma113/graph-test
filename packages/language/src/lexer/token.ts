@@ -1,10 +1,63 @@
-import { TokenKind, OperatorEnum, KeywordEnum } from './constants'
 import type { Range } from '../index'
 
-export type Keyword = {
+// prettier-ignore
+export enum SymbolChar {
+  OpenBrace             =         '{',
+  CloseBrace            =         '}',
+  OpenBracket           =         '[',
+  CloseBracket          =         ']',
+  OpenAngleBracket      =         '<',
+  CloseAngleBracket     =         '>',
+  Assign                =         '=',
+  Result                =         '->',
+  Comma                 =         ',',
+  Quote                 =         '"',
+  Well                  =         '#'
+}
+
+// prettier-ignore
+export enum OperatorEnum {
+  OpenBrace             =         '{',
+  CloseBrace            =         '}',
+  Assign                =         '=',
+  Result                =         '->',
+  Comma                 =         ',',
+}
+
+// prettier-ignore
+export enum KeywordEnum {
+  Start                 =         'start',
+  Goto                  =         'goto',
+  If                    =         'if',
+  Else                  =         'else',
+  Switch                =         'switch',
+  Case                  =         'case',
+  Default               =         'default',
+  Import                =         'import',
+  From                  =         'from',
+  Export                =         'export',
+}
+
+// prettier-ignore
+export enum TokenKind {
+  Comment               =         'comment',
+  Operator              =         'operator',
+  Keyword               =         'keyword',
+  Identifier            =         'identifier',
+  Action                =         'action',
+  Path                  =         'path',
+  EOP                   =         'eop'
+}
+
+export interface BaseToken {
+  kind: TokenKind,
+  word: string,
+  range: Range
+}
+
+export interface Keyword extends BaseToken {
   kind: TokenKind.Keyword
   word: KeywordEnum
-  range: Range
 }
 
 export const createKeyword = (word: KeywordEnum, range: Range): Keyword => {
@@ -15,10 +68,9 @@ export const createKeyword = (word: KeywordEnum, range: Range): Keyword => {
   }
 }
 
-export type Operator = {
+export interface Operator extends BaseToken {
   kind: TokenKind.Operator
   word: OperatorEnum
-  range: Range
 }
 
 export const createOperator = (word: OperatorEnum, range: Range): Operator => {
@@ -29,10 +81,9 @@ export const createOperator = (word: OperatorEnum, range: Range): Operator => {
   }
 }
 
-export type Identifier = {
+export interface Identifier extends BaseToken {
   kind: TokenKind.Identifier
   word: string
-  range: Range
 }
 
 export const createIdentifier = (word: string, range: Range): Identifier => {
@@ -43,10 +94,9 @@ export const createIdentifier = (word: string, range: Range): Identifier => {
   }
 }
 
-export type Action = {
+export interface Action extends BaseToken {
   kind: TokenKind.Action
   word: string
-  range: Range
 }
 
 export const createAction = (word: string, range: Range): Action => {
@@ -57,10 +107,9 @@ export const createAction = (word: string, range: Range): Action => {
   }
 }
 
-export type Path = {
+export interface Path extends BaseToken {
   kind: TokenKind.Path
   word: string
-  range: Range
 }
 
 export const createPath = (word: string, range: Range): Path => {
@@ -71,10 +120,9 @@ export const createPath = (word: string, range: Range): Path => {
   }
 }
 
-export type Comment = {
+export interface Comment extends BaseToken {
   kind: TokenKind.Comment
   word: string
-  range: Range
 }
 
 export const createComment = (word: string, range: Range): Comment => {
@@ -85,10 +133,9 @@ export const createComment = (word: string, range: Range): Comment => {
   }
 }
 
-export type EOP = {
+export interface EOP extends BaseToken {
   kind: TokenKind.EOP
   word: 'eop'
-  range: Range
 }
 
 export const createEOP = (range: Range): EOP => {

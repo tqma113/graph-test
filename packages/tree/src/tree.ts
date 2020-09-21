@@ -1,7 +1,7 @@
-import { NodeKind } from './index'
+import { TreeNodeKind } from './index'
 
 export type Tree = {
-  kind: NodeKind.Tree
+  kind: TreeNodeKind.Tree
   blocks: TreeBlock[]
   starts: string[]
   comments: string[]
@@ -13,7 +13,7 @@ export const createTree = (
   comments: string[]
 ): Tree => {
   return {
-    kind: NodeKind.Tree,
+    kind: TreeNodeKind.Tree,
     blocks,
     starts,
     comments,
@@ -21,29 +21,29 @@ export const createTree = (
 }
 
 export type TreeBlock = {
-  kind: NodeKind.TreeBlock
+  kind: TreeNodeKind.TreeBlock
   name: string
-  children: TreeNode[]
+  children: TreeBlockNode[]
   comments: string[]
 }
 
 export const createTreeBlock = (
   name: string,
-  children: TreeNode[],
+  children: TreeBlockNode[],
   comments: string[]
 ): TreeBlock => {
   return {
-    kind: NodeKind.TreeBlock,
+    kind: TreeNodeKind.TreeBlock,
     name,
     children,
     comments,
   }
 }
 
-export type TreeNode = ActionNode | GotoNode | SwitchTree | IfTree
+export type TreeBlockNode = ActionNode | GotoNode | SwitchTree | IfTree
 
 export type ActionNode = {
-  kind: NodeKind.ActionNode
+  kind: TreeNodeKind.ActionNode
   expression: string
   comments: string[]
 }
@@ -53,28 +53,28 @@ export const createActionNode = (
   comments: string[]
 ): ActionNode => {
   return {
-    kind: NodeKind.ActionNode,
+    kind: TreeNodeKind.ActionNode,
     expression,
     comments,
   }
 }
 
 export type GotoNode = {
-  kind: NodeKind.GotoNode
+  kind: TreeNodeKind.GotoNode
   name: string
   comments: string[]
 }
 
 export const createGotoNode = (name: string, comments: string[]): GotoNode => {
   return {
-    kind: NodeKind.GotoNode,
+    kind: TreeNodeKind.GotoNode,
     name,
     comments,
   }
 }
 
 export type SwitchTree = {
-  kind: NodeKind.SwitchTree
+  kind: TreeNodeKind.SwitchTree
   condition: string
   children: CaseNode[]
   defaultChild: DefaultNode | null
@@ -88,7 +88,7 @@ export const createSwitchTree = (
   comments: string[]
 ): SwitchTree => {
   return {
-    kind: NodeKind.SwitchTree,
+    kind: TreeNodeKind.SwitchTree,
     condition,
     children,
     defaultChild,
@@ -97,19 +97,19 @@ export const createSwitchTree = (
 }
 
 export type CaseNode = {
-  kind: NodeKind.CaseNode
+  kind: TreeNodeKind.CaseNode
   expectation: string
-  children: TreeNode[]
+  children: TreeBlockNode[]
   comments: string[]
 }
 
 export const createCaseNode = (
   expectation: string,
-  children: TreeNode[],
+  children: TreeBlockNode[],
   comments: string[]
 ): CaseNode => {
   return {
-    kind: NodeKind.CaseNode,
+    kind: TreeNodeKind.CaseNode,
     expectation,
     children,
     comments,
@@ -117,38 +117,38 @@ export const createCaseNode = (
 }
 
 export type DefaultNode = {
-  kind: NodeKind.DefaultNode
-  children: TreeNode[]
+  kind: TreeNodeKind.DefaultNode
+  children: TreeBlockNode[]
   comments: string[]
 }
 
 export const createDefaultNode = (
-  children: TreeNode[],
+  children: TreeBlockNode[],
   comments: string[]
 ): DefaultNode => {
   return {
-    kind: NodeKind.DefaultNode,
+    kind: TreeNodeKind.DefaultNode,
     children,
     comments,
   }
 }
 
 export type IfTree = {
-  kind: NodeKind.IfTree
+  kind: TreeNodeKind.IfTree
   condition: string
-  successChildren: TreeNode[]
-  faildChildren: TreeNode[]
+  successChildren: TreeBlockNode[]
+  faildChildren: TreeBlockNode[]
   comments: string[]
 }
 
 export const createIfTree = (
   condition: string,
-  successChildren: TreeNode[],
-  faildChildren: TreeNode[],
+  successChildren: TreeBlockNode[],
+  faildChildren: TreeBlockNode[],
   comments: string[]
 ): IfTree => {
   return {
-    kind: NodeKind.IfTree,
+    kind: TreeNodeKind.IfTree,
     condition,
     successChildren,
     faildChildren,

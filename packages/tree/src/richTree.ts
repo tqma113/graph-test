@@ -1,8 +1,8 @@
-import { NodeKind } from './index'
+import { TreeNodeKind } from './index'
 
 export type RichTree = {
   id: number
-  kind: NodeKind.Tree
+  kind: TreeNodeKind.Tree
   blocks: RichTreeBlock[]
   starts: string[]
   comments: string[]
@@ -16,7 +16,7 @@ export const createRichTree = (
 ): RichTree => {
   return {
     id,
-    kind: NodeKind.Tree,
+    kind: TreeNodeKind.Tree,
     blocks,
     starts,
     comments,
@@ -25,28 +25,28 @@ export const createRichTree = (
 
 export type RichTreeBlock = {
   id: number
-  kind: NodeKind.TreeBlock
+  kind: TreeNodeKind.TreeBlock
   name: string
-  children: RichTreeNode[]
+  children: RichTreeBlockNode[]
   comments: string[]
 }
 
 export const createRichTreeBlock = (
   id: number,
   name: string,
-  children: RichTreeNode[],
+  children: RichTreeBlockNode[],
   comments: string[]
 ): RichTreeBlock => {
   return {
     id,
-    kind: NodeKind.TreeBlock,
+    kind: TreeNodeKind.TreeBlock,
     name,
     children,
     comments,
   }
 }
 
-export type RichTreeNode =
+export type RichTreeBlockNode =
   | RichActionNode
   | RichGotoNode
   | RichSwitchTree
@@ -54,7 +54,7 @@ export type RichTreeNode =
 
 export type RichActionNode = {
   id: number
-  kind: NodeKind.ActionNode
+  kind: TreeNodeKind.ActionNode
   expression: string
   comments: string[]
 }
@@ -66,7 +66,7 @@ export const createRichActionNode = (
 ): RichActionNode => {
   return {
     id,
-    kind: NodeKind.ActionNode,
+    kind: TreeNodeKind.ActionNode,
     expression,
     comments,
   }
@@ -74,7 +74,7 @@ export const createRichActionNode = (
 
 export type RichGotoNode = {
   id: number
-  kind: NodeKind.GotoNode
+  kind: TreeNodeKind.GotoNode
   name: string
   comments: string[]
 }
@@ -86,7 +86,7 @@ export const createRichGotoNode = (
 ): RichGotoNode => {
   return {
     id,
-    kind: NodeKind.GotoNode,
+    kind: TreeNodeKind.GotoNode,
     name,
     comments,
   }
@@ -94,23 +94,23 @@ export const createRichGotoNode = (
 
 export type RichIfTree = {
   id: number
-  kind: NodeKind.IfTree
+  kind: TreeNodeKind.IfTree
   condition: string
-  successChildren: RichTreeNode[]
-  faildChildren: RichTreeNode[]
+  successChildren: RichTreeBlockNode[]
+  faildChildren: RichTreeBlockNode[]
   comments: string[]
 }
 
 export const createRichIfTree = (
   id: number,
   condition: string,
-  successChildren: RichTreeNode[],
-  faildChildren: RichTreeNode[],
+  successChildren: RichTreeBlockNode[],
+  faildChildren: RichTreeBlockNode[],
   comments: string[]
 ): RichIfTree => {
   return {
     id,
-    kind: NodeKind.IfTree,
+    kind: TreeNodeKind.IfTree,
     condition,
     successChildren,
     faildChildren,
@@ -120,7 +120,7 @@ export const createRichIfTree = (
 
 export type RichSwitchTree = {
   id: number
-  kind: NodeKind.SwitchTree
+  kind: TreeNodeKind.SwitchTree
   condition: string
   children: RichCaseNode[]
   defaultChild: RichDefaultNode | null
@@ -136,7 +136,7 @@ export const createRichSwitchTree = (
 ): RichSwitchTree => {
   return {
     id,
-    kind: NodeKind.SwitchTree,
+    kind: TreeNodeKind.SwitchTree,
     condition,
     children,
     defaultChild,
@@ -146,21 +146,21 @@ export const createRichSwitchTree = (
 
 export type RichCaseNode = {
   id: number
-  kind: NodeKind.CaseNode
+  kind: TreeNodeKind.CaseNode
   expectation: string
-  children: RichTreeNode[]
+  children: RichTreeBlockNode[]
   comments: string[]
 }
 
 export const createRichCaseNode = (
   id: number,
   expectation: string,
-  children: RichTreeNode[],
+  children: RichTreeBlockNode[],
   comments: string[]
 ): RichCaseNode => {
   return {
     id,
-    kind: NodeKind.CaseNode,
+    kind: TreeNodeKind.CaseNode,
     expectation,
     children,
     comments,
@@ -169,19 +169,19 @@ export const createRichCaseNode = (
 
 export type RichDefaultNode = {
   id: number
-  kind: NodeKind.DefaultNode
-  children: RichTreeNode[]
+  kind: TreeNodeKind.DefaultNode
+  children: RichTreeBlockNode[]
   comments: string[]
 }
 
 export const createRichDefaultNode = (
   id: number,
-  children: RichTreeNode[],
+  children: RichTreeBlockNode[],
   comments: string[]
 ): RichDefaultNode => {
   return {
     id,
-    kind: NodeKind.DefaultNode,
+    kind: TreeNodeKind.DefaultNode,
     children,
     comments,
   }

@@ -1,7 +1,7 @@
 import type { Identifier, Path, Action, Comment } from '../lexer'
 import type { Range } from '../index'
 
-export enum FragmentKind {
+export enum NodeKind {
   Program = 'Program',
   InferenceDefinition = 'InferenceDefinition',
   ImportStatement = 'ImportStatement',
@@ -19,7 +19,12 @@ export enum FragmentKind {
   GotoStatement = 'GotoStatement',
 }
 
-export type Fragment =
+export interface BaseNode {
+  kind: NodeKind
+  range: Range
+}
+
+export type Node =
   | Program
   | Statement
   | ModuleStatement
@@ -30,10 +35,9 @@ export type Fragment =
   | CaseClause
   | DefaultClause
 
-export type Program = {
-  kind: FragmentKind.Program
+export interface Program extends BaseNode {
+  kind: NodeKind.Program
   moduleStatemens: ModuleStatement[]
-  range: Range
   comments: Comment[]
 }
 
@@ -43,7 +47,7 @@ export const createProgram = (
   comments: Comment[]
 ): Program => {
   return {
-    kind: FragmentKind.Program,
+    kind: NodeKind.Program,
     moduleStatemens,
     range,
     comments,
@@ -56,11 +60,10 @@ export type ModuleStatement =
   | ExportStatement
   | StartStatement
 
-export type InferenceDefinition = {
-  kind: FragmentKind.InferenceDefinition
+export interface InferenceDefinition extends BaseNode {
+  kind: NodeKind.InferenceDefinition
   identifier: Identifier
   block: Block
-  range: Range
   comments: Comment[]
 }
 
@@ -71,7 +74,7 @@ export const createInferenceDefinition = (
   comments: Comment[]
 ): InferenceDefinition => {
   return {
-    kind: FragmentKind.InferenceDefinition,
+    kind: NodeKind.InferenceDefinition,
     identifier,
     block,
     range,
@@ -79,11 +82,10 @@ export const createInferenceDefinition = (
   }
 }
 
-export type ImportStatement = {
-  kind: FragmentKind.ImportStatement
+export interface ImportStatement extends BaseNode {
+  kind: NodeKind.ImportStatement
   moduleItems: ModuleItems
   path: Path
-  range: Range
   comments: Comment[]
 }
 
@@ -94,7 +96,7 @@ export const createImportStatement = (
   comments: Comment[]
 ): ImportStatement => {
   return {
-    kind: FragmentKind.ImportStatement,
+    kind: NodeKind.ImportStatement,
     moduleItems,
     path,
     range,
@@ -102,10 +104,9 @@ export const createImportStatement = (
   }
 }
 
-export type ModuleItems = {
-  kind: FragmentKind.ModuleItems
+export interface ModuleItems extends BaseNode {
+  kind: NodeKind.ModuleItems
   identifiers: Identifier[]
-  range: Range
 }
 
 export const createModuleItems = (
@@ -113,17 +114,16 @@ export const createModuleItems = (
   range: Range
 ): ModuleItems => {
   return {
-    kind: FragmentKind.ModuleItems,
+    kind: NodeKind.ModuleItems,
     identifiers,
     range,
   }
 }
 
-export type Module = {
-  kind: FragmentKind.Module
+export interface Module extends BaseNode {
+  kind: NodeKind.Module
   identifier: Identifier
   definition: InferenceDefinition | null
-  range: Range
 }
 
 export const createModule = (
@@ -132,17 +132,16 @@ export const createModule = (
   range: Range
 ): Module => {
   return {
-    kind: FragmentKind.Module,
+    kind: NodeKind.Module,
     identifier,
     definition,
     range,
   }
 }
 
-export type ExportStatement = {
-  kind: FragmentKind.ExportStatement
+export interface ExportStatement extends BaseNode {
+  kind: NodeKind.ExportStatement
   module: Module
-  range: Range
   comments: Comment[]
 }
 
@@ -152,17 +151,16 @@ export const createExportStatement = (
   comments: Comment[]
 ): ExportStatement => {
   return {
-    kind: FragmentKind.ExportStatement,
+    kind: NodeKind.ExportStatement,
     module,
     range,
     comments,
   }
 }
 
-export type StartStatement = {
-  kind: FragmentKind.StartStatement
+export interface StartStatement extends BaseNode {
+  kind: NodeKind.StartStatement
   module: Module
-  range: Range
   comments: Comment[]
 }
 
@@ -172,22 +170,21 @@ export const createStartStatement = (
   comments: Comment[]
 ): StartStatement => {
   return {
-    kind: FragmentKind.StartStatement,
+    kind: NodeKind.StartStatement,
     module,
     range,
     comments,
   }
 }
 
-export type Block = {
-  kind: FragmentKind.Block
+export interface Block extends BaseNode {
+  kind: NodeKind.Block
   list: Statement[]
-  range: Range
 }
 
 export const createBlock = (list: Statement[], range: Range): Block => {
   return {
-    kind: FragmentKind.Block,
+    kind: NodeKind.Block,
     list,
     range,
   }
@@ -199,10 +196,9 @@ export type Statement =
   | SwitchStatement
   | GotoStatement
 
-export type StepStatement = {
-  kind: FragmentKind.StepStatement
+export interface StepStatement extends BaseNode {
+  kind: NodeKind.StepStatement
   expression: Action
-  range: Range
   comments: Comment[]
 }
 
@@ -212,19 +208,18 @@ export const createStepStatement = (
   comments: Comment[]
 ): StepStatement => {
   return {
-    kind: FragmentKind.StepStatement,
+    kind: NodeKind.StepStatement,
     expression,
     range,
     comments,
   }
 }
 
-export type IfStatement = {
-  kind: FragmentKind.IfStatement
+export interface IfStatement extends BaseNode {
+  kind: NodeKind.IfStatement
   expression: Action
   ifBlock: Block
   elseBlock: Block | null
-  range: Range
   comments: Comment[]
 }
 
@@ -236,7 +231,7 @@ export const createIfStatement = (
   comments: Comment[]
 ): IfStatement => {
   return {
-    kind: FragmentKind.IfStatement,
+    kind: NodeKind.IfStatement,
     expression,
     ifBlock,
     elseBlock,
@@ -245,11 +240,10 @@ export const createIfStatement = (
   }
 }
 
-export type SwitchStatement = {
-  kind: FragmentKind.SwitchStatement
+export interface SwitchStatement extends BaseNode {
+  kind: NodeKind.SwitchStatement
   expression: Action
   switchBlock: SwitchBlock
-  range: Range
   comments: Comment[]
 }
 
@@ -260,7 +254,7 @@ export const createSwitchStatement = (
   comments: Comment[]
 ): SwitchStatement => {
   return {
-    kind: FragmentKind.SwitchStatement,
+    kind: NodeKind.SwitchStatement,
     expression,
     switchBlock,
     range,
@@ -268,11 +262,10 @@ export const createSwitchStatement = (
   }
 }
 
-export type SwitchBlock = {
-  kind: FragmentKind.SwitchBlock
+export interface SwitchBlock extends BaseNode {
+  kind: NodeKind.SwitchBlock
   caseClauses: CaseClause[]
   defaultClause: DefaultClause | null
-  range: Range
 }
 
 export const createSwitchBlock = (
@@ -281,18 +274,17 @@ export const createSwitchBlock = (
   range: Range
 ): SwitchBlock => {
   return {
-    kind: FragmentKind.SwitchBlock,
+    kind: NodeKind.SwitchBlock,
     caseClauses,
     defaultClause,
     range,
   }
 }
 
-export type CaseClause = {
-  kind: FragmentKind.CaseClause
+export interface CaseClause extends BaseNode {
+  kind: NodeKind.CaseClause
   expression: Action
   block: Block
-  range: Range
   comments: Comment[]
 }
 
@@ -303,7 +295,7 @@ export const createCaseClause = (
   comments: Comment[]
 ): CaseClause => {
   return {
-    kind: FragmentKind.CaseClause,
+    kind: NodeKind.CaseClause,
     expression,
     block,
     range,
@@ -311,10 +303,9 @@ export const createCaseClause = (
   }
 }
 
-export type DefaultClause = {
-  kind: FragmentKind.DefaultClause
+export interface DefaultClause extends BaseNode {
+  kind: NodeKind.DefaultClause
   block: Block
-  range: Range
   comments: Comment[]
 }
 
@@ -324,17 +315,16 @@ export const createDefaultClause = (
   comments: Comment[]
 ): DefaultClause => {
   return {
-    kind: FragmentKind.DefaultClause,
+    kind: NodeKind.DefaultClause,
     block,
     range,
     comments,
   }
 }
 
-export type GotoStatement = {
-  kind: FragmentKind.GotoStatement
+export interface GotoStatement extends BaseNode {
+  kind: NodeKind.GotoStatement
   identifier: Identifier
-  range: Range
   comments: Comment[]
 }
 
@@ -344,7 +334,7 @@ export const createGotoStatement = (
   comments: Comment[]
 ): GotoStatement => {
   return {
-    kind: FragmentKind.GotoStatement,
+    kind: NodeKind.GotoStatement,
     identifier,
     range,
     comments,

@@ -5,7 +5,7 @@
  */
 
 import { SemanticError } from './SemanticError'
-import { FragmentKind } from '../parser/ast'
+import { NodeKind } from '../parser/ast'
 import type { Identifier } from '../lexer/index'
 import type {
   Program,
@@ -25,7 +25,7 @@ import type {
   ModuleStatement,
   ModuleItems,
   Statement,
-  Fragment,
+  Node,
 } from '../parser/ast'
 
 export * from './SemanticError'
@@ -47,15 +47,15 @@ export const analysis = (program: Program): CheckSemanticResult => {
   const record = () => {
     program.moduleStatemens.forEach((moduleStatement) => {
       switch (moduleStatement.kind) {
-        case FragmentKind.ImportStatement: {
+        case NodeKind.ImportStatement: {
           recordImport(moduleStatement)
           break
         }
-        case FragmentKind.InferenceDefinition: {
+        case NodeKind.InferenceDefinition: {
           recordDefinition(moduleStatement)
           break
         }
-        case FragmentKind.StartStatement: {
+        case NodeKind.StartStatement: {
           recordStart(moduleStatement)
           break
         }
@@ -106,19 +106,19 @@ export const analysis = (program: Program): CheckSemanticResult => {
 
   const checkModuleStatement = (moduleStatement: ModuleStatement) => {
     switch (moduleStatement.kind) {
-      case FragmentKind.ImportStatement: {
+      case NodeKind.ImportStatement: {
         checkImportStatement(moduleStatement)
         break
       }
-      case FragmentKind.ExportStatement: {
+      case NodeKind.ExportStatement: {
         checkExportStatement(moduleStatement)
         break
       }
-      case FragmentKind.StartStatement: {
+      case NodeKind.StartStatement: {
         checkStartStatement(moduleStatement)
         break
       }
-      case FragmentKind.InferenceDefinition: {
+      case NodeKind.InferenceDefinition: {
         checkInferenceDefinition(moduleStatement)
         break
       }
@@ -161,19 +161,19 @@ export const analysis = (program: Program): CheckSemanticResult => {
 
   const checkStatement = (statement: Statement) => {
     switch (statement.kind) {
-      case FragmentKind.StepStatement: {
+      case NodeKind.StepStatement: {
         checkStepStatement(statement)
         break
       }
-      case FragmentKind.IfStatement: {
+      case NodeKind.IfStatement: {
         checkIfStatement(statement)
         break
       }
-      case FragmentKind.SwitchStatement: {
+      case NodeKind.SwitchStatement: {
         checkSwitchStatement(statement)
         break
       }
-      case FragmentKind.GotoStatement: {
+      case NodeKind.GotoStatement: {
         checkGotoStatement(statement)
         break
       }
@@ -215,7 +215,7 @@ export const analysis = (program: Program): CheckSemanticResult => {
     }
   }
 
-  const reportError = (message: string, fragment: Fragment) => {
+  const reportError = (message: string, fragment: Node) => {
     semanticErrors.push(new SemanticError(message, fragment))
   }
 

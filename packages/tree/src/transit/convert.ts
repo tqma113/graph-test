@@ -4,7 +4,7 @@
  * Transit AST(Abstruct Syntax Tree) to Mid-Tree.
  */
 
-import { FragmentKind } from 'gt-language'
+import { NodeKind } from 'gt-language'
 import {
   createTreeBlock,
   createActionNode,
@@ -35,7 +35,7 @@ import type {
   Statement,
   Comment,
 } from 'gt-language'
-import type { Tree, TreeBlock, TreeNode, IfTree } from '../tree'
+import type { Tree, TreeBlock, TreeBlockNode, IfTree } from '../tree'
 
 export const convert = (program: Program): Tree => {
   const convertProgram = (program: Program) => {
@@ -44,19 +44,19 @@ export const convert = (program: Program): Tree => {
 
   const convertModuleStatement = (moduleStatement: ModuleStatement) => {
     switch (moduleStatement.kind) {
-      case FragmentKind.ImportStatement: {
+      case NodeKind.ImportStatement: {
         convertImportStatement(moduleStatement)
         break
       }
-      case FragmentKind.ExportStatement: {
+      case NodeKind.ExportStatement: {
         convertExportStatement(moduleStatement)
         break
       }
-      case FragmentKind.StartStatement: {
+      case NodeKind.StartStatement: {
         convertStartStatement(moduleStatement)
         break
       }
-      case FragmentKind.InferenceDefinition: {
+      case NodeKind.InferenceDefinition: {
         convertInferenceDefinition(moduleStatement)
         break
       }
@@ -92,22 +92,22 @@ export const convert = (program: Program): Tree => {
     starts.push(name)
   }
 
-  const convertBlock = (block: Block): TreeNode[] => {
+  const convertBlock = (block: Block): TreeBlockNode[] => {
     return block.list.map(convertStatement)
   }
 
   const convertStatement = (statement: Statement) => {
     switch (statement.kind) {
-      case FragmentKind.StepStatement: {
+      case NodeKind.StepStatement: {
         return convertStepStatement(statement)
       }
-      case FragmentKind.IfStatement: {
+      case NodeKind.IfStatement: {
         return convertIfStatement(statement)
       }
-      case FragmentKind.SwitchStatement: {
+      case NodeKind.SwitchStatement: {
         return convertSwitchStatement(statement)
       }
-      case FragmentKind.GotoStatement: {
+      case NodeKind.GotoStatement: {
         return convertGotoStatement(statement)
       }
     }

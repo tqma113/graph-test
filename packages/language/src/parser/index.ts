@@ -8,9 +8,8 @@
  * 预测分析法(prdictive parsing)
  */
 
-import { createLexer } from '../lexer'
+import { createLexer, TokenKind, KeywordEnum, OperatorEnum } from '../lexer'
 import { LexicalError } from '../lexer/LexicalError'
-import { TokenKind, KeywordEnum, OperatorEnum } from '../lexer/constants'
 import { SyntaxError } from './SyntaxError'
 import {
   createProgram,
@@ -75,10 +74,10 @@ export const parse = (
   const getNextToken = (): Token => {
     while (true) {
       const tok = lexer.next()
-      if (tok.kind !== TokenKind.Comment) {
-        return tok
-      } else {
+      if (tok.kind === TokenKind.Comment) {
         comments.push(tok)
+      } else {
+        return tok
       }
     }
   }

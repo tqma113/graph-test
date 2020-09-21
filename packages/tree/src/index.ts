@@ -1,4 +1,4 @@
-export enum NodeKind {
+export enum TreeNodeKind {
   Tree = 'Tree',
   TreeBlock = 'TreeBlock',
   ActionNode = 'ActionNode',
@@ -9,11 +9,11 @@ export enum NodeKind {
   IfTree = 'IfTree',
 }
 
-export type TreeNodeKind =
-  | NodeKind.ActionNode
-  | NodeKind.GotoNode
-  | NodeKind.IfTree
-  | NodeKind.SwitchTree
+export type TreeBlockNodeKindType =
+  | TreeNodeKind.ActionNode
+  | TreeNodeKind.GotoNode
+  | TreeNodeKind.IfTree
+  | TreeNodeKind.SwitchTree
 
 export * from './tree'
 export * from './richTree'

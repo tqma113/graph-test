@@ -4,7 +4,7 @@
  * Transit AST(Abstruct Syntax Tree) to source code.
  */
 
-import { FragmentKind } from '../parser/ast'
+import { NodeKind } from '../parser/ast'
 import type {
   Program,
   InferenceDefinition,
@@ -42,16 +42,16 @@ export const codegen = (ast: Program): string => {
 
   const genModuleStatement = (moduleStatement: ModuleStatement): string => {
     switch (moduleStatement.kind) {
-      case FragmentKind.ImportStatement: {
+      case NodeKind.ImportStatement: {
         return genImportStatement(moduleStatement)
       }
-      case FragmentKind.ExportStatement: {
+      case NodeKind.ExportStatement: {
         return genExportStatement(moduleStatement)
       }
-      case FragmentKind.StartStatement: {
+      case NodeKind.StartStatement: {
         return genStartStatement(moduleStatement)
       }
-      case FragmentKind.InferenceDefinition: {
+      case NodeKind.InferenceDefinition: {
         return genInferenceDefinition(moduleStatement)
       }
     }
@@ -110,16 +110,16 @@ export const codegen = (ast: Program): string => {
 
   const genStatement = (statement: Statement, depth: number): string => {
     switch (statement.kind) {
-      case FragmentKind.StepStatement: {
+      case NodeKind.StepStatement: {
         return genStepStatement(statement, depth)
       }
-      case FragmentKind.IfStatement: {
+      case NodeKind.IfStatement: {
         return genIfStatement(statement, depth)
       }
-      case FragmentKind.SwitchStatement: {
+      case NodeKind.SwitchStatement: {
         return genSwitchStatement(statement, depth)
       }
-      case FragmentKind.GotoStatement: {
+      case NodeKind.GotoStatement: {
         return genGotoStatement(statement, depth)
       }
     }

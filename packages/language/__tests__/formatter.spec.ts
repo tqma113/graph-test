@@ -1,4 +1,4 @@
-import { parse, format, FragmentKind } from '../src'
+import { parse, format, NodeKind } from '../src'
 
 describe('formatter', () => {
   describe('Program', () => {
@@ -23,19 +23,19 @@ describe('formatter', () => {
         const programAfterFMT = format(program)
         expect(
           programAfterFMT.moduleStatemens[0].kind ===
-            FragmentKind.ImportStatement
+            NodeKind.ImportStatement
         )
         expect(
           programAfterFMT.moduleStatemens[1].kind ===
-            FragmentKind.ExportStatement
+            NodeKind.ExportStatement
         )
         expect(
           programAfterFMT.moduleStatemens[2].kind ===
-            FragmentKind.StartStatement
+            NodeKind.StartStatement
         )
         expect(
           programAfterFMT.moduleStatemens[3].kind ===
-            FragmentKind.InferenceDefinition
+            NodeKind.InferenceDefinition
         )
       }
     })

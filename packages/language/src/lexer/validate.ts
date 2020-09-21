@@ -1,4 +1,4 @@
-import { KeywordEnum, OperatorEnum } from './constants'
+import { KeywordEnum, OperatorEnum } from './token'
 
 const keywords = Object.values(KeywordEnum)
 export const isKeyword = (word: string): word is KeywordEnum => {

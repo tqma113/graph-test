@@ -4,7 +4,6 @@
  * Transit source code to tokens.
  */
 
-import { SymbolChar, TokenKind, OperatorEnum } from './constants'
 import { LexicalError } from './LexicalError'
 import {
   isLetter,
@@ -12,8 +11,9 @@ import {
   isNewLineChar,
   isWhitespace,
   isKeyword,
-} from './util'
+} from './validate'
 import {
+  SymbolChar, TokenKind, OperatorEnum,
   createKeyword,
   createOperator,
   createIdentifier,
@@ -35,7 +35,6 @@ import type {
 import type { Range, Position } from '../index'
 
 export * from './token'
-export * from './constants'
 export * from './LexicalError'
 
 export const createLexer = (

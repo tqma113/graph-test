@@ -1,4 +1,4 @@
-import { NodeKind } from '../index'
+import { TreeNodeKind } from '../index'
 
 export enum LeafNodeKind {
   Start = 'Start',
@@ -18,7 +18,7 @@ export type TreeNonLeafNodeRecord = {
   id: number
   floorId: number
   parentId: number
-  kind: NodeKind | AntherNodeKind
+  kind: TreeNodeKind | AntherNodeKind
   content: null
 }
 

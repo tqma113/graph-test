@@ -1,7 +1,7 @@
 import {
   parse,
   codegen,
-  FragmentKind,
+  NodeKind,
   InferenceDefinition,
   StepStatement,
   StartStatement,
@@ -12,7 +12,7 @@ import {
 import {
   convert,
   reverse,
-  NodeKind,
+  TreeNodeKind,
   ActionNode,
   IfTree,
   SwitchTree,
@@ -70,10 +70,10 @@ describe('transit', () => {
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(2)
-          expect(tree.blocks[0].children[0].kind).toBe(NodeKind.ActionNode)
+          expect(tree.blocks[0].children[0].kind).toBe(TreeNodeKind.ActionNode)
           const actionNode1 = tree.blocks[0].children[0] as ActionNode
           expect(actionNode1.expression).toBe('打开携程首页')
-          expect(tree.blocks[0].children[1].kind).toBe(NodeKind.ActionNode)
+          expect(tree.blocks[0].children[1].kind).toBe(TreeNodeKind.ActionNode)
           const actionNode2 = tree.blocks[0].children[1] as ActionNode
           expect(actionNode2.expression).toBe('点击旅游频道')
           expect(tree.starts.length).toBe(0)
@@ -119,10 +119,10 @@ describe('transit', () => {
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(2)
-          expect(tree.blocks[0].children[0].kind).toBe(NodeKind.ActionNode)
+          expect(tree.blocks[0].children[0].kind).toBe(TreeNodeKind.ActionNode)
           const actionNode1 = tree.blocks[0].children[0] as ActionNode
           expect(actionNode1.expression).toBe('打开携程首页')
-          expect(tree.blocks[0].children[1].kind).toBe(NodeKind.ActionNode)
+          expect(tree.blocks[0].children[1].kind).toBe(TreeNodeKind.ActionNode)
           const actionNode2 = tree.blocks[0].children[1] as ActionNode
           expect(actionNode2.expression).toBe('点击旅游频道')
           expect(tree.starts.length).toBe(0)
@@ -148,11 +148,11 @@ describe('transit', () => {
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(1)
-          expect(tree.blocks[0].children[0].kind).toBe(NodeKind.IfTree)
+          expect(tree.blocks[0].children[0].kind).toBe(TreeNodeKind.IfTree)
           const ifTree = tree.blocks[0].children[0] as IfTree
           expect(ifTree.condition).toBe('没有出行人')
           expect(ifTree.successChildren.length).toBe(1)
-          expect(ifTree.successChildren[0].kind).toBe(NodeKind.ActionNode)
+          expect(ifTree.successChildren[0].kind).toBe(TreeNodeKind.ActionNode)
           const actionNode = ifTree.successChildren[0] as ActionNode
           expect(actionNode.expression).toBe('创建出行人')
           expect(ifTree.faildChildren.length).toBe(0)
@@ -179,15 +179,15 @@ describe('transit', () => {
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(1)
-          expect(tree.blocks[0].children[0].kind).toBe(NodeKind.IfTree)
+          expect(tree.blocks[0].children[0].kind).toBe(TreeNodeKind.IfTree)
           const ifTree = tree.blocks[0].children[0] as IfTree
           expect(ifTree.condition).toBe('没有出行人')
           expect(ifTree.successChildren.length).toBe(1)
-          expect(ifTree.successChildren[0].kind).toBe(NodeKind.ActionNode)
+          expect(ifTree.successChildren[0].kind).toBe(TreeNodeKind.ActionNode)
           const actionNode1 = ifTree.successChildren[0] as ActionNode
           expect(actionNode1.expression).toBe('创建出行人')
           expect(ifTree.faildChildren.length).toBe(1)
-          expect(ifTree.faildChildren[0].kind).toBe(NodeKind.ActionNode)
+          expect(ifTree.faildChildren[0].kind).toBe(TreeNodeKind.ActionNode)
           const actionNode2 = ifTree.faildChildren[0] as ActionNode
           expect(actionNode2.expression).toBe('点击去付款')
           expect(tree.starts.length).toBe(0)
@@ -219,7 +219,7 @@ describe('transit', () => {
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(1)
-          expect(tree.blocks[0].children[0].kind).toBe(NodeKind.SwitchTree)
+          expect(tree.blocks[0].children[0].kind).toBe(TreeNodeKind.SwitchTree)
           const switchTree = tree.blocks[0].children[0] as SwitchTree
           expect(switchTree.condition).toBe('当前城市')
           expect(switchTree.children.length).toBe(2)
@@ -257,7 +257,7 @@ describe('transit', () => {
           expect(tree.blocks.length).toBe(1)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(1)
-          expect(tree.blocks[0].children[0].kind).toBe(NodeKind.SwitchTree)
+          expect(tree.blocks[0].children[0].kind).toBe(TreeNodeKind.SwitchTree)
           const switchTree = tree.blocks[0].children[0] as SwitchTree
           expect(switchTree.condition).toBe('当前城市')
           expect(switchTree.children.length).toBe(2)
@@ -294,7 +294,7 @@ describe('transit', () => {
           expect(tree.blocks.length).toBe(2)
           expect(tree.blocks[0].name).toBe('从首页进入旅游频道')
           expect(tree.blocks[0].children.length).toBe(1)
-          expect(tree.blocks[0].children[0].kind).toBe(NodeKind.GotoNode)
+          expect(tree.blocks[0].children[0].kind).toBe(TreeNodeKind.GotoNode)
           const gotoNode = tree.blocks[0].children[0] as GotoNode
           expect(gotoNode.name).toBe('选择出行人')
         }
@@ -313,7 +313,7 @@ describe('transit', () => {
         } as Tree
         const program = reverse(tree)
 
-        expect(program.kind).toBe(FragmentKind.Program)
+        expect(program.kind).toBe(NodeKind.Program)
         expect(program.moduleStatemens.length).toBe(0)
       })
 
@@ -335,7 +335,7 @@ describe('transit', () => {
 
         expect(program.moduleStatemens.length).toBe(1)
         expect(program.moduleStatemens[0].kind).toBe(
-          FragmentKind.InferenceDefinition
+          NodeKind.InferenceDefinition
         )
 
         const inferenceDefinition = program
@@ -373,14 +373,14 @@ describe('transit', () => {
 
         expect(program.moduleStatemens.length).toBe(1)
         expect(program.moduleStatemens[0].kind).toBe(
-          FragmentKind.InferenceDefinition
+          NodeKind.InferenceDefinition
         )
         const inferenceDefinition = program
           .moduleStatemens[0] as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(2)
         expect(inferenceDefinition.block.list[0].kind).toBe(
-          FragmentKind.StepStatement
+          NodeKind.StepStatement
         )
       })
     })
@@ -404,7 +404,7 @@ describe('transit', () => {
 
         expect(program.moduleStatemens.length).toBe(1)
         expect(program.moduleStatemens[0].kind).toBe(
-          FragmentKind.StartStatement
+          NodeKind.StartStatement
         )
         const startStatement = program.moduleStatemens[0] as StartStatement
         expect(startStatement.module.identifier.word).toBe(
@@ -449,20 +449,20 @@ describe('transit', () => {
 
         expect(program.moduleStatemens.length).toBe(1)
         expect(program.moduleStatemens[0].kind).toBe(
-          FragmentKind.InferenceDefinition
+          NodeKind.InferenceDefinition
         )
         const inferenceDefinition = program
           .moduleStatemens[0] as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(2)
         expect(inferenceDefinition.block.list[0].kind).toBe(
-          FragmentKind.StepStatement
+          NodeKind.StepStatement
         )
         const stepStatement1 = inferenceDefinition.block
           .list[0] as StepStatement
         expect(stepStatement1.expression.word).toBe('[打开携程首页]')
         expect(inferenceDefinition.block.list[1].kind).toBe(
-          FragmentKind.StepStatement
+          NodeKind.StepStatement
         )
         const stepStatement2 = inferenceDefinition.block
           .list[1] as StepStatement
@@ -501,14 +501,14 @@ describe('transit', () => {
 
         expect(program.moduleStatemens.length).toBe(2)
         expect(program.moduleStatemens[0].kind).toBe(
-          FragmentKind.InferenceDefinition
+          NodeKind.InferenceDefinition
         )
         const inferenceDefinition = program
           .moduleStatemens[0] as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
         expect(inferenceDefinition.block.list[0].kind).toBe(
-          FragmentKind.GotoStatement
+          NodeKind.GotoStatement
         )
         const gotoStatement = inferenceDefinition.block.list[0] as GotoStatement
         expect(gotoStatement.identifier.word).toBe('<选择出行人>')
@@ -542,14 +542,14 @@ describe('transit', () => {
 
         expect(program.moduleStatemens.length).toBe(1)
         expect(program.moduleStatemens[0].kind).toBe(
-          FragmentKind.InferenceDefinition
+          NodeKind.InferenceDefinition
         )
         const inferenceDefinition = program
           .moduleStatemens[0] as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
         expect(inferenceDefinition.block.list[0].kind).toBe(
-          FragmentKind.IfStatement
+          NodeKind.IfStatement
         )
         const ifStatement = inferenceDefinition.block.list[0] as IfStatement
         expect(ifStatement.expression.word).toBe('[不是上海站]')
@@ -589,14 +589,14 @@ describe('transit', () => {
 
         expect(program.moduleStatemens.length).toBe(1)
         expect(program.moduleStatemens[0].kind).toBe(
-          FragmentKind.InferenceDefinition
+          NodeKind.InferenceDefinition
         )
         const inferenceDefinition = program
           .moduleStatemens[0] as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
         expect(inferenceDefinition.block.list[0].kind).toBe(
-          FragmentKind.IfStatement
+          NodeKind.IfStatement
         )
         const ifStatement = inferenceDefinition.block.list[0] as IfStatement
         expect(ifStatement.expression.word).toBe('[不是上海站]')
@@ -645,14 +645,14 @@ describe('transit', () => {
 
         expect(program.moduleStatemens.length).toBe(1)
         expect(program.moduleStatemens[0].kind).toBe(
-          FragmentKind.InferenceDefinition
+          NodeKind.InferenceDefinition
         )
         const inferenceDefinition = program
           .moduleStatemens[0] as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
         expect(inferenceDefinition.block.list[0].kind).toBe(
-          FragmentKind.SwitchStatement
+          NodeKind.SwitchStatement
         )
         const switchStatement = inferenceDefinition.block
           .list[0] as SwitchStatement
@@ -716,14 +716,14 @@ describe('transit', () => {
 
         expect(program.moduleStatemens.length).toBe(1)
         expect(program.moduleStatemens[0].kind).toBe(
-          FragmentKind.InferenceDefinition
+          NodeKind.InferenceDefinition
         )
         const inferenceDefinition = program
           .moduleStatemens[0] as InferenceDefinition
         expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
         expect(inferenceDefinition.block.list.length).toBe(1)
         expect(inferenceDefinition.block.list[0].kind).toBe(
-          FragmentKind.SwitchStatement
+          NodeKind.SwitchStatement
         )
         const switchStatement = inferenceDefinition.block
           .list[0] as SwitchStatement

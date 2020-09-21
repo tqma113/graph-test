@@ -1,4 +1,4 @@
-import { travel, Tree, ActualNode, NodeKind } from '../src'
+import { travel, Tree, ActualNode, TreeNodeKind } from '../src'
 import { tree as sampleTree } from './sample'
 
 describe('travel', () => {
@@ -13,35 +13,35 @@ describe('travel', () => {
 
   const callee = (node: ActualNode) => {
     switch (node.kind) {
-      case NodeKind.Tree: {
+      case TreeNodeKind.Tree: {
         treeCount++
         break
       }
-      case NodeKind.TreeBlock: {
+      case TreeNodeKind.TreeBlock: {
         treeBlockCount++
         break
       }
-      case NodeKind.ActionNode: {
+      case TreeNodeKind.ActionNode: {
         actionNodeCount++
         break
       }
-      case NodeKind.GotoNode: {
+      case TreeNodeKind.GotoNode: {
         gotoNodeCount++
         break
       }
-      case NodeKind.SwitchTree: {
+      case TreeNodeKind.SwitchTree: {
         switchTreeCount++
         break
       }
-      case NodeKind.CaseNode: {
+      case TreeNodeKind.CaseNode: {
         caseNodeCount++
         break
       }
-      case NodeKind.DefaultNode: {
+      case TreeNodeKind.DefaultNode: {
         defaultNodeCount++
         break
       }
-      case NodeKind.IfTree: {
+      case TreeNodeKind.IfTree: {
         ifTreeCount++
         break
       }

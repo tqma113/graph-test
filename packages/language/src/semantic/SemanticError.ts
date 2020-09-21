@@ -1,12 +1,12 @@
 import type { Range } from '../index'
-import type { Fragment } from '../parser/ast'
+import type { Node } from '../parser/ast'
 
 export class SemanticError extends Error {
   kind = 'error' as const
-  fragment: Fragment
+  fragment: Node
   range: Range
 
-  constructor(message: string, fragment: Fragment) {
+  constructor(message: string, fragment: Node) {
     super(message)
 
     this.name = 'SemanticError'

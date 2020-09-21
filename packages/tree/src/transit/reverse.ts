@@ -21,12 +21,12 @@ import {
   createIdentifier,
   createAction,
 } from 'gt-language'
-import { NodeKind } from '../index'
+import { TreeNodeKind } from '../index'
 import type { Program, Block, Comment, Range } from 'gt-language'
 import type {
   Tree,
   TreeBlock,
-  TreeNode,
+  TreeBlockNode,
   ActionNode,
   GotoNode,
   IfTree,
@@ -86,18 +86,18 @@ export const reverse = (tree: Tree): Program => {
     }
   }
 
-  const reverseNode = (node: TreeNode) => {
+  const reverseNode = (node: TreeBlockNode) => {
     switch (node.kind) {
-      case NodeKind.ActionNode: {
+      case TreeNodeKind.ActionNode: {
         return reverseActionNode(node)
       }
-      case NodeKind.GotoNode: {
+      case TreeNodeKind.GotoNode: {
         return reverseGotoNode(node)
       }
-      case NodeKind.IfTree: {
+      case TreeNodeKind.IfTree: {
         return reverseIfTree(node)
       }
-      case NodeKind.SwitchTree: {
+      case TreeNodeKind.SwitchTree: {
         return reverseSwitchTree(node)
       }
     }

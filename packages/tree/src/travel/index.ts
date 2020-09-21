@@ -1,8 +1,8 @@
-import { NodeKind } from '../index'
+import { TreeNodeKind } from '../index'
 import type {
   Tree,
   TreeBlock,
-  TreeNode,
+  TreeBlockNode,
   ActionNode,
   GotoNode,
   IfTree,
@@ -34,24 +34,24 @@ export const travelTree = (tree: Tree, callee: TravelCallee) => {
 
 export const travelTreeBlock = (treeBlock: TreeBlock, callee: TravelCallee) => {
   callee(treeBlock)
-  treeBlock.children.forEach((node) => travelNode(node, callee))
+  treeBlock.children.forEach((node) => travelBlockNode(node, callee))
 }
 
-export const travelNode = (node: TreeNode, callee: TravelCallee) => {
+export const travelBlockNode = (node: TreeBlockNode, callee: TravelCallee) => {
   switch (node.kind) {
-    case NodeKind.ActionNode: {
+    case TreeNodeKind.ActionNode: {
       travelActionNode(node, callee)
       break
     }
-    case NodeKind.GotoNode: {
+    case TreeNodeKind.GotoNode: {
       travelGotoNode(node, callee)
       break
     }
-    case NodeKind.IfTree: {
+    case TreeNodeKind.IfTree: {
       travelIfTree(node, callee)
       break
     }
-    case NodeKind.SwitchTree: {
+    case TreeNodeKind.SwitchTree: {
       travelSwitchTree(node, callee)
       break
     }
@@ -71,9 +71,9 @@ export const travelGotoNode = (gotoNode: GotoNode, callee: TravelCallee) => {
 
 export const travelIfTree = (ifTree: IfTree, callee: TravelCallee) => {
   callee(ifTree)
-  ifTree.successChildren.forEach((node) => travelNode(node, callee))
+  ifTree.successChildren.forEach((node) => travelBlockNode(node, callee))
   if (ifTree.faildChildren.length > 0) {
-    ifTree.faildChildren.forEach((node) => travelNode(node, callee))
+    ifTree.faildChildren.forEach((node) => travelBlockNode(node, callee))
   }
 }
 
@@ -90,7 +90,7 @@ export const travelSwitchTree = (
 
 export const travelCaseNode = (caseNode: CaseNode, callee: TravelCallee) => {
   callee(caseNode)
-  caseNode.children.map((node) => travelNode(node, callee))
+  caseNode.children.map((node) => travelBlockNode(node, callee))
 }
 
 export const travelDefaultNode = (
@@ -98,5 +98,5 @@ export const travelDefaultNode = (
   callee: TravelCallee
 ) => {
   callee(defaultNode)
-  defaultNode.children.map((node) => travelNode(node, callee))
+  defaultNode.children.map((node) => travelBlockNode(node, callee))
 }

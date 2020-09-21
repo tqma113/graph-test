@@ -1,10 +1,10 @@
-import { NodeKind } from '../index'
+import { TreeNodeKind } from '../index'
 import { LeafNodeKind, AntherNodeKind } from './index'
 import type { TreeNodeRecord } from './index'
 import type {
   RichTree,
   RichTreeBlock,
-  RichTreeNode,
+  RichTreeBlockNode,
   RichActionNode,
   RichGotoNode,
   RichIfTree,
@@ -15,7 +15,7 @@ import type {
 
 export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
   const unfoldTree = (tree: RichTree): TreeNodeRecord[] => {
-    const record = createTNLNR(tree.id, NodeKind.Tree, 0, 0)
+    const record = createTNLNR(tree.id, TreeNodeKind.Tree, 0, 0)
     return [
       record,
       ...unfoldTreeBlocks(tree.blocks, record.id),
@@ -41,44 +41,44 @@ export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
   ): TreeNodeRecord[] => {
     const record = createTNLNR(
       treeBlock.id,
-      NodeKind.TreeBlock,
+      TreeNodeKind.TreeBlock,
       parentId,
       index
     )
     return [
       record,
       unfoldName(treeBlock.name, record.id),
-      ...unfoldTreeNodes(treeBlock.children, record.id),
+      ...unfoldTreeBlockNodes(treeBlock.children, record.id),
       ...unfoldComments(treeBlock.comments, record.id),
     ]
   }
 
-  const unfoldTreeNodes = (
-    treeNodes: RichTreeNode[],
+  const unfoldTreeBlockNodes = (
+    treeNodes: RichTreeBlockNode[],
     parentId: number
   ): TreeNodeRecord[] => {
     const draftArr = treeNodes.map((treeNode, index) => {
-      return unfoldTreeNode(treeNode, parentId, index)
+      return unfoldTreeBlockNode(treeNode, parentId, index)
     })
     return flat(draftArr)
   }
 
-  const unfoldTreeNode = (
-    treeNode: RichTreeNode,
+  const unfoldTreeBlockNode = (
+    treeNode: RichTreeBlockNode,
     parentId: number,
     index: number
   ): TreeNodeRecord[] => {
     switch (treeNode.kind) {
-      case NodeKind.ActionNode: {
+      case TreeNodeKind.ActionNode: {
         return unfoldActionNode(treeNode, parentId, index)
       }
-      case NodeKind.GotoNode: {
+      case TreeNodeKind.GotoNode: {
         return unfoldGotoNode(treeNode, parentId, index)
       }
-      case NodeKind.IfTree: {
+      case TreeNodeKind.IfTree: {
         return unfoldIfTree(treeNode, parentId, index)
       }
-      case NodeKind.SwitchTree: {
+      case TreeNodeKind.SwitchTree: {
         return unfoldSwitchTree(treeNode, parentId, index)
       }
     }
@@ -91,7 +91,7 @@ export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
   ): TreeNodeRecord[] => {
     const record = createTNLNR(
       actionNode.id,
-      NodeKind.ActionNode,
+      TreeNodeKind.ActionNode,
       parentId,
       index
     )
@@ -107,7 +107,7 @@ export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
     parentId: number,
     index: number
   ): TreeNodeRecord[] => {
-    const record = createTNLNR(gotoNode.id, NodeKind.GotoNode, parentId, index)
+    const record = createTNLNR(gotoNode.id, TreeNodeKind.GotoNode, parentId, index)
     return [
       record,
       unfoldName(gotoNode.name, record.id),
@@ -120,7 +120,7 @@ export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
     parentId: number,
     index: number
   ): TreeNodeRecord[] => {
-    const record = createTNLNR(ifTree.id, NodeKind.IfTree, parentId, index)
+    const record = createTNLNR(ifTree.id, TreeNodeKind.IfTree, parentId, index)
     return [
       record,
       unfoldCondition(ifTree.condition, record.id),
@@ -131,19 +131,19 @@ export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
   }
 
   const unfoldSuccessChildren = (
-    treeNodes: RichTreeNode[],
+    treeNodes: RichTreeBlockNode[],
     parentId: number
   ): TreeNodeRecord[] => {
     const record = createTNLNR(3.15, AntherNodeKind.SuccessBlock, parentId, 0)
-    return [record, ...unfoldTreeNodes(treeNodes, record.id)]
+    return [record, ...unfoldTreeBlockNodes(treeNodes, record.id)]
   }
 
   const unfoldFaildChildren = (
-    treeNodes: RichTreeNode[],
+    treeNodes: RichTreeBlockNode[],
     parentId: number
   ): TreeNodeRecord[] => {
     const record = createTNLNR(3.14, AntherNodeKind.FaildBlock, parentId, 0)
-    return [record, ...unfoldTreeNodes(treeNodes, record.id)]
+    return [record, ...unfoldTreeBlockNodes(treeNodes, record.id)]
   }
 
   const unfoldSwitchTree = (
@@ -153,7 +153,7 @@ export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
   ): TreeNodeRecord[] => {
     const record = createTNLNR(
       switchTree.id,
-      NodeKind.SwitchTree,
+      TreeNodeKind.SwitchTree,
       parentId,
       index
     )
@@ -181,11 +181,11 @@ export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
     parentId: number,
     index: number
   ): TreeNodeRecord[] => {
-    const record = createTNLNR(caseNode.id, NodeKind.CaseNode, parentId, index)
+    const record = createTNLNR(caseNode.id, TreeNodeKind.CaseNode, parentId, index)
     return [
       record,
       unfoldExpectation(caseNode.expectation, record.id),
-      ...unfoldTreeNodes(caseNode.children, record.id),
+      ...unfoldTreeBlockNodes(caseNode.children, record.id),
       ...unfoldComments(caseNode.comments, record.id),
     ]
   }
@@ -199,13 +199,13 @@ export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
     }
     const record = createTNLNR(
       defaultNode.id,
-      NodeKind.DefaultNode,
+      TreeNodeKind.DefaultNode,
       parentId,
       0
     )
     return [
       record,
-      ...unfoldTreeNodes(defaultNode.children, record.id),
+      ...unfoldTreeBlockNodes(defaultNode.children, record.id),
       ...unfoldComments(defaultNode.comments, record.id),
     ]
   }
@@ -255,7 +255,7 @@ export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
 
   const createTNLNR = (
     id: number,
-    kind: NodeKind | AntherNodeKind,
+    kind: TreeNodeKind | AntherNodeKind,
     parentId: number,
     floorId: number
   ): TreeNodeRecord => {
