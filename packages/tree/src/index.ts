@@ -20,3 +20,4 @@ export * from './richTree'
 
 export * from './fold'
 export * from './transit'
+export * from './travel'

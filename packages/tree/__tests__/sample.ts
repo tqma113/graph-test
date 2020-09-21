@@ -1524,7 +1524,7 @@ export const tree = {
       comments: [],
     },
     {
-      kind: 'Block',
+      kind: 'TreeBlock',
       name: '从旅游频道进入产品详情页',
       children: [
         {
@@ -1541,7 +1541,7 @@ export const tree = {
       comments: [],
     },
     {
-      kind: 'Block',
+      kind: 'TreeBlock',
       name: '下单流程',
       children: [
         {
@@ -1617,7 +1617,7 @@ export const tree = {
       comments: [],
     },
     {
-      kind: 'Block',
+      kind: 'TreeBlock',
       name: '选择上海站',
       children: [
         {
@@ -1642,7 +1642,7 @@ export const tree = {
       comments: [],
     },
     {
-      kind: 'Block',
+      kind: 'TreeBlock',
       name: '选择出行人',
       children: [
         {
@@ -1677,7 +1677,7 @@ export const tree = {
       comments: [],
     },
     {
-      kind: 'Block',
+      kind: 'TreeBlock',
       name: '创建出行人',
       children: [
         {
@@ -1704,7 +1704,7 @@ export const tree = {
       comments: [],
     },
     {
-      kind: 'Block',
+      kind: 'TreeBlock',
       name: '填写联系人',
       children: [
         {
