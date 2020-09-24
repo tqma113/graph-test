@@ -403,9 +403,7 @@ describe('transit', () => {
         const program = reverse(tree)
 
         expect(program.moduleStatemens.length).toBe(1)
-        expect(program.moduleStatemens[0].kind).toBe(
-          NodeKind.StartStatement
-        )
+        expect(program.moduleStatemens[0].kind).toBe(NodeKind.StartStatement)
         const startStatement = program.moduleStatemens[0] as StartStatement
         expect(startStatement.module.identifier.word).toBe(
           '<从首页进入旅游频道>'

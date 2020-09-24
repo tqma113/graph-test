@@ -5,7 +5,7 @@ import { Tree } from 'gt-tree'
 import { FontSizeSelect } from './FontSizeSelect'
 
 export type MonacoEditorProps = {
-  onSave?: (tree: Tree) => void,
+  onSave?: (tree: Tree) => void
   onError?: (message: string) => void
   containerStyle?: React.CSSProperties
   style?: React.CSSProperties
@@ -21,7 +21,13 @@ const defaultOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   fontSize: 12,
 }
 
-function MonacoEditor({ onSave, onError, style, containerStyle, initialValue = '{}' }: MonacoEditorProps) {
+function MonacoEditor({
+  onSave,
+  onError,
+  style,
+  containerStyle,
+  initialValue = '{}',
+}: MonacoEditorProps) {
   const [value, setValue] = useState(initialValue)
   const [options, setOptions] = useState<
     monaco.editor.IStandaloneEditorConstructionOptions

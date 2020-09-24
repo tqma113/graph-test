@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import CodeEditor from 'gt-editor'
 import { Program } from 'gt-language'
-import { Tree, TreeNodeRecord, unfold } from 'gt-tree'
+import { Tree, TreeNodeRecord, unfold, convert } from 'gt-tree'
 import TreeEditor from './TreeEditor'
 import ProgramEditor from './ProgramEditor'
 import RecordEditor from './RecordEditor'
@@ -95,38 +95,59 @@ function App() {
   const [tree, setTree] = useState({} as Tree)
   const [records, setRecords] = useState([] as TreeNodeRecord[])
 
-  const onCodeChange = (code: string, tree: Tree, program: Program) => {
+  const onCodeChange = (code: string, program: Program) => {
     setProgram(program)
+    const tree = convert(program)
     setTree(tree)
     setRecords(unfold(tree))
   }
 
   const onTreeChange = (tree: Tree) => {
     console.log({
-      tree
+      tree,
     })
   }
 
   const onProgramChange = (program: Program) => {
     console.log({
-      program
+      program,
     })
   }
 
   const onRecordsChange = (records: TreeNodeRecord[]) => {
     console.log({
-      records
+      records,
     })
   }
-  
+
   return (
     <div className="App">
-      <CodeEditor style={{ width: '100%'}} containerStyle={{ width: '640px' }} onSave={onCodeChange} value={initialValue} />
-      <ProgramEditor style={{ width: '100%'}} containerStyle={{ width: '640px' }} onSave={onProgramChange} initialValue={JSON.stringify(program)} />
-      <TreeEditor style={{ width: '100%'}} containerStyle={{ width: '640px' }} onSave={onTreeChange} initialValue={JSON.stringify(tree)} />
-      <RecordEditor style={{ width: '100%'}} containerStyle={{ width: '640px' }} onSave={onRecordsChange} initialValue={JSON.stringify(records)} />
+      <CodeEditor
+        style={{ width: '100%' }}
+        containerStyle={{ width: '640px' }}
+        onSave={onCodeChange}
+        value={initialValue}
+      />
+      <ProgramEditor
+        style={{ width: '100%' }}
+        containerStyle={{ width: '640px' }}
+        onSave={onProgramChange}
+        initialValue={JSON.stringify(program)}
+      />
+      <TreeEditor
+        style={{ width: '100%' }}
+        containerStyle={{ width: '640px' }}
+        onSave={onTreeChange}
+        initialValue={JSON.stringify(tree)}
+      />
+      <RecordEditor
+        style={{ width: '100%' }}
+        containerStyle={{ width: '640px' }}
+        onSave={onRecordsChange}
+        initialValue={JSON.stringify(records)}
+      />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

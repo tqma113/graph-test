@@ -47,7 +47,7 @@ const registerDiagnosticsAdapter = () => {
     if (model.getModeId() !== MODE_ID) {
       return
     }
-    
+
     let handle: number
     const changeSubscription = model.onDidChangeContent(() => {
       clearTimeout(handle)

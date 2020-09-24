@@ -13,7 +13,9 @@ import {
   isKeyword,
 } from './validate'
 import {
-  SymbolChar, TokenKind, OperatorEnum,
+  SymbolChar,
+  TokenKind,
+  OperatorEnum,
   createKeyword,
   createOperator,
   createIdentifier,

@@ -69,10 +69,15 @@ export const fold = (records: TreeNodeRecord[]): Tree => {
             record.kind === TreeNodeKind.SwitchTree)
       )
       .sort((a, b) => a.floorId - b.floorId)
-      .map((record) => foldTreeBlockNode(record.id, record.kind as TreeBlockNodeKindType))
+      .map((record) =>
+        foldTreeBlockNode(record.id, record.kind as TreeBlockNodeKindType)
+      )
   }
 
-  const foldTreeBlockNode = (id: number, kind: TreeBlockNodeKindType): TreeBlockNode => {
+  const foldTreeBlockNode = (
+    id: number,
+    kind: TreeBlockNodeKindType
+  ): TreeBlockNode => {
     switch (kind) {
       case TreeNodeKind.ActionNode: {
         return foldActionNode(id)

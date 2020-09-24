@@ -50,8 +50,8 @@ export enum TokenKind {
 }
 
 export interface BaseToken {
-  kind: TokenKind,
-  word: string,
+  kind: TokenKind
+  word: string
   range: Range
 }
 

@@ -22,16 +22,13 @@ describe('formatter', () => {
         expect(program.moduleStatemens.length).toBe(4)
         const programAfterFMT = format(program)
         expect(
-          programAfterFMT.moduleStatemens[0].kind ===
-            NodeKind.ImportStatement
+          programAfterFMT.moduleStatemens[0].kind === NodeKind.ImportStatement
         )
         expect(
-          programAfterFMT.moduleStatemens[1].kind ===
-            NodeKind.ExportStatement
+          programAfterFMT.moduleStatemens[1].kind === NodeKind.ExportStatement
         )
         expect(
-          programAfterFMT.moduleStatemens[2].kind ===
-            NodeKind.StartStatement
+          programAfterFMT.moduleStatemens[2].kind === NodeKind.StartStatement
         )
         expect(
           programAfterFMT.moduleStatemens[3].kind ===

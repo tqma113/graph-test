@@ -5,7 +5,7 @@ import { Program } from 'gt-language'
 import { FontSizeSelect } from './FontSizeSelect'
 
 export type MonacoEditorProps = {
-  onSave?: (program: Program) => void,
+  onSave?: (program: Program) => void
   onError?: (message: string) => void
   containerStyle?: React.CSSProperties
   style?: React.CSSProperties
@@ -21,7 +21,13 @@ const defaultOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   fontSize: 12,
 }
 
-function MonacoEditor({ onSave, onError, style, containerStyle, initialValue = '{}' }: MonacoEditorProps) {
+function MonacoEditor({
+  onSave,
+  onError,
+  style,
+  containerStyle,
+  initialValue = '{}',
+}: MonacoEditorProps) {
   const [value, setValue] = useState(initialValue)
   const [options, setOptions] = useState<
     monaco.editor.IStandaloneEditorConstructionOptions
@@ -81,12 +87,12 @@ function MonacoEditor({ onSave, onError, style, containerStyle, initialValue = '
 
   return (
     <div style={containerStyle}>
-    <span>
-      <FontSizeSelect
-        value={options.fontSize}
-        onChange={handleFonSizeSelect}
-      />
-    </span>
+      <span>
+        <FontSizeSelect
+          value={options.fontSize}
+          onChange={handleFonSizeSelect}
+        />
+      </span>
       <div ref={containerRef} style={style} />
     </div>
   )

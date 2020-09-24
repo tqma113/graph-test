@@ -107,7 +107,12 @@ export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
     parentId: number,
     index: number
   ): TreeNodeRecord[] => {
-    const record = createTNLNR(gotoNode.id, TreeNodeKind.GotoNode, parentId, index)
+    const record = createTNLNR(
+      gotoNode.id,
+      TreeNodeKind.GotoNode,
+      parentId,
+      index
+    )
     return [
       record,
       unfoldName(gotoNode.name, record.id),
@@ -181,7 +186,12 @@ export const unfoldRich = (tree: RichTree): TreeNodeRecord[] => {
     parentId: number,
     index: number
   ): TreeNodeRecord[] => {
-    const record = createTNLNR(caseNode.id, TreeNodeKind.CaseNode, parentId, index)
+    const record = createTNLNR(
+      caseNode.id,
+      TreeNodeKind.CaseNode,
+      parentId,
+      index
+    )
     return [
       record,
       unfoldExpectation(caseNode.expectation, record.id),

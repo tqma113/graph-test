@@ -9,7 +9,7 @@
     "dts": "node scripts/dts.js",
     "test": "jest",
     "release": "node scripts/release.js",
-    "format": "prettier --write --parser typescript \"packages/**/*.ts?(x)\"",
+    "format": "prettier --write --parser typescript \"packages/**/*.ts?(x)\" \"example/src/**/*.ts?(x)\"",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "antlr": "antlr4 -Dlanguage=JavaScript ./src/language/antlr/GraphLexer.g4&antlr4 -Dlanguage=JavaScript ./src/language/antlr/GraphParser.g4",
     "preinstall": "node ./scripts/checkYarn.js"
