@@ -1,5 +1,5 @@
 import * as monaco from 'monaco-editor'
-import { isReference } from '../utils'
+import { isValidIdentifierStr } from '../utils'
 import server from './server'
 
 const getReferenceProvider = (): monaco.languages.ReferenceProvider => {
@@ -7,7 +7,7 @@ const getReferenceProvider = (): monaco.languages.ReferenceProvider => {
     provideReferences(model, position, context, token) {
       const uri = model.uri
       const word = model.getWordAtPosition(position)
-      if (word && isReference(word.word)) {
+      if (word && isValidIdentifierStr(word.word)) {
         const name = word.word.slice(1, word.word.length - 1)
         const definition = server.definitions.get(name)
         if (definition) {

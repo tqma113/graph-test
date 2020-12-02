@@ -15,24 +15,17 @@ export const isKeyword = (word: string) => {
   return keywords.includes(word)
 }
 
-export const isReference = (word: string) => {
-  return /<([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)>/g.test(
-    word
-  )
+export const isValidIdentifierStr = (word: string) => {
+  return /<([^\<\>\s]+)>/g.test(word)
 }
 
-export const isAction = (word: string) => {
-  return /\[([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\]/.test(
-    word
-  )
+export const isValidActionStr = (word: string) => {
+  return /\[([^\[\]\s]+)\]/.test(word)
 }
 
-export const isPath = (word: string) => {
-  return /\"([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\"/g.test(
-    word
-  )
+export const isValidPathStr = (word: string) => {
+  return /\"([^\"\s]+)\"/g.test(word)
 }
-
 export enum WordType {
   Action,
   Reference,
@@ -46,15 +39,15 @@ export const getWordType = (word: string) => {
     return WordType.Keyword
   }
 
-  if (isAction(word)) {
+  if (isValidActionStr(word)) {
     return WordType.Action
   }
 
-  if (isReference(word)) {
+  if (isValidIdentifierStr(word)) {
     return WordType.Reference
   }
 
-  if (isPath(word)) {
+  if (isValidPathStr(word)) {
     return WordType.Path
   }
 

@@ -7,7 +7,9 @@
 import { LexicalError } from './LexicalError'
 import {
   isLetter,
-  isValidContentChar,
+  isValidActionChar,
+  isValidIdentifierChar,
+  isValidPathChar,
   isNewLineChar,
   isWhitespace,
   isKeyword,
@@ -169,7 +171,7 @@ export const createLexer = (
 
         return createIdentifier(word, range)
       }
-      if (isEoP() || !isValidContentChar(char)) {
+      if (isEoP() || !isValidIdentifierChar(char)) {
         const word = getCurrentWord()
         return new LexicalError(
           `Identifier: ${word} has not been closed`,
@@ -191,7 +193,7 @@ export const createLexer = (
 
         return createAction(word, range)
       }
-      if (isEoP() || !isValidContentChar(char)) {
+      if (isEoP() || !isValidActionChar(char)) {
         const word = getCurrentWord()
         return new LexicalError(
           `Action: ${word} has not been closed`,
@@ -213,7 +215,7 @@ export const createLexer = (
 
         return createPath(word, range)
       }
-      if (isEoP() || !isValidContentChar(char)) {
+      if (isEoP() || !isValidPathChar(char)) {
         const word = getCurrentWord()
         return new LexicalError(
           `Path: ${word} has not been closed`,

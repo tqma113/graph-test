@@ -10,31 +10,38 @@ export const isOperator = (word: string): word is OperatorEnum => {
   return operators.includes(word as any)
 }
 
-export const isValidContentChar = (char: string) => {
-  return /[^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]/g.test(
-    char
-  )
-}
-
-export const isAction = (word: string) => {
+export const isValidActionStr = (word: string) => {
   // [xxx]
-  return /\[([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\]/.test(
-    word
-  )
+  return /\[([^\[\]\s]+)\]/.test(word)
 }
 
-export const isPath = (word: string) => {
+export const isValidPathStr = (word: string) => {
   // "xxx"
-  return /\"([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)\"/g.test(
-    word
-  )
+  return /\"([^\"\s]+)\"/g.test(word)
 }
 
-export const isReference = (word: string) => {
+export const isValidIdentifierStr = (word: string) => {
   // <xxx>
-  return /<([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)>/g.test(
-    word
-  )
+  return /<([^\<\>\s]+)>/g.test(word)
+}
+
+export const isValidContentChar = (char: string) => {
+  return /[^\s]/g.test(char)
+}
+
+export const isValidActionChar = (word: string) => {
+  // [xxx]
+  return /[^\[\]\s]/.test(word)
+}
+
+export const isValidPathChar = (word: string) => {
+  // "xxx"
+  return /[^\"\s]/g.test(word)
+}
+
+export const isValidIdentifierChar = (word: string) => {
+  // <xxx>
+  return /[^\<\>\s]/g.test(word)
 }
 
 export const isWhitespace = (char: string) => {

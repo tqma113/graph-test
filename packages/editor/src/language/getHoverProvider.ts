@@ -1,5 +1,5 @@
 import * as monaco from 'monaco-editor'
-import { isKeyword, isReference, isAction } from '../utils'
+import { isKeyword, isValidIdentifierStr, isValidActionStr } from '../utils'
 
 const getKeywordHover = (keyword: string) => {
   switch (keyword) {
@@ -49,7 +49,7 @@ const getHoverProvider = (): monaco.languages.HoverProvider => {
           const end = Math.min(line.length, word.endColumn + 2)
           const content = line.slice(start, end)
 
-          if (isReference(content)) {
+          if (isValidIdentifierStr(content)) {
             const contents = [
               {
                 value: 'Reference',
@@ -68,7 +68,7 @@ const getHoverProvider = (): monaco.languages.HoverProvider => {
               range,
               contents,
             }
-          } else if (isAction(content)) {
+          } else if (isValidActionStr(content)) {
             const contents = [
               {
                 value: 'Action',
