@@ -529,7 +529,22 @@ export const parse = (
               lookahead.word === KeywordEnum.Else
             ) {
               nextToken()
-              const elseBlock = matchBlock()
+              const lookahead = predict()
+              let elseBlock: Block | null
+              if (
+                lookahead.kind === TokenKind.Keyword &&
+                lookahead.word === KeywordEnum.If
+              ) {
+                const internalIfStatement = matchIfStatement()
+                const list: Statement[] =
+                  internalIfStatement === null ? [] : [internalIfStatement]
+                elseBlock = createBlock(list, {
+                  start,
+                  end: lookahead.range.end,
+                })
+              } else {
+                elseBlock = matchBlock()
+              }
               if (elseBlock) {
                 return createIfStatement(
                   expression,

@@ -9,6 +9,7 @@ import {
   SwitchStatement,
   GotoStatement,
   NodeKind,
+  Block,
 } from '../src'
 import { sample } from './sample'
 
@@ -357,6 +358,49 @@ describe('parser', () => {
         expect(ifStatement.elseBlock).toBeDefined()
       }
     })
+  })
+
+  it('with else if in module block', () => {
+    const input = `<从首页进入旅游频道> = {
+      if [不是上海站] -> {
+
+      } else if [不是北京站] -> {
+
+      } else {
+
+      }
+    }`
+    const { program, lexcialErrors, syntaxErrors } = parse(input)
+
+    expect(lexcialErrors.length).toBe(0)
+    expect(syntaxErrors.length).toBe(0)
+    expect(program).toBeDefined()
+    if (program) {
+      expect(program.moduleStatemens.length).toBe(1)
+
+      const moduleStatement = program.moduleStatemens[0]
+      expect(moduleStatement.kind).toBe(NodeKind.InferenceDefinition)
+
+      const inferenceDefinition = moduleStatement as InferenceDefinition
+      expect(inferenceDefinition.identifier.word).toBe('<从首页进入旅游频道>')
+      expect(inferenceDefinition.block.list.length).toBe(1)
+
+      const statement = inferenceDefinition.block.list[0]
+      expect(statement.kind).toBe(NodeKind.IfStatement)
+
+      const ifStatement = statement as IfStatement
+      expect(ifStatement.expression.word).toBe('[不是上海站]')
+      expect(ifStatement.ifBlock).toBeDefined()
+      expect(ifStatement.elseBlock).toBeDefined()
+
+      const elseBlock = ifStatement.elseBlock as Block
+      expect(elseBlock.list.length).toBe(1)
+
+      const ifStatement1 = elseBlock.list[0] as IfStatement
+      expect(ifStatement1.expression.word).toBe('[不是北京站]')
+      expect(ifStatement1.ifBlock).toBeDefined()
+      expect(ifStatement1.elseBlock).toBeDefined()
+    }
   })
 
   describe('SwitchStatement', () => {

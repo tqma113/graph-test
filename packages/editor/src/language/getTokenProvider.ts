@@ -24,7 +24,7 @@ const getTokenProvider = (): monaco.languages.IMonarchLanguage => {
         [/<([^\<\>\s]*)>/,      'identifier'],
         [/\"([^\"\s]*)\"/,      'path'],
         [/#.*/,                 'comment'],
-      ],
+      ]
     },
   }
 }
