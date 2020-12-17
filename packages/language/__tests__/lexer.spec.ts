@@ -193,7 +193,7 @@ describe('lexer', () => {
     it('work', () => {
       const input = sample
       const lexer = createLexer(input)
-      while (lexer.next().kind !== 'eop');
+      while (lexer.next().value.kind !== 'eop');
 
       expect(lexer.lexicalErrors.length).toBe(0)
     })
@@ -202,7 +202,7 @@ describe('lexer', () => {
       const input = ``
       const lexer = createLexer(input)
 
-      expect(lexer.next().kind).toBe('eop')
+      expect(lexer.next().value.kind).toBe('eop')
       expect(lexer.lexicalErrors.length).toBe(0)
     })
 
@@ -210,7 +210,7 @@ describe('lexer', () => {
       const input = `<从首页进入旅游频道>`
       const lexer = createLexer(input)
 
-      expect(lexer.next()).toStrictEqual({
+      expect(lexer.next().value).toStrictEqual({
         kind: 'identifier',
         word: '<从首页进入旅游频道>',
         range: {
@@ -224,7 +224,7 @@ describe('lexer', () => {
           },
         },
       })
-      expect(lexer.next().kind).toBe('eop')
+      expect(lexer.next().value.kind).toBe('eop')
       expect(lexer.lexicalErrors.length).toBe(0)
     })
 
@@ -232,7 +232,7 @@ describe('lexer', () => {
       const input = `[从首页进入旅游频道]`
       const lexer = createLexer(input)
 
-      expect(lexer.next()).toStrictEqual({
+      expect(lexer.next().value).toStrictEqual({
         kind: 'action',
         word: '[从首页进入旅游频道]',
         range: {
@@ -246,7 +246,7 @@ describe('lexer', () => {
           },
         },
       })
-      expect(lexer.next().kind).toBe('eop')
+      expect(lexer.next().value.kind).toBe('eop')
       expect(lexer.lexicalErrors.length).toBe(0)
     })
 
@@ -254,7 +254,7 @@ describe('lexer', () => {
       const input = `"从首页进入旅游频道"`
       const lexer = createLexer(input)
 
-      expect(lexer.next()).toStrictEqual({
+      expect(lexer.next().value).toStrictEqual({
         kind: 'path',
         word: '"从首页进入旅游频道"',
         range: {
@@ -268,7 +268,7 @@ describe('lexer', () => {
           },
         },
       })
-      expect(lexer.next().kind).toBe('eop')
+      expect(lexer.next().value.kind).toBe('eop')
       expect(lexer.lexicalErrors.length).toBe(0)
     })
 
@@ -290,7 +290,7 @@ describe('lexer', () => {
       const lexer = createLexer(input)
 
       for (let i = 0; i < 11; i++) {
-        const token = lexer.next()
+        const { value: token } = lexer.next()
         if (i < 10) {
           expect(token.kind).toBe('keyword')
         } else {
@@ -308,7 +308,7 @@ describe('lexer', () => {
       const lexer = createLexer(input)
 
       for (let i = 0; i < 6; i++) {
-        const token = lexer.next()
+        const { value: token } = lexer.next()
         if (i < 5) {
           expect(token.kind).toBe('operator')
         } else {
@@ -323,8 +323,8 @@ describe('lexer', () => {
     it('Comment', () => {
       const input = `# test`
       const lexer = createLexer(input)
-      const token = lexer.next()
-      const eop = lexer.next()
+      const { value: token } = lexer.next()
+      const { value: eop } = lexer.next()
 
       expect(lexer.tokens.length).toBe(2)
       expect(lexer.lexicalErrors.length).toBe(0)

@@ -31,9 +31,12 @@ function MonacoEditor({
   value = '# start from here\n\n',
 }: MonacoEditorProps) {
   const [code] = useState(value)
-  const [options, setOptions] = useState<
-    monaco.editor.IStandaloneEditorConstructionOptions
-  >(defaultOptions)
+  const [
+    options,
+    setOptions,
+  ] = useState<monaco.editor.IStandaloneEditorConstructionOptions>(
+    defaultOptions
+  )
   const containerRef = useRef<HTMLDivElement>(null)
   const editor = useRef<monaco.editor.IStandaloneCodeEditor>()
   const subscription = useRef<monaco.IDisposable>()

@@ -41,15 +41,15 @@ import type { Range, Position } from '../index'
 export * from './token'
 export * from './LexicalError'
 
-export const createLexer = (
-  input: string
-): {
+export interface Lexer {
   tokens: Token[]
   lexicalErrors: LexicalError[]
   getPosition: () => Position
-  next: () => Token
-  run: () => void
-} => {
+  run: () => Token[]
+  next: () => IteratorResult<Token, EOP>
+}
+
+export const createLexer = (input: string): Lexer => {
   let offset = 0
   let forward = 0
   let line = 1
@@ -73,28 +73,7 @@ export const createLexer = (
     ) {
       tokens.push(createEOP(getRange()))
     }
-    return tokens[tokens.length - 1]
-  }
-
-  const next = (): Token => {
-    if (isEoP() && tokens.length > 0) {
-      if (tokens[tokens.length - 1].kind !== TokenKind.EOP) {
-        tokens.push(createEOP(getRange()))
-      }
-      return tokens[tokens.length - 1]
-    }
-
-    let result = nextToken()
-    while (true) {
-      if (result.kind === 'error') {
-        lexicalErrors.push(result)
-      } else {
-        tokens.push(result)
-        break
-      }
-      result = nextToken()
-    }
-    return result
+    return tokens
   }
 
   const nextToken = (): Token | LexicalError => {
@@ -353,7 +332,34 @@ export const createLexer = (
     },
 
     getPosition,
-    next,
+    next: () => {
+      if (isEoP() && tokens.length > 0) {
+        let lastestToken = tokens[tokens.length - 1]
+        if (lastestToken.kind !== TokenKind.EOP) {
+          lastestToken = createEOP(getRange())
+          tokens.push(lastestToken)
+        }
+        return {
+          value: lastestToken,
+          done: true as const,
+        }
+      }
+
+      let result = nextToken()
+      while (true) {
+        if (result.kind === 'error') {
+          lexicalErrors.push(result)
+        } else {
+          tokens.push(result)
+          break
+        }
+        result = nextToken()
+      }
+      return {
+        value: result,
+        done: false as const,
+      }
+    },
     run,
   }
 }

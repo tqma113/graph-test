@@ -73,11 +73,16 @@ export const parse = (
 
   const getNextToken = (): Token => {
     while (true) {
-      const tok = lexer.next()
-      if (tok.kind === TokenKind.Comment) {
-        comments.push(tok)
+      const result = lexer.next()
+      if (!result.done) {
+        const tok = result.value
+        if (tok.kind !== TokenKind.Comment) {
+          return tok
+        } else {
+          comments.push(tok)
+        }
       } else {
-        return tok
+        return result.value
       }
     }
   }
